@@ -1,4 +1,6 @@
 .w-full
+  = link_to "Leaderboard", leaderboard_tournament_path(@tour), class: ""
+
   - if @matches.present?
     - @matches.each do |match|
       .my-3
