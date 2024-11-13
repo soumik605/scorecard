@@ -1,2 +1,41 @@
-= Player.where(id: @match.teams.pluck(:captain_id)).pluck(:name).join("  vs  ")
+.w-full
+  
+  .my-1.py-4.bg-slate-100.w-full.flex.justify-center
+    .mb-2.text-gray-900.dark:text-white.text-2xl.bg-orange-300.w-full.py-4.text-center
+      %span{class: @match.winner_team_id.present? ? @match.winner_team_id == @match.teams.first.id ? "font-bold text-green-500" : "text-light text-red-600" : "font-bold"}= @match.teams.first.captain.name
+      %span.mx-2 vs
+      %span{class: @match.winner_team_id.present? ? @match.winner_team_id == @match.teams.last.id ? "font-bold text-green-500" : "text-light text-red-600" : "font-bold"}= @match.teams.last.captain.name
 
+  
+  - if @match.winner_team_id.present?
+    - arr = ["Won this match"]
+    - arr << "by an innings" if @match.is_won_by_innings
+    - arr << "by follow on" if @match.is_won_by_follow_on
+
+    .text-3xl.text-center.mt-8= "#{@match.winner_team.captain.name}"
+    .text-sm.text-center= arr.to_sentence 
+  - else
+    .flex.w-full.justify-center
+      %div.mt-10
+        = form_with(model: @match, url: match_path(@match), class: "contents", data: { turbo_frame: "_top"}) do |form|
+          .flex.justify-equal.w-full
+
+            - @match.teams.each do |team|
+              .flex.p-4
+                %label
+                  .text-xl.pl-1.text-center= team.captain.name
+                  = form.radio_button :winner_team_id, team.id, checked: @match.winner_team_id == team.id, class: "focus:ring-violet-900"
+
+          .my-4
+            = form.check_box :is_won_by_innings, {class: "h-6 w-6 border border-gray-300 rounded-lg bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer", :type => "button"}
+            = form.label "Won by innings", class: "text-md fort-bold"
+          
+          .my-4
+            = form.check_box :is_won_by_follow_on, {class: "h-6 w-6 border border-gray-300 rounded-lg bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer", :type => "button"}
+            = form.label "Won by follow on", class: "text-md fort-bold"
+          
+          .my-4
+            = form.check_box :is_draw, {class: "h-6 w-6 border border-gray-300 rounded-lg bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer", :type => "button"}
+            = form.label "Draw ?", class: "text-md fort-bold"
+          
+          = form.submit "Submit", class: "focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
