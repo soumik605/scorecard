@@ -1,0 +1,27 @@
+
+= form_with(model: @tournament, url: tournaments_path, method: "POST", class: "contents block", data: { turbo_frame: "_top"}) do |form|
+  .w-full.px-8
+    .text-xl.my-4 Create Tournament
+    .w-full
+      .my-4
+        = form.label "Name", class: "text-md fort-bold"
+        = form.text_field :name, {required: true, class: "block rounded-md border border-gray-200 outline-none px-2 py-2 mt-1 w-full text-sm"}
+      
+      .my-4
+        = form.label "Win point", class: "text-md fort-bold"
+        = form.number_field :win_point, {required: true, class: "block rounded-md border border-gray-200 outline-none px-2 py-2 mt-1 w-full text-sm"}
+      
+      .my-4
+        = form.label "Draw point", class: "text-md fort-bold"
+        = form.number_field :draw_point, {required: true, class: "block rounded-md border border-gray-200 outline-none px-2 py-2 mt-1 w-full text-sm"}
+      
+      .my-4
+        = form.label "Innings win point", class: "text-md fort-bold"
+        = form.number_field :innings_win_point, {required: true, class: "block rounded-md border border-gray-200 outline-none px-2 py-2 mt-1 w-full text-sm"}
+      
+      .my-4
+        = form.label "Follow on win point", class: "text-md fort-bold"
+        = form.number_field :follow_on_win_point, {required: true, class: "block rounded-md border border-gray-200 outline-none px-2 py-2 mt-1 w-full text-sm"}
+    
+    .mt-4
+      = form.submit "Submit", class: "focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"

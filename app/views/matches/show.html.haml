@@ -28,11 +28,11 @@
 
           .my-4
             = form.check_box :is_won_by_innings, {class: "h-6 w-6 border border-gray-300 rounded-lg bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer", :type => "button"}
-            = form.label "Won by innings", class: "text-md fort-bold"
+            = form.label "Won by innings (+#{@match.tournament.innings_win_point})", class: "text-md fort-bold"
           
           .my-4
             = form.check_box :is_won_by_follow_on, {class: "h-6 w-6 border border-gray-300 rounded-lg bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer", :type => "button"}
-            = form.label "Won by follow on", class: "text-md fort-bold"
+            = form.label "Won by follow on (+#{@match.tournament.follow_on_win_point})", class: "text-md fort-bold"
           
           .my-4
             = form.check_box :is_draw, {class: "h-6 w-6 border border-gray-300 rounded-lg bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer", :type => "button"}

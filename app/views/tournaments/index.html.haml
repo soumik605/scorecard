@@ -1,4 +1,5 @@
 .w-full
+  = link_to "Create Tournament", new_tournament_path, class: ""
   - if @tours.present?
     - @tours.each do |tour|
       .my-3

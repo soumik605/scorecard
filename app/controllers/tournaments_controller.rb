@@ -7,7 +7,19 @@ class TournamentsController < ApplicationController
   def show
   end
 
+  def new
+    @tournament = Tournament.new
+  end
+
   def create
+    @tour = Tournament.new(tournament_params)
+    respond_to do |format|
+      if @tour.save
+        format.turbo_stream { redirect_to tournament_path(@tour), notice: 'Done !!'}
+      else
+        format.turbo_stream { redirect_to request.referrer, notice: @tour.errors.full_messages}
+      end
+    end
   end
 
   def edit
@@ -33,6 +45,10 @@ class TournamentsController < ApplicationController
   def set_tournament
     @tour = Tournament.find(params[:id])
     @matches = @tour.matches
+  end
+
+  def tournament_params
+    params.require(:tournament).permit(:name, :win_point, :draw_point, :innings_win_point, :follow_on_win_point)
   end
 
 end
