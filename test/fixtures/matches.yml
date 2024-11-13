@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  tournament: one
+  team_1_id: 1
+  team_2_id: 1
+  date: 2024-11-12
+
+two:
+  tournament: two
+  team_1_id: 1
+  team_2_id: 1
+  date: 2024-11-12
