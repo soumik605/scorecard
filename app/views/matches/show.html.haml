@@ -1,0 +1,2 @@
+= Player.where(id: @match.teams.pluck(:captain_id)).pluck(:name).join("  vs  ")
+

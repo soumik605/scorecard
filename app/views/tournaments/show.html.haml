@@ -2,5 +2,5 @@
   - if @matches.present?
     - @matches.each do |match|
       .my-3
-        = link_to "", class: "block w-full p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700" do
+        = link_to match_path(match), class: "block w-full p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700" do
           %h5.mb-2.text-2xl.font-bold.tracking-tight.text-gray-900.dark:text-white= Player.where(id: match.teams.pluck(:captain_id)).pluck(:name).join(" vs ")
