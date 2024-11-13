@@ -1,3 +1,7 @@
-%div
-  %h1.font-bold.text-4xl Tournaments#index
-  %p Find me in app/views/tournaments/index.html.erb
+.w-full
+  - if @tours.present?
+    - @tours.each do |tour|
+      .my-3
+        = link_to tournament_path(tour), class: "block w-full p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700" do
+          %h5.mb-2.text-2xl.font-bold.tracking-tight.text-gray-900.dark:text-white= tour.name
+          %p.font-normal.text-gray-700.dark:text-gray-400= "Win point : #{tour.win_point}"

@@ -1,10 +1,11 @@
 class TournamentsController < ApplicationController
-  before_action :set_tournament, only: [:view, :edit, :update]
+  before_action :set_tournament, only: [:show, :edit, :update]
   def index
     @tours = Tournament.all
   end
 
-  def view
+  def show
+    @matches = @tour.matches
   end
 
   def create
@@ -20,7 +21,7 @@ class TournamentsController < ApplicationController
   private 
 
   def set_tournament
-    @tournament = Tournament.find(params[:id])
+    @tour = Tournament.find(params[:id])
   end
 
 end
