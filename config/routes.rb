@@ -14,5 +14,6 @@ Rails.application.routes.draw do
   end
   resources :matches
   resources :performances
+  resources :players
   resources :rankings
 end

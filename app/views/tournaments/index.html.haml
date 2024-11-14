@@ -1,8 +1,12 @@
 .w-full
   - if user_signed_in?
-    = link_to "Create Tournament", new_tournament_path, class: "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2focus:outline-none"
+    .p-2 
+      = link_to "Create Tournament", new_tournament_path, class: "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2focus:outline-none"
+    .p-2 
+      = link_to "Add Player", players_path, class: "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2focus:outline-none"
      
-  = link_to "Rankings", rankings_path, class: "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2focus:outline-none"
+  .p-2 
+    = link_to "Rankings", rankings_path, class: "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2focus:outline-none"
   
   - if @tours.present?
     - @tours.each do |tour|

@@ -18,7 +18,7 @@ class MatchesController < ApplicationController
 
   def set_match
     @match = Match.find_by(id: params[:id])
-    @players = Player.all
+    @players = Player.all.order("created_at ASC")
   end
 
   def match_params
