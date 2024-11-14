@@ -15,8 +15,7 @@
 				%button#contacts-tab.inline-block.p-4.border-b-2.rounded-t-lg.hover:text-gray-600.hover:border-gray-300{"aria-controls" => "contacts", "aria-selected" => "false", "data-tabs-target" => "#contacts", role: "tab", type: "button"} Result
 	#default-tab-content
 		#profile.hidden.p-4.rounded-lg.bg-gray-50{"aria-labelledby" => "profile-tab", role: "tabpanel"}
-			%p.text-sm.text-gray-500
-				This is some placeholder content the a
+			= render "matches/players"
 				
 		#contacts.hidden.p-4.rounded-lg.bg-gray-50{"aria-labelledby" => "contacts-tab", role: "tabpanel"}
 			= render "matches/result"

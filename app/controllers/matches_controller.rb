@@ -17,6 +17,7 @@ class MatchesController < ApplicationController
 
   def set_match
     @match = Match.find_by(id: params[:id])
+    @other_players = Player.where.not(id: @match.teams.pluck(:captain_id))
   end
 
   def match_params
