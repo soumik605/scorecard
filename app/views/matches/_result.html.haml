@@ -6,7 +6,7 @@
 
   .text-3xl.text-center= "#{@match.winner_team.captain.name}"
   .text-sm.text-center= arr.to_sentence 
-- else
+- elsif user_signed_in?
   .flex.w-full.justify-center
     %div.mt-2
       = form_with(model: @match, url: match_path(@match), class: "contents", data: { turbo_frame: "_top"}) do |form|
@@ -31,3 +31,5 @@
           = form.label "Draw ?", class: "text-md fort-bold"
         
         = form.submit "Submit", class: "focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
+- else 
+  .text-sm.text-center No result till now
