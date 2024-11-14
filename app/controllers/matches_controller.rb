@@ -2,6 +2,7 @@ class MatchesController < ApplicationController
   before_action :set_match, only: [:show, :update]
 
   def show
+    @performance = Performance.new
   end
 
   def update
@@ -17,7 +18,7 @@ class MatchesController < ApplicationController
 
   def set_match
     @match = Match.find_by(id: params[:id])
-    @other_players = Player.where.not(id: @match.teams.pluck(:captain_id))
+    @players = Player.all
   end
 
   def match_params

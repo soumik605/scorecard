@@ -1,1 +1,31 @@
-= @other_players.pluck(:name)
+- @players.each do |player|
+  .pb-8
+    .text-xl= player.name
+    - if player.performances.present?
+      - player.performances.each do |perf|
+        = form_with(model: @performance, url: performance_path(perf), method: "PUT", class: "contents block", data: { turbo_frame: "_top"}) do |form|
+          .grid.grid-cols-12.gap-2
+            .col-span-5
+              = form.hidden_field :player_id, value: player.id
+              = form.hidden_field :match_id, value: @match.id
+              = form.label "Run", class: "text-md fort-bold"
+              = form.number_field :runs, { value: perf.runs || "", required: false, class: "block rounded-md border border-gray-200 outline-none px-2 py-2 mt-1 w-full text-xs"}
+            .col-span-5
+              = form.label "Wicket", class: "text-md fort-bold"
+              = form.number_field :wickets, { value: perf.wickets || "", required: false, class: "block rounded-md border border-gray-200 outline-none px-2 py-2 mt-1 w-full text-xs"}
+            .col-span-2
+              = form.submit "OK", class: "focus:outline-none text-white bg-green-700 hover:bg-green-800 font-medium rounded-lg text-xs px-2 py-1.5 mt-8"
+
+    - if player.performances.count < 2
+      = form_with(model: @performance, url: performances_path, method: "POST", class: "contents block", data: { turbo_frame: "_top"}) do |form|
+        .grid.grid-cols-12.gap-2
+          .col-span-5
+            = form.hidden_field :player_id, value: player.id
+            = form.hidden_field :match_id, value: @match.id
+            = form.label "Run", class: "text-md fort-bold"
+            = form.number_field :runs, {required: false, class: "block rounded-md border border-gray-200 outline-none px-2 py-2 mt-1 w-full text-xs"}
+          .col-span-5
+            = form.label "Wicket", class: "text-md fort-bold"
+            = form.number_field :wickets, {required: false, class: "block rounded-md border border-gray-200 outline-none px-2 py-2 mt-1 w-full text-xs"}
+          .col-span-2
+            = form.submit "OK", class: "focus:outline-none text-white bg-green-700 hover:bg-green-800 font-medium rounded-lg text-xs px-2 py-1.5 mt-8"
