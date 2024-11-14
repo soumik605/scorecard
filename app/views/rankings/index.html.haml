@@ -1,0 +1,19 @@
+.w-full
+  .text-2xl.text-center Rankings
+  .text-sm.text-center Based on last 10 innings of each player
+  .mt-8
+    .mb-4.border-b.border-gray-200
+      %ul#default-tab.flex.flex-wrap.-mb-px.text-sm.font-medium.text-center{"data-tabs-toggle" => "#default-tab-content", role: "tablist"}
+        %li.me-2{role: "presentation"}
+          %button#profile-tab.inline-block.p-4.border-b-2.rounded-t-lg{"aria-controls" => "profile", "aria-selected" => "false", "data-tabs-target" => "#profile", role: "tab", type: "button"} Runs
+        %li{role: "presentation"}
+          %button#contacts-tab.inline-block.p-4.border-b-2.rounded-t-lg.hover:text-gray-600.hover:border-gray-300{"aria-controls" => "contacts", "aria-selected" => "false", "data-tabs-target" => "#contacts", role: "tab", type: "button"} Wickets
+    #default-tab-content
+      #profile.hidden.p-4.rounded-lg.bg-gray-50{"aria-labelledby" => "profile-tab", role: "tabpanel"}
+        = render 'rankings/runs', runs: @runs
+          
+      #contacts.hidden.p-4.rounded-lg.bg-gray-50{"aria-labelledby" => "contacts-tab", role: "tabpanel"}
+        = render 'rankings/wickets', wickets: @wickets
+          
+
+
