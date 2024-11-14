@@ -48,7 +48,7 @@ class TournamentsController < ApplicationController
   end
 
   def tournament_params
-    params.require(:tournament).permit(:name, :win_point, :draw_point, :innings_win_point, :follow_on_win_point)
+    params.require(:tournament).permit(:name, :win_point, :draw_point, :innings_win_point, :follow_on_win_point, :round_count)
   end
 
 end

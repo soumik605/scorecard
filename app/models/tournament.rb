@@ -6,7 +6,7 @@ class Tournament < ApplicationRecord
   private 
 
   def create_matches
-    service = TournamentSetupService.new(self, Player.all, 3)
+    service = TournamentSetupService.new(self, Player.all, round_count)
     service.setup_tournament
   end
 end
