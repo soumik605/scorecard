@@ -12,6 +12,8 @@
     - @tours.each do |tour|
       .my-3
         = link_to tournament_path(tour), class: "block w-full p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100" do
+          - if tour.is_removed 
+            %spam removed
           %h5.mb-2.text-2xl.font-bold.tracking-tight.text-gray-900= tour.name
           - final = tour.matches.find_by(match_type: 4)
           - if final.present? && final.winner_team.present?

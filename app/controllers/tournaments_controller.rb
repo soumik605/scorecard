@@ -1,7 +1,11 @@
 class TournamentsController < ApplicationController
   before_action :set_tournament, only: [:show, :edit, :update, :leaderboard]
   def index
-    @tours = Tournament.all
+    if user_signed_in?
+      @tours = Tournament.all
+    else
+      @tours = Tournament.where(is_removed: false)
+    end
   end
 
   def show
@@ -27,6 +31,13 @@ class TournamentsController < ApplicationController
   end
 
   def update
+    respond_to do |format|
+      if @tour.update(tournament_params)
+        format.turbo_stream { redirect_to tournament_path(@tour), notice: 'Done !!'}
+      else
+        format.turbo_stream { redirect_to request.referrer, notice: @tour.errors.full_messages}
+      end
+    end
   end
 
   def leaderboard
@@ -49,7 +60,7 @@ class TournamentsController < ApplicationController
   end
 
   def tournament_params
-    params.require(:tournament).permit(:name, :win_point, :draw_point, :innings_win_point, :follow_on_win_point, :round_count, captain_ids: [])
+    params.require(:tournament).permit(:name, :is_removed, :win_point, :draw_point, :innings_win_point, :follow_on_win_point, :round_count, captain_ids: [])
   end
 
 end
