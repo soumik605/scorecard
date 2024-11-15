@@ -7,19 +7,18 @@
 			%span{class: @match.winner_team_id.present? ? @match.winner_team_id == @match.teams.last.id ? "font-bold text-green-500" : "text-light text-red-600" : "font-bold"}= @match.teams.last.captain.name
 
 
-	.mb-4.border-b.border-gray-200
-		%ul#default-tab.flex.flex-wrap.-mb-px.text-sm.font-medium.text-center{"data-tabs-toggle" => "#default-tab-content", role: "tablist"}
-			%li.me-2{role: "presentation"}
-				%button#profile-tab.inline-block.p-4.border-b-2.rounded-t-lg{"aria-controls" => "profile", "aria-selected" => "false", "data-tabs-target" => "#profile", role: "tab", type: "button"} Players
-			%li{role: "presentation"}
-				%button#contacts-tab.inline-block.p-4.border-b-2.rounded-t-lg.hover:text-gray-600.hover:border-gray-300{"aria-controls" => "contacts", "aria-selected" => "false", "data-tabs-target" => "#contacts", role: "tab", type: "button"} Result
-	#default-tab-content
-		#profile.hidden.p-4.rounded-lg.bg-gray-50{"aria-labelledby" => "profile-tab", role: "tabpanel"}
+	%div{"data-controller" => "tabs", "data-tabs-active-tab-class" => "-mb-px border-l border-t border-r rounded-t"}
+		%ul.list-reset.flex.border-b
+			%li.-mb-px.mr-1{"data-action" => "click->tabs#change:prevent", "data-tabs-target" => "tab"}
+				%a.bg-white.inline-block.py-2.px-4.text-blue-500.hover:text-blue-700.font-semibold.no-underline{href: "#"} Players
+			%li.mr-1{"data-action" => "click->tabs#change:prevent", "data-tabs-target" => "tab"}
+				%a.bg-white.inline-block.py-2.px-4.text-blue-500.hover:text-blue-700.font-semibold.no-underline{href: "#"} Result
+			
+		.hidden.py-4.px-4.border-l.border-b.border-r{"data-tabs-target" => "panel"}
 			= render "matches/players"
-				
-		#contacts.hidden.p-4.rounded-lg.bg-gray-50{"aria-labelledby" => "contacts-tab", role: "tabpanel"}
+		.hidden.py-4.px-4.border-l.border-b.border-r{"data-tabs-target" => "panel"}
 			= render "matches/result"
-				
+		
 
 
 	
