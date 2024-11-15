@@ -24,7 +24,7 @@ class TournamentSetupService
 
     matches.each_with_index do |mt, index|
       p mt
-      match = Match.create(tournament_id: tournament.id)
+      match = Match.create(tournament_id: tournament.id, match_type: 1)
       Team.create(name: "Team 1", captain_id: mt.stringify_keys["player_1_id"], match_id: match.id)
       Team.create(name: "Team 2", captain_id: mt.stringify_keys["player_2_id"], match_id: match.id)
     end

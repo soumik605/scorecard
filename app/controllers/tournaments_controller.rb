@@ -30,7 +30,7 @@ class TournamentsController < ApplicationController
   end
 
   def leaderboard
-    @players = Player.all
+    @players = Player.where(id: Team.where(match_id: @tour.matches.pluck(:id)).pluck(:captain_id))
     @players_data = []
 
     @players.each do |player|
@@ -45,7 +45,7 @@ class TournamentsController < ApplicationController
 
   def set_tournament
     @tour = Tournament.find(params[:id])
-    @matches = @tour.matches
+    @matches = @tour.matches.order("created_at desc")
   end
 
   def tournament_params
