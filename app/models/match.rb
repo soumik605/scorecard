@@ -12,7 +12,7 @@ class Match < ApplicationRecord
 
   def add_points_in_teams
     
-    if saved_changes.has_key? 'winner_team_id' and self.winner_team_id.present? and self.match_type == 1
+    if saved_changes.has_key? 'winner_team_id' and self.winner_team_id.present? and (self.match_type == 1 || self.match_type == "group stage")
       win_point = tournament.win_point
       draw_point = tournament.draw_point
       innings_win_point = is_won_by_innings ? tournament.innings_win_point : 0
