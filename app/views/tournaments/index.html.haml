@@ -13,4 +13,8 @@
       .my-3
         = link_to tournament_path(tour), class: "block w-full p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100" do
           %h5.mb-2.text-2xl.font-bold.tracking-tight.text-gray-900= tour.name
-          %p.font-normal.text-gray-700= "Win point : #{tour.win_point}"
+          - final = tour.matches.find_by(match_type: 4)
+          - if final.present? && final.winner_team.present?
+            %p.font-normal.text-gray-700.text-green-600= "WINNER : #{final.winner_team.captain.name}"
+          - else
+            %p.font-normal.text-gray-700= "Win point : #{tour.win_point}"

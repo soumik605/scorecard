@@ -12,7 +12,7 @@ class Match < ApplicationRecord
 
   def add_points_in_teams
     
-    if saved_changes.has_key? 'winner_team_id' and self.winner_team_id.present?
+    if saved_changes.has_key? 'winner_team_id' and self.winner_team_id.present? and self.match_type == 1
       win_point = tournament.win_point
       draw_point = tournament.draw_point
       innings_win_point = is_won_by_innings ? tournament.innings_win_point : 0
@@ -44,20 +44,11 @@ class Match < ApplicationRecord
     players.each do |player|
       players_data << [player.id, Team.where(match_id: tournament.matches.where(match_type: 1).pluck(:id), captain_id: player.id).pluck(:total_point).compact.select { |x| x.is_a?(Numeric) && x != 0 }.sum]
     end
-    p players_data
     players_data = players_data.sort_by { |name, score| [-score, name] }
-    p players_data
-    p q1
-    p q2
-    p final
+    
     cap1 = players_data[0][0]
     cap2 = players_data[1][0]
     cap3 = players_data[2][0]
-    p cap1
-    p cap2
-    p cap3
-
-
 
     if q1.nil?
       match = Match.create(tournament_id: tournament.id, match_type: 2)
