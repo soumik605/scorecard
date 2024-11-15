@@ -9,6 +9,7 @@ class TournamentsController < ApplicationController
 
   def new
     @tournament = Tournament.new
+    @players = Player.all
   end
 
   def create
@@ -48,7 +49,7 @@ class TournamentsController < ApplicationController
   end
 
   def tournament_params
-    params.require(:tournament).permit(:name, :win_point, :draw_point, :innings_win_point, :follow_on_win_point, :round_count)
+    params.require(:tournament).permit(:name, :win_point, :draw_point, :innings_win_point, :follow_on_win_point, :round_count, captain_ids: [])
   end
 
 end
