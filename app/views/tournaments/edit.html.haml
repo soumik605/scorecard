@@ -1,7 +1,9 @@
+= link_to "<- Matches list", tournament_path(@tour), class: "mb-4 px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
+
 - if user_signed_in?
   = form_with(model: @tour, url: tournament_path(@tour), method: "PUT", class: "contents block", data: { turbo_frame: "_top"}) do |form|
     .w-full.px-8
-      .text-xl.my-4 Create Tournament
+      .text-xl.my-4 Update Tournament
       .w-full
         .my-4
           = form.label "Name", class: "text-md fort-bold"
