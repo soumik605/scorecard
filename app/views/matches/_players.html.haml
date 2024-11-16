@@ -1,10 +1,10 @@
 - @players.each do |player|
-  .pb-8
-    .text-xl= player.name
+  .py-4.px-2.bg-slate-200.my-4.rounded-xl
+    .text-xl.mb-2= player.name
     - perfs = player.performances.where(match_id: @match)
     - if perfs.present?
       - perfs.each do |perf|
-        .pb-6
+        .my-3.bg-slate-300.rounded-lg.p-2
           = form_with(model: @performance, url: user_signed_in? ? performance_path(perf) : "", method: "PUT", class: "contents block", data: { turbo_frame: "_top"}) do |form|
             .grid.grid-cols-12.gap-2
               .col-span-5
