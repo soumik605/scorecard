@@ -8,6 +8,8 @@
           %th.px-6.py-3{scope: "col"}
             Name
           %th.px-6.py-3{scope: "col"}
+            Point
+          %th.px-6.py-3{scope: "col"}
             Wickets
         
       %tbody
@@ -19,5 +21,7 @@
               %h5{class: index == 0 ? "text-2xl" : ""}= wicket[0]
             %td.px-6.py-4
               %h5{class: index == 0 ? "text-2xl" : ""}= wicket[1]
+            %td.px-6.py-4
+              %h5{class: index == 0 ? "text-2xl" : ""}= wicket[2]
         
         
