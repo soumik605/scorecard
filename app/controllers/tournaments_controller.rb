@@ -45,10 +45,12 @@ class TournamentsController < ApplicationController
     @players_data = []
 
     @players.each do |player|
-      @players_data << [player.name, Team.where(match_id: @matches.pluck(:id), captain_id: player.id).pluck(:total_point).compact.select { |x| x.is_a?(Numeric) && x != 0 }.sum]
+      teams = Team.where(match_id: @matches.pluck(:id), captain_id: player.id)
+      matches = Match.joins(:teams).where("teams.captain_id = ?", player.id ).where(tournament_id: @tour.id).distinct
+      @players_data << [player.name, matches.where.not(winner_team_id: nil).uniq.count, matches.where(winner_team_id: nil).count, teams.pluck(:total_point).compact.select { |x| x.is_a?(Numeric) && x != 0 }.sum]
     end
 
-    @players_data = @players_data.sort_by { |name, score| [-score, name] }
+    @players_data = @players_data.sort_by { |name, complete, pending, score| [-score, complete, -pending, name] }
 
   end
 
