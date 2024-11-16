@@ -27,7 +27,7 @@ class PerformancesController < ApplicationController
   private 
 
   def performance_params
-    params.require(:performance).permit(:runs, :wickets, :player_id, :match_id)
+    params.require(:performance).permit(:runs, :wickets, :player_id, :match_id, :is_not_out)
   end
 
   def set_performance
