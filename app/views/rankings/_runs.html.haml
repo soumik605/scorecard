@@ -9,6 +9,8 @@
             Name
           %th.px-6.py-3{scope: "col"}
             Runs
+          %th.px-6.py-3{scope: "col"}
+            Average
         
       %tbody
         - runs.each_with_index do |run, index|
@@ -19,5 +21,7 @@
               %h5{class: index == 0 ? "text-2xl" : ""}= run[0]
             %td.px-6.py-4
               %h5{class: index == 0 ? "text-2xl" : ""}= run[1]
+            %td.px-6.py-4
+              %h5{class: index == 0 ? "text-2xl" : ""}= run[2]
         
       
