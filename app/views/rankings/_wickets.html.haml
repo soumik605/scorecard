@@ -20,7 +20,7 @@
             %td.px-6.py-4
               %h5{class: index == 0 ? "text-2xl" : ""}= wicket[0]
             %td.px-6.py-4
-              %h5{class: index == 0 ? "text-2xl" : ""}= wicket[1]
+              %h5{class: index == 0 ? "text-2xl" : ""}= wicket[1].try(:to_i)
             %td.px-6.py-4
               %h5{class: index == 0 ? "text-2xl" : ""}= wicket[2]
         
