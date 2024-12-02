@@ -11,6 +11,9 @@
             Point
           %th.px-6.py-3{scope: "col"}
             Wickets
+          %th.px-6.py-3{scope: "col"}
+            Recent Form
+
         
       %tbody
         - wickets.each_with_index do |wicket, index|
@@ -23,5 +26,7 @@
               %h5{class: index == 0 ? "text-2xl" : ""}= wicket[1].try(:to_i)
             %td.px-6.py-4
               %h5{class: index == 0 ? "text-2xl" : ""}= wicket[2]
+            %td.px-6.py-4
+              %h5{class: index == 0 ? "text-2xl" : ""}= wicket[3].join(", ")
         
         
