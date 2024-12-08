@@ -22,11 +22,12 @@ module PlayersHelper
   def getPlayerWicketData player
     innings = Performance.where(id: player.performances.where.not(wickets: nil).pluck(:id))
     matches = Match.where(id: innings.pluck(:match_id)).distinct
-    total_wickets = innings.pluck(:wickets).compact.select { |x| x.is_a?(Numeric) }.sum
-    zero_count = innings.where(wickets: 0).count
-    range_1_count = innings.where(wickets: 3).count
-    range_2_count = innings.where(wickets: 4).count
-    range_3_count = innings.where("wickets > 4").count
+    all_wickets = innings.pluck(:wickets).compact.select { |x| x.is_a?(Numeric) }
+    total_wickets = all_wickets.sum
+    zero_count = all_wickets.count(0)
+    range_1_count = all_wickets.count(3)
+    range_2_count = all_wickets.count(4)
+    range_3_count = all_wickets.count { |num| num > 4 }
 
     return [total_wickets, matches.count, innings.count, zero_count, range_1_count, range_2_count, range_3_count]
   end
