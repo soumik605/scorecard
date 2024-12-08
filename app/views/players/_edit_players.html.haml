@@ -1,0 +1,8 @@
+.text-sm.mt-20 Other Players 
+- @players.each do |pl|
+  = form_with(model: pl, url: user_signed_in? ? player_path(pl) : "", method: "PUT", class: "contents block", data: { turbo_frame: "_top"}) do |form|
+    .grid.grid-cols-12.gap-2.py-2
+      .col-span-10
+        = form.text_field :name, {required: true, readonly: !user_signed_in?, class: "block rounded-md border border-gray-200 outline-none px-2 py-2 mt-1 w-full text-xs"}
+      .col-span-2 
+        = form.submit "OK", class: "focus:outline-none text-white bg-green-700 hover:bg-green-800 font-medium rounded-lg text-xs px-2 py-1.5 mt-2"

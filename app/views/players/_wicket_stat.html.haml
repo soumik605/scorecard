@@ -1,0 +1,43 @@
+.relative.overflow-x-auto
+  %table.w-full.text-sm.text-left.rtl:text-right.text-gray-500
+    %thead.text-xs.text-gray-700.uppercase.bg-gray-50
+      %tr
+        %th.px-6.py-3.whitespace-nowrap.bg-slate-100.text-black.sticky.left-0{scope: "col"}
+          Name
+        %th.px-6.py-3.whitespace-nowrap{scope: "col"}
+          Wickets
+        %th.px-6.py-3.whitespace-nowrap{scope: "col"}
+          Matches
+        %th.px-6.py-3.whitespace-nowrap{scope: "col"}
+          Innings
+        %th.px-6.py-3.whitespace-nowrap{scope: "col"}
+          3 wicket
+        %th.px-6.py-3.whitespace-nowrap{scope: "col"}
+          4 wicket
+        %th.px-6.py-3.whitespace-nowrap{scope: "col"}
+          5+ wicket
+        %th.px-6.py-3.whitespace-nowrap{scope: "col"}
+          No Wicket
+
+      
+    %tbody
+      - players.each do |pl|
+        - wicket_data = getPlayerWicketData(pl)
+        %tr.border-b
+          %th.px-6.py-3.bg-slate-100.text-black.sticky.left-0{scope: "row"}
+            %h5.whitespace-nowrap= pl.name
+          %td.px-6.py-3
+            %h5.whitespace-nowrap= wicket_data[0]
+          %td.px-6.py-3
+            %h5.whitespace-nowrap= wicket_data[1]
+          %td.px-6.py-3
+            %h5.whitespace-nowrap= wicket_data[2]
+          %td.px-6.py-3
+            %h5.whitespace-nowrap= wicket_data[3]
+          %td.px-6.py-3
+            %h5.whitespace-nowrap= wicket_data[4]
+          %td.px-6.py-3
+            %h5.whitespace-nowrap= wicket_data[5]
+          %td.px-6.py-3
+            %h5.whitespace-nowrap= wicket_data[6]
+          

@@ -1,19 +1,21 @@
 .w-full
   = link_to "<- Tournaments list", root_path, class: "mb-4 px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
-  .text-xl.text-center.my-4 Add Player
-  = form_with(model: @player, url: user_signed_in? ? players_path : "", method: "POST", class: "contents block", data: { turbo_frame: "_top"}) do |form|
-    .grid.grid-cols-12.gap-2
-      .col-span-10
-        = form.label "name", class: "text-md fort-bold"
-        = form.text_field :name, {required: true, readonly: !user_signed_in?, class: "block rounded-md border border-gray-200 outline-none px-2 py-2 mt-1 w-full text-xs"}
-      .col-span-2 
-        = form.submit "OK", class: "focus:outline-none text-white bg-green-700 hover:bg-green-800 font-medium rounded-lg text-xs px-2 py-1.5 mt-8"
+  
 
-  .text-sm.mt-20 Other Players 
-  - @players.each do |pl|
-    = form_with(model: pl, url: user_signed_in? ? player_path(pl) : "", method: "PUT", class: "contents block", data: { turbo_frame: "_top"}) do |form|
-      .grid.grid-cols-12.gap-2.py-2
-        .col-span-10
-          = form.text_field :name, {required: true, readonly: !user_signed_in?, class: "block rounded-md border border-gray-200 outline-none px-2 py-2 mt-1 w-full text-xs"}
-        .col-span-2 
-          = form.submit "OK", class: "focus:outline-none text-white bg-green-700 hover:bg-green-800 font-medium rounded-lg text-xs px-2 py-1.5 mt-2"
+
+  .mt-6 
+    .text-lg.mb-3.text-center Batting Records
+    = render "players/run_stat", players: @players
+
+  .mt-10
+    .text-lg.mb-3.text-center Bowling Records
+    = render "players/wicket_stat", players: @players
+  
+  - if user_signed_in?
+    .mt-6.mb-10 
+      = render "players/add_player"
+      = render "players/edit_players"
+
+
+
+  

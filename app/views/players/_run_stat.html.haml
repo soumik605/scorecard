@@ -1,0 +1,55 @@
+.relative.overflow-x-auto
+  %table.w-full.text-sm.text-left.rtl:text-right.text-gray-500
+    %thead.text-xs.text-gray-700.uppercase.bg-gray-50
+      %tr
+        %th.px-6.py-3.whitespace-nowrap.bg-slate-100.text-black.sticky.left-0{scope: "col"}
+          Name
+        %th.px-6.py-3.whitespace-nowrap{scope: "col"}
+          Runs
+        %th.px-6.py-3.whitespace-nowrap{scope: "col"}
+          Average
+        %th.px-6.py-3.whitespace-nowrap{scope: "col"}
+          Matches
+        %th.px-6.py-3.whitespace-nowrap{scope: "col"}
+          Innings
+        %th.px-6.py-3.whitespace-nowrap{scope: "col"}
+          Not Out
+        %th.px-6.py-3.whitespace-nowrap{scope: "col"}
+          0
+        %th.px-6.py-3.whitespace-nowrap{scope: "col"}
+          1-30
+        %th.px-6.py-3.whitespace-nowrap{scope: "col"}
+          31-49
+        %th.px-6.py-3.whitespace-nowrap{scope: "col"}
+          50-99
+        %th.px-6.py-3.whitespace-nowrap{scope: "col"}
+          100+
+
+      
+    %tbody
+      - players.each do |pl|
+        - run_data = getPlayerRunData(pl)
+        %tr.border-b
+          %th.px-6.py-3.bg-slate-100.text-black.sticky.left-0{scope: "row"}
+            %h5.whitespace-nowrap= pl.name
+          %td.px-6.py-3
+            %h5.whitespace-nowrap= run_data[0]
+          %td.px-6.py-3
+            %h5.whitespace-nowrap= run_data[1]
+          %td.px-6.py-3
+            %h5.whitespace-nowrap= run_data[2]
+          %td.px-6.py-3
+            %h5.whitespace-nowrap= run_data[3]
+          %td.px-6.py-3
+            %h5.whitespace-nowrap= run_data[4]
+          %td.px-6.py-3
+            %h5.whitespace-nowrap= run_data[5]
+          %td.px-6.py-3
+            %h5.whitespace-nowrap= run_data[6]
+          %td.px-6.py-3
+            %h5.whitespace-nowrap= run_data[7]
+          %td.px-6.py-3
+            %h5.whitespace-nowrap= run_data[8]
+          %td.px-6.py-3
+            %h5.whitespace-nowrap= run_data[9]
+          
