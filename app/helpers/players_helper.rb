@@ -1,7 +1,7 @@
 module PlayersHelper
 
   def getPlayerRunData player
-    innings = Performance.where.not(runs: nil).where(player_id: player.id).distinct
+    innings = Performance.where(id: player.performances.where.not(runs: nil).pluck(:id)).distinct
     matches = Match.where(id: innings.pluck(:match_id)).distinct
     obj = innings.pluck(:runs, :is_not_out).compact.select { |x| x[0].is_a?(Numeric)}
     total_run = obj.map(&:first).sum
