@@ -29,7 +29,7 @@ module PlayersHelper
     range_2_count = all_wickets.count(4)
     range_3_count = all_wickets.count { |num| num > 4 }
 
-    return [total_wickets, matches.count, innings.count, zero_count, range_1_count, range_2_count, range_3_count]
+    return [total_wickets, matches.count, innings.count, range_1_count, range_2_count, range_3_count, zero_count]
   end
 
 
