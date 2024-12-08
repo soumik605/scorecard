@@ -20,9 +20,9 @@ module PlayersHelper
 
 
   def getPlayerWicketData player
-    innings = Performance.where.not(wickets: nil).where(player_id: player.id).distinct
+    innings = Performance.where(id: player.performances.where.not(wickets: nil).pluck(:id))
     matches = Match.where(id: innings.pluck(:match_id)).distinct
-    total_wickets = innings.pluck(:wickets).sum
+    total_wickets = innings.pluck(:wickets).compact.select { |x| x.is_a?(Numeric) }.sum
     zero_count = innings.where(wickets: 0).count
     range_1_count = innings.where(wickets: 3).count
     range_2_count = innings.where(wickets: 4).count
