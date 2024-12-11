@@ -13,8 +13,16 @@ module PlayersHelper
     range_2_count = innings.where("runs between 31 and 49").count
     range_3_count = innings.where("runs between 50 and 99").count
     range_4_count = innings.where("runs > 99").count
+    max_value, is_not_out = nil, nil
+    
+    max_value, is_not_out = obj.max_by { |num, bool| [num, bool ? 1 : 0] } if obj.present? 
 
-    return [total_run, average, matches.count, innings.count, not_out, zero_count, range_1_count, range_2_count, range_3_count, range_4_count]
+    highest = ""
+    if max_value.present?
+      highest = is_not_out ? "#{max_value}*" : max_value
+    end
+
+    return [total_run, average, matches.count, innings.count, highest, not_out, zero_count, range_1_count, range_2_count, range_3_count, range_4_count]
   end
 
 
