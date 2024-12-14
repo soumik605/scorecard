@@ -10,6 +10,13 @@ class Performance < ApplicationRecord
   scope :best_batting, -> { order(runs: :desc) }
   scope :best_bowling, -> { order(wickets: :desc) }
 
+  def performance_score
+    run = runs || 0
+    wicket = wickets || 0
+    score = run + (wicket * 15) + (is_not_out ? 10 : 0)
+    return score
+  end
+
   def self.best_batting_innings
     p = Performance.with_runs.order('runs DESC').first
     return "#{p.runs} (#{p.player.name})"

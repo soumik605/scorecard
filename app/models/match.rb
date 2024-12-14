@@ -25,6 +25,27 @@ class Match < ApplicationRecord
                                     .order('wins DESC')
                                     .limit(1) 
   end
+
+  def player_of_the_match
+    if winner_team.present?
+      data = {}
+      Player.all.each do |player|
+        perfs = performances.where(player_id: player)
+        if perfs.present?
+          sum = 0
+          perfs.each do |p|
+            sum += p.performance_score
+          end
+          data ["#{player.name}"] = sum
+        end
+      end
+
+      name = data.present? ? data.max_by { |_, value| value }[0] : ""
+      return name
+    else
+      return nil
+    end
+  end
   
   private 
 

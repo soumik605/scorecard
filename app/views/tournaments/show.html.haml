@@ -14,3 +14,9 @@
             %span{class: match.winner_team_id.present? ? match.winner_team_id == match.teams.first.id ? "font-bold text-green-500 text-3xl" : "text-light text-red-500 text-sm" : "font-bold"}= match.teams.first.captain.name
             %span vs
             %span{class: match.winner_team_id.present? ? match.winner_team_id == match.teams.last.id ? "font-bold text-green-500 text-3xl" : "text-light text-red-500 text-sm" : "font-bold"}= match.teams.last.captain.name
+          
+          - pm = match.player_of_the_match
+          - if pm.present?
+            %div
+              %span.text-xs Player of the match
+              %span.text-md.font-bold= match.player_of_the_match
