@@ -7,7 +7,25 @@ class Match < ApplicationRecord
   after_update :add_points_in_teams
 
   enum :match_type, { 'group stage': 1, 'qualifier1': 2, 'qualifier2': 3, 'final': 4  }
+  
+  scope :won_by_innings, -> { where(is_won_by_innings: true) }
+  scope :won_by_follow_on, -> { where(is_won_by_follow_on: true) }
+  scope :drawn, -> { where(is_draw: true) }
 
+  def self.most_wins_by_innings
+    where(is_won_by_innings: true).select('winner_team_id, COUNT(*) AS wins')
+                                  .group('winner_team_id')
+                                  .order('wins DESC')
+                                  .limit(1) 
+  end
+
+  def self.most_wins_by_follow_on
+    where(is_won_by_follow_on: true).select('winner_team_id, COUNT(*) AS wins')
+                                    .group('winner_team_id')
+                                    .order('wins DESC')
+                                    .limit(1) 
+  end
+  
   private 
 
   def add_points_in_teams

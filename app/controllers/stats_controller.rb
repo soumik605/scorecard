@@ -2,19 +2,19 @@ class StatsController < ApplicationController
 
   def index
     @stats = []
-    @stats << ["Most run", Player.joins(:performances).select('players.*, SUM(performances.runs) AS total_runs').group('players.id').order('total_runs DESC').first.try(:name)]
-    @stats << ["Most wicket", Player.joins(:performances).select('players.*, SUM(performances.wickets) AS total_wickets').group('players.id').order('total_wickets DESC').first.try(:name)]
-    @stats << ["Most duck", Player.joins(:performances).select('players.*, COUNT(performances.id) AS duck_count').where(performances: { runs: 0 }).group('players.id').order('duck_count DESC').first.try(:name)]
-    @stats << ["Most 50", Player.joins(:performances).select('players.*, COUNT(performances.id) AS fifty_count').where('performances.runs >= 50 AND performances.runs < 100').group('players.id').order('fifty_count DESC').first]
-    @stats << ["Most 100", Player.joins(:performances).select('players.*, COUNT(performances.id) AS hundred_count').where('performances.runs >= 100').group('players.id').order('hundred_count DESC').first.try(:name)]
-    @stats << ["Best win % (captain)", ""]
-    @stats << ["Worst win % (captain)", ""]
-    @stats << ["Most win (captain)", ""]
-    @stats << ["Most series win (captain)", ""]
-    @stats << ["Best batting innings", Performance.with_runs.joins(:player).select('performances.*, players.name AS player_name').order('runs DESC').first.try(:runs)]
-    @stats << ["Best bowling innings", Performance.with_wickets.joins(:player).select('performances.*, players.name AS player_name').order('wickets DESC').first.try(:wickets)]
-    @stats << ["Most win by innings", ""]
-    @stats << ["Most win by follow on", ""]
+    @stats << ["Most run", Player.most_runs]
+    @stats << ["Most wicket", Player.most_wickets]
+    @stats << ["Most duck", Player.most_ducks]
+    @stats << ["Most 50", Player.most_fifties]
+    @stats << ["Most 100", Player.most_hundreds]
+    # @stats << ["Best win % (captain)", Player.captain_win_percentage(order: :desc)]
+    # @stats << ["Worst win % (captain)", Player.captain_win_percentage(order: :asc)]
+    @stats << ["Most win (captain)", Player.most_wins]
+    # @stats << ["Most series win (captain)", Player.most_series_wins]
+    @stats << ["Best batting innings", Performance.best_batting_innings]
+    @stats << ["Best bowling innings", Performance.best_bowling_innings]
+    # @stats << ["Most win by innings", Match.most_wins_by_innings]
+    # @stats << ["Most win by follow on", Match.most_wins_by_follow_on]
   end
 
 end

@@ -2,13 +2,11 @@
 
 - if @stats.present?
   .relative.overflow-x-auto.mt-4
-    %table.w-full.text-sm.text-left.rtl:text-right.text-gray-500
-      %tbody
-        - @stats.each_with_index do |stat|
-          %tr.odd:bg-white.even:bg-gray-100
-            %td.px-6.py-3.max-w-20
-              %h5= stat[0]
-            %td.px-6.py-3
-              %h5= stat[1]
-        
+    .grid.grid-cols-12.col-gap-2
+      - @stats.each_with_index do |stat, index|
+        .col-span-6.py-3.px-2{class: index % 2 == 0 ? "bg-slate-100" : "bg-white"}
+          %h5= stat[0]
+        .col-span-6.py-3.px-2{class: index % 2 == 0 ? "bg-slate-100" : "bg-white"}
+          %h5= stat[1]
       
+    

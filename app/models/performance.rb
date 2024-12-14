@@ -9,5 +9,15 @@ class Performance < ApplicationRecord
   scope :hundreds, -> { where('runs >= 100') }
   scope :best_batting, -> { order(runs: :desc) }
   scope :best_bowling, -> { order(wickets: :desc) }
+
+  def self.best_batting_innings
+    p = Performance.with_runs.order('runs DESC').first
+    return "#{p.runs} (#{p.player.name})"
+  end
+
+  def self.best_bowling_innings
+    p = Performance.with_runs.order('wickets DESC').first
+    return "#{p.runs} (#{p.player.name})"
+  end
   
 end
