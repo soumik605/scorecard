@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       get :leaderboard
     end
   end
+  resources :stats
   resources :matches
   resources :performances
   resources :players
