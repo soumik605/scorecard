@@ -7,6 +7,8 @@ class Tournament < ApplicationRecord
 
   validate :check_captain_count
 
+  enum :tour_type, { 'test': 1, 't20': 2  }
+
   private 
 
   def check_captain_count

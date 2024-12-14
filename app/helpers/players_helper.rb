@@ -22,7 +22,7 @@ module PlayersHelper
       highest = is_not_out ? "#{max_value}*" : max_value
     end
 
-    return [total_run, average, matches.count, innings.count, highest, not_out, zero_count, range_1_count, range_2_count, range_3_count, range_4_count]
+    return [total_run, innings.count, average, matches.count, highest, not_out, zero_count, range_1_count, range_2_count, range_3_count, range_4_count]
   end
 
 

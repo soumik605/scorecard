@@ -3,9 +3,7 @@
     %table.w-full.text-sm.text-left.rtl:text-right.text-gray-500
       %thead.text-xs.text-gray-700.uppercase.bg-gray-50
         %tr
-          %th.px-6.py-3{scope: "col"}
-            Rank
-          %th.px-6.py-3{scope: "col"}
+          %th.px-6.py-3.sticky.left-0.bg-gray-50{scope: "col"}
             Name
           %th.px-6.py-3{scope: "col"}
             Point
@@ -18,9 +16,7 @@
       %tbody
         - wickets.each_with_index do |wicket, index|
           %tr.border-b{class: index == 0 ? "bg-green-100" : ""}
-            %th.px-6.py-4.font-medium.text-gray-900.whitespace-nowrap{scope: "row"}
-              %h5{class: index == 0 ? "text-2xl" : ""}= index + 1
-            %td.px-6.py-4
+            %th.px-6.py-4.font-medium.text-gray-900.whitespace-nowrap.sticky.left-0{scope: "row", class: index == 0 ? "bg-green-100" : "bg-white"}
               %h5{class: index == 0 ? "text-2xl" : ""}= wicket[0]
             %td.px-6.py-4
               %h5{class: index == 0 ? "text-2xl" : ""}= wicket[1].try(:to_i)
