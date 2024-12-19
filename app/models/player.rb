@@ -10,6 +10,7 @@ class Player < ApplicationRecord
       entries.sum { |entry| entry["runs"].to_i } 
     end
     player_with_most_runs = player_runs.max_by { |player_id, total_runs| total_runs }
+    return "-" unless player_with_most_runs.present?
     player = players.find{|p| p["id"] == player_with_most_runs[0]}
     return "#{player['name']} (#{player_with_most_runs[1]})"
   end
@@ -20,6 +21,7 @@ class Player < ApplicationRecord
       entries.sum { |entry| entry["wickets"].to_i } 
     end
     player_with_most_wickets = player_wickets.max_by { |player_id, total_wickets| total_wickets }
+    return "-" unless player_with_most_wickets.present?
     player = players.find{|p| p["id"] == player_with_most_wickets[0]}
     return "#{player['name']} (#{player_with_most_wickets[1]})"
   end
@@ -29,6 +31,7 @@ class Player < ApplicationRecord
     zero_runs = performances.select { |record| record["runs"] == 0 }
     player_zero_counts = zero_runs.group_by { |record| record["player_id"] }.transform_values(&:count)
     player_with_most_zeros = player_zero_counts.max_by { |_, count| count }
+    return "-" unless player_with_most_zeros.present?
     player = players.find{|p| p["id"] == player_with_most_zeros[0]}
     return "#{player['name']} (#{player_with_most_zeros[1]})"
   end
@@ -65,15 +68,14 @@ class Player < ApplicationRecord
   end
 
   def self.most_wins matches, teams, players
-    winning_matches = matches.reject { |match| match["winner_team_id"].nil? }
-    captain_wins = Hash.new(0)
-    winning_matches.each do |match|
-      winner_team = teams.find { |team| team["id"] == match["winner_team_id"] }
-      captain_wins[winner_team["captain_id"]] += 1 if winner_team
+    win_counts = matches.each_with_object(Hash.new(0)) do |match, counts|
+      counts[match["winner_captain_id"]] += 1
     end
-    most_wins = captain_wins.max_by { |_, wins| wins }
-    player = players.find{|p| p["id"] == most_wins[0]}
-    return "#{player['name']} (#{most_wins[1]})"
+    
+    most_winning_captain = win_counts.max_by { |captain_id, wins| wins }
+    winner_captain_id, win_count = most_winning_captain
+    player = players.find{|p| p["id"] == winner_captain_id}
+    return "#{player['name']} (#{win_count})"
   end
   
   def self.most_series_wins

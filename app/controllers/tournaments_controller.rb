@@ -44,8 +44,13 @@ class TournamentsController < ApplicationController
 
     @players.each do |player|
       player_matches = @matches.filter{|m| [m["captain_a"], m["captain_b"]].include? player["id"]  }
-      win_matches = player_matches.filter{|m| m["winner_captain_id"] == player["id"]}
-      @players_data << [player["name"], player_matches.filter{|m| m["winner_captain_id"].present?}.count, player_matches.filter{|m| !m["winner_captain_id"].present?}.count, win_matches.pluck("total_point").compact.select { |x| x.is_a?(Numeric) && x != 0 }.sum]
+      p player_matches.count
+      p player
+      win_matches = player_matches.filter{|m| m["winner_captain_id"].present? && m["winner_captain_id"] == player["id"] }
+      loose_matches = player_matches.filter{|m| m["winner_captain_id"].present? && m["winner_captain_id"] != player["id"] }
+      win_point = win_matches.pluck("win_point").compact.select { |x| x.is_a?(Numeric) && x != 0 }.sum
+      loose_point = loose_matches.pluck("loose_point").compact.select { |x| x.is_a?(Numeric) && x != 0 }.sum
+      @players_data << [player["name"], player_matches.filter{|m| m["winner_captain_id"].present?}.count, player_matches.filter{|m| !m["winner_captain_id"].present?}.count, win_point+loose_point]
     end
 
     @players_data = @players_data.sort_by { |name, complete, pending, score| [-score, complete, -pending, name] }
