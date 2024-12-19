@@ -1,10 +1,8 @@
 class PlayersController < ApplicationController
-
+  before_action :get_data
   before_action :set_player, only: [:update]
 
   def index 
-    @players = Player.all.order("created_at ASC")
-    @player = Player.new
   end
 
   def create

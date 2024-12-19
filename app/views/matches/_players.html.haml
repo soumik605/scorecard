@@ -1,45 +1,14 @@
 - @players.each do |player|
   .py-4.px-2.bg-slate-200.my-4.rounded-xl
-    .text-xl.mb-2= player.name
-    - perfs = player.performances.where(match_id: @match)
+    .text-xl.mb-2= player["name"]
+    - perfs = @performances.filter{|p| ((p["match_id"].to_s == match["id"].to_s) && (p["player_id"].to_s == player["id"].to_s))  }
+
     - if perfs.present?
       - perfs.each do |perf|
-        .my-3.bg-slate-300.rounded-lg.p-2
-          = form_with(model: @performance, url: user_signed_in? ? performance_path(perf) : "", method: "PUT", class: "contents block", data: { turbo_frame: "_top"}) do |form|
-            .grid.grid-cols-12.gap-2
-              .col-span-5
-                = form.hidden_field :player_id, value: player.id
-                = form.hidden_field :match_id, value: @match.id
-                = form.label "Run", class: "text-md fort-bold"
-                = form.number_field :runs, { value: perf.runs || "", required: false, readonly: !user_signed_in?, class: "block rounded-md border border-gray-200 outline-none px-2 py-2 mt-1 w-full text-xs"}
-              .col-span-5
-                = form.label "Wicket", class: "text-md fort-bold"
-                = form.number_field :wickets, { value: perf.wickets || "", required: false, readonly: !user_signed_in?, class: "block rounded-md border border-gray-200 outline-none px-2 py-2 mt-1 w-full text-xs"}
-              - if user_signed_in?
-                .col-span-2
-                  = form.submit "OK", class: "focus:outline-none text-white bg-green-700 hover:bg-green-800 font-medium rounded-lg text-xs px-2 py-1.5 mt-8"
-              .col-span-12
-                = form.check_box :is_not_out, {checked: perf.is_not_out, class: "h-6 w-6 border border-gray-300 rounded-lg bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer", :type => "button"}
-                = form.label "Not Out?", class: "text-md fort-bold"
-          
-
-
-    - if perfs.count < 2
-      = form_with(model: @performance, url: user_signed_in? ? performances_path : "", method: "POST", class: "contents block", data: { turbo_frame: "_top"}) do |form|
-        .grid.grid-cols-12.gap-2
-          .col-span-5
-            = form.hidden_field :player_id, value: player.id
-            = form.hidden_field :match_id, value: @match.id
-            = form.label "Run", class: "text-md fort-bold"
-            = form.number_field :runs, {required: false, readonly: !user_signed_in?, class: "block rounded-md border border-gray-200 outline-none px-2 py-2 mt-1 w-full text-xs"}
-          .col-span-5
-            = form.label "Wicket", class: "text-md fort-bold"
-            = form.number_field :wickets, {required: false, readonly: !user_signed_in?, class: "block rounded-md border border-gray-200 outline-none px-2 py-2 mt-1 w-full text-xs"}
-
-          -if user_signed_in?
-            .col-span-2
-              = form.submit "OK", class: "focus:outline-none text-white bg-green-700 hover:bg-green-800 font-medium rounded-lg text-xs px-2 py-1.5 mt-8"
-          .col-span-12
-            = form.check_box :is_not_out, {class: "h-6 w-6 border border-gray-300 rounded-lg bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer", :type => "button"}
-            = form.label "Not Out?", class: "text-md fort-bold"
-          
+        .my-4.grid.grid-cols-12.gap-6
+          .flex.col-span-4
+            .text-md= "Run - #{perf["runs"]}"
+            - if perf["is_not_out"]
+              .text-md *
+          .col-span-6
+            .text-md= "Wickets - #{perf["wickets"]}"

@@ -1,36 +1,14 @@
 
-- if @match.winner_team_id.present?
+- if @match["winner_team_id"].present?
   - arr = ["Won this match"]
-  - arr << "by an innings" if @match.is_won_by_innings
-  - arr << "by follow on" if @match.is_won_by_follow_on
+  - arr << "by an innings" if @match["is_won_by_innings"]
+  - arr << "by follow on" if @match["is_won_by_follow_on"]
 
-  .text-3xl.text-center= "#{@match.winner_team.captain.name}"
+  - winner_team = @teams.find{|t| t["id"] == @match["winner_team_id"]}
+  - winner_captain = @players.find{|p| p["id"] == winner_team["captain_id"]}
+
+  .text-3xl.text-center= "#{winner_captain["name"]}"
   .text-sm.text-center= arr.to_sentence 
-- elsif user_signed_in?
-  .flex.w-full.justify-center
-    %div.mt-2
-      = form_with(model: @match, url: match_path(@match), class: "contents", data: { turbo_frame: "_top"}) do |form|
-        .flex.justify-equal.w-full
 
-          - @match.teams.each do |team|
-            .flex.p-4
-              %label
-                .text-xl.pl-1.text-center= team.captain.name
-                = form.radio_button :winner_team_id, team.id, checked: @match.winner_team_id == team.id, class: "focus:ring-violet-900"
-
-        - if @match.match_type == 1 || @match.match_type == "group stage"
-          .my-4
-            = form.check_box :is_won_by_innings, {class: "h-6 w-6 border border-gray-300 rounded-lg bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer", :type => "button"}
-            = form.label "Won by innings (+#{@match.tournament.innings_win_point})", class: "text-md fort-bold"
-          
-          .my-4
-            = form.check_box :is_won_by_follow_on, {class: "h-6 w-6 border border-gray-300 rounded-lg bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer", :type => "button"}
-            = form.label "Won by follow on (+#{@match.tournament.follow_on_win_point})", class: "text-md fort-bold"
-          
-          .my-4
-            = form.check_box :is_draw, {class: "h-6 w-6 border border-gray-300 rounded-lg bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer", :type => "button"}
-            = form.label "Draw ?", class: "text-md fort-bold"
-        
-        = form.submit "Submit", class: "focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
 - else 
   .text-sm.text-center No result till now

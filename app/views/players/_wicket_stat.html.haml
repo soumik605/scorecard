@@ -22,10 +22,10 @@
       
     %tbody
       - players.each do |pl|
-        - wicket_data = getPlayerWicketData(pl)
+        - wicket_data = getPlayerWicketData(pl, @performances, @matches)
         %tr.border-b
           %th.px-6.py-3.bg-slate-100.text-black.sticky.left-0{scope: "row"}
-            %h5.whitespace-nowrap= pl.name
+            %h5.whitespace-nowrap= pl["name"]
           %td.px-6.py-3
             %h5.whitespace-nowrap= wicket_data[0]
           %td.px-6.py-3

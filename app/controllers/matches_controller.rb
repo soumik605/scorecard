@@ -1,8 +1,8 @@
 class MatchesController < ApplicationController
+  before_action :get_data
   before_action :set_match, only: [:show, :update]
 
   def show
-    @performance = Performance.new
   end
 
   def update
@@ -17,8 +17,7 @@ class MatchesController < ApplicationController
   private
 
   def set_match
-    @match = Match.find_by(id: params[:id])
-    @players = Player.all.order("created_at ASC")
+    @match = @matches.find{|m| m["id"].to_s == params[:id].to_s}
   end
 
   def match_params

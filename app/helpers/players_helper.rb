@@ -1,18 +1,19 @@
 module PlayersHelper
 
-  def getPlayerRunData player
-    innings = Performance.where(id: player.performances.where.not(runs: nil).pluck(:id)).order("id desc")
-    matches = Match.where(id: innings.pluck(:match_id)).distinct
-    obj = innings.pluck(:runs, :is_not_out).compact.select { |x| x[0].is_a?(Numeric)}
+  def getPlayerRunData player, performances, matches
+    innings = performances.filter{|p| (p["player_id"] == player["id"]) && p["runs"].present? }
+    matches = matches.filter{ |m| innings.pluck("match_id").include?(m["id"])}.uniq
+    obj = innings.pluck("runs", "is_not_out").compact.select { |x| x[0].is_a?(Numeric)}
+    p obj
     total_run = obj.map(&:first).sum
-    not_out = innings.where(is_not_out: true).count
-    out = innings.where(is_not_out: false).count
+    not_out = innings.filter{ |i| i["is_not_out"] == true}.count
+    out = innings.filter{ |i| i["is_not_out"] == false}.count
     average = out > 0 ? total_run/out : nil
-    zero_count = innings.where(runs: 0).count
-    range_1_count = innings.where("runs between 1 and 30").count
-    range_2_count = innings.where("runs between 31 and 49").count
-    range_3_count = innings.where("runs between 50 and 99").count
-    range_4_count = innings.where("runs > 99").count
+    zero_count = innings.filter{ |i| i["runs"] == 0}.count
+    range_1_count = innings.filter{ |i| i["runs"] >= 0 && i["runs"] <= 30}.count
+    range_2_count = innings.filter{ |i| i["runs"] >= 31 && i["runs"] <= 49}.count
+    range_3_count = innings.filter{ |i| i["runs"] >= 50 && i["runs"] <= 99}.count
+    range_4_count = innings.filter{ |i| i["runs"] >= 100}.count
     max_value, is_not_out = nil, nil
     
     max_value, is_not_out = obj.max_by { |num, bool| [num, bool ? 1 : 0] } if obj.present? 
@@ -27,10 +28,10 @@ module PlayersHelper
 
 
 
-  def getPlayerWicketData player
-    innings = Performance.where(id: player.performances.where.not(wickets: nil).pluck(:id))
-    matches = Match.where(id: innings.pluck(:match_id)).distinct
-    all_wickets = innings.pluck(:wickets).compact.select { |x| x.is_a?(Numeric) }
+  def getPlayerWicketData player, performances, matches
+    innings = performances.filter{|p| (p["player_id"] == player["id"]) && p["wickets"].present? }
+    matches = matches.filter{ |m| innings.pluck("match_id").include?(m["id"])}.uniq
+    all_wickets = innings.pluck("wickets").compact.select { |x| x.is_a?(Numeric) }
     total_wickets = all_wickets.sum
     zero_count = all_wickets.count(0)
     range_1_count = all_wickets.count(3)

@@ -17,14 +17,18 @@ class Performance < ApplicationRecord
     return score
   end
 
-  def self.best_batting_innings
-    p = Performance.with_runs.order('runs DESC').first
-    return "#{p.runs} (#{p.player.name})"
+  def self.best_batting_innings performances, players
+    valid_data = performances.reject { |record| record["runs"].nil? }
+    best_innings = valid_data.max_by { |record| record["runs"] }
+    player = players.find{|p| p["id"] == best_innings["player_id"]}
+    return "#{player['name']} (#{best_innings["runs"]})"
   end
 
-  def self.best_bowling_innings
-    p = Performance.with_runs.order('wickets DESC').first
-    return "#{p.runs} (#{p.player.name})"
+  def self.best_bowling_innings performances, players
+    valid_data = performances.reject { |record| record["wickets"].nil? }
+    best_innings = valid_data.max_by { |record| record["wickets"] }
+    player = players.find{|p| p["id"] == best_innings["player_id"]}
+    return "#{player['name']} (#{best_innings["wickets"]})"
   end
   
 end

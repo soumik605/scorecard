@@ -1,11 +1,10 @@
 class TournamentsController < ApplicationController
+  before_action :get_data
   before_action :set_tournament, only: [:show, :edit, :update, :leaderboard]
+
+
   def index
-    if user_signed_in?
-      @tours = Tournament.all
-    else
-      @tours = Tournament.where(is_removed: false)
-    end
+    @tours = @tours.filter{|t| t["is_removed"].to_s == "false"}
   end
 
   def show
@@ -40,14 +39,16 @@ class TournamentsController < ApplicationController
     end
   end
 
-  def leaderboard
-    @players = Player.where(id: Team.where(match_id: @tour.matches.pluck(:id)).pluck(:captain_id))
+  def leaderboard    
+    @teams = @teams.filter{|t| @matches.pluck("id").include?t["match_id"]}
+    @players = @players.filter { |p| @teams.pluck("captain_id").include?(p["id"])}
+    
     @players_data = []
 
     @players.each do |player|
-      teams = Team.where(match_id: @matches.pluck(:id), captain_id: player.id)
-      matches = Match.joins(:teams).where("teams.captain_id = ?", player.id ).where(tournament_id: @tour.id).distinct
-      @players_data << [player.name, matches.where.not(winner_team_id: nil).uniq.count, matches.where(winner_team_id: nil).count, teams.pluck(:total_point).compact.select { |x| x.is_a?(Numeric) && x != 0 }.sum]
+      teams = @teams.filter{|t| @matches.pluck("id").include?(t["match_id"]) && (t["captain_id"] == player["id"])}
+      matches = @matches.filter{|m| teams.pluck("match_id").include?m["id"]}
+      @players_data << [player["name"], matches.filter{|m| m["winner_team_id"].present? }.uniq.count, matches.filter{|m| m["winner_team_id"] == nil }.uniq.count, teams.pluck("total_point").compact.select { |x| x.is_a?(Numeric) && x != 0 }.sum]
     end
 
     @players_data = @players_data.sort_by { |name, complete, pending, score| [-score, complete, -pending, name] }
@@ -57,8 +58,8 @@ class TournamentsController < ApplicationController
   private 
 
   def set_tournament
-    @tour = Tournament.find(params[:id])
-    @matches = @tour.matches.order("created_at desc")
+    @tour = @tours.find{ |t| t["id"].to_s == params[:id].to_s}
+    @matches = @matches.filter{|m| m["tournament_id"].to_s == params[:id].to_s}
   end
 
   def tournament_params
