@@ -13,9 +13,6 @@ class ApplicationController < ActionController::Base
 
     performances_file = File.open "public/stats/performances.json"
     @performances = JSON.load performances_file
-
-    teams_file = File.open "public/stats/teams.json"
-    @teams = JSON.load teams_file
   end
 
 

@@ -39,10 +39,9 @@
 						%h5.mb-2.text-2xl.font-bold.tracking-tight.text-gray-900= tour["name"]
 						- matches = @matches.filter{|m| m["tournament_id"] == tour["id"]}
 						- final = matches.present? ? matches.find{|m| m["match_type"] == "final"} : nil
-						- if final.present? && final["winner_team_id"].present?
-							- team = @teams.find{|t| t["id"] == final["winner_team_id"]}
-							- player = team.present? ? @players.find{|p| p["id"] == team["captain_id"]} : nil
-							%p.font-normal.text-gray-700.text-green-600= "WINNER : #{player["name"]}"
+						- if final.present? && final["winner_captain_id"].present?
+							- player = @players.find{|p| p["id"].to_s == final["winner_captain_id"].to_s} || nil
+							%p.font-normal.text-gray-700.text-green-600= "Winner : #{player["name"]}"
 						- else
 							%p.font-normal.text-gray-700= "Win point : #{tour["win_point"]}"
 					.bg-slate-100.p-4.absolute.right-0.top-0.h-full{class: "[writing-mode:vertical-lr]"}

@@ -1,4 +1,4 @@
-= link_to "<- Matches list", tournament_path(@tour), class: "mb-4 px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
+= link_to "<- Matches list", tournament_path(@tour["id"]), class: "mb-4 px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
 
 - if @players_data.present?
   .relative.overflow-x-auto

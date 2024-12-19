@@ -7,18 +7,16 @@
 
   - if @matches.present?
     - @matches.each do |match|
-      - teams = @teams.filter{|t| t["match_id"] == match["id"]}
       .my-3
         = link_to match_path(match["id"]), data: {turbo_frame: "_top"}, class: "block w-full p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100" do
           .text-xs= match["match_type"].try(:humanize)
-          - if teams.present?
-            - cap1 = @players.find{|p| p["id"] == teams[0]["captain_id"]}
-            - cap2 = @players.find{|p| p["id"] == teams[1]["captain_id"]}
+          - cap1 = @players.find{|p| p["id"] == match["captain_a"]}
+          - cap2 = @players.find{|p| p["id"] == match["captain_b"]}
 
-            %h5.mb-2.tracking-tight.text-gray-900
-              %span{class: match["winner_team_id"].present? ? match["winner_team_id"] == teams[0]["id"] ? "font-bold text-green-500 text-3xl" : "text-light text-red-500 text-sm" : "font-bold"}= cap1["name"]
-              %span vs
-              %span{class: match["winner_team_id"].present? ? match["winner_team_id"] == teams[1]["id"] ? "font-bold text-green-500 text-3xl" : "text-light text-red-500 text-sm" : "font-bold"}= cap2["name"]
+          %h5.mb-2.tracking-tight.text-gray-900
+            %span{class: match["winner_captain_id"].present? ? match["winner_captain_id"] == cap1["id"] ? "font-bold text-green-500 text-3xl" : "text-light text-red-500 text-sm" : "font-bold"}= cap1["name"]
+            %span vs
+            %span{class: match["winner_captain_id"].present? ? match["winner_captain_id"] == cap2["id"] ? "font-bold text-green-500 text-3xl" : "text-light text-red-500 text-sm" : "font-bold"}= cap2["name"]
           
           -# - pm = match.player_of_the_match
           -# - if pm.present?

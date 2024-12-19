@@ -1,11 +1,10 @@
 
-- if @match["winner_team_id"].present?
+- if @match["winner_captain_id"].present?
   - arr = ["Won this match"]
   - arr << "by an innings" if @match["is_won_by_innings"]
   - arr << "by follow on" if @match["is_won_by_follow_on"]
 
-  - winner_team = @teams.find{|t| t["id"] == @match["winner_team_id"]}
-  - winner_captain = @players.find{|p| p["id"] == winner_team["captain_id"]}
+  - winner_captain = @players.find{|p| p["id"] == @match["winner_captain_id"]}
 
   .text-3xl.text-center= "#{winner_captain["name"]}"
   .text-sm.text-center= arr.to_sentence 

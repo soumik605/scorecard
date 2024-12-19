@@ -1,14 +1,14 @@
 .w-full
 	= link_to "<- Matchs list", tournament_path(@match["tournament_id"]), class: "mb-4 px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
 
-	- teams = @teams.filter{|t| t["match_id"] == @match["id"]}
-	- cap1 = @players.find{|p| p["id"] == teams[0]["captain_id"]}
-	- cap2 = @players.find{|p| p["id"] == teams[1]["captain_id"]}
+	- cap1 = @players.find{|p| p["id"] == @match["captain_a"]}
+	- cap2 = @players.find{|p| p["id"] == @match["captain_b"]}
+
 	.mb-4.py-4.bg-blue-100.w-full.flex.justify-center
 		.mb-2.text-gray-900.text-2xl.w-full.text-center
-			%span{class: @match["winner_team_id"].present? ? @match["winner_team_id"] == teams[0]["id"] ? "font-bold text-green-500" : "text-light text-red-600" : "font-bold"}= cap1["name"]
+			%span{class: @match["winner_captain_id"].present? ? @match["winner_captain_id"] == cap1["id"] ? "font-bold text-green-500" : "text-light text-red-600" : "font-bold"}= cap1["name"]
 			%span.mx-2 vs
-			%span{class: @match["winner_team_id"].present? ? @match["winner_team_id"] == teams[1]["id"] ? "font-bold text-green-500" : "text-light text-red-600" : "font-bold"}= cap2["name"]
+			%span{class: @match["winner_captain_id"].present? ? @match["winner_captain_id"] == cap2["id"] ? "font-bold text-green-500" : "text-light text-red-600" : "font-bold"}= cap2["name"]
 
 
 	%div{"data-controller" => "tabs", "data-tabs-active-tab-class" => "-mb-px border-l border-t border-r rounded-t"}

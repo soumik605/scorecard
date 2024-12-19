@@ -40,15 +40,12 @@ class TournamentsController < ApplicationController
   end
 
   def leaderboard    
-    @teams = @teams.filter{|t| @matches.pluck("id").include?t["match_id"]}
-    @players = @players.filter { |p| @teams.pluck("captain_id").include?(p["id"])}
-    
     @players_data = []
 
     @players.each do |player|
-      teams = @teams.filter{|t| @matches.pluck("id").include?(t["match_id"]) && (t["captain_id"] == player["id"])}
-      matches = @matches.filter{|m| teams.pluck("match_id").include?m["id"]}
-      @players_data << [player["name"], matches.filter{|m| m["winner_team_id"].present? }.uniq.count, matches.filter{|m| m["winner_team_id"] == nil }.uniq.count, teams.pluck("total_point").compact.select { |x| x.is_a?(Numeric) && x != 0 }.sum]
+      player_matches = @matches.filter{|m| [m["captain_a"], m["captain_b"]].include? player["id"]  }
+      win_matches = player_matches.filter{|m| m["winner_captain_id"] == player["id"]}
+      @players_data << [player["name"], player_matches.filter{|m| m["winner_captain_id"].present?}.count, player_matches.filter{|m| !m["winner_captain_id"].present?}.count, win_matches.pluck("total_point").compact.select { |x| x.is_a?(Numeric) && x != 0 }.sum]
     end
 
     @players_data = @players_data.sort_by { |name, complete, pending, score| [-score, complete, -pending, name] }
