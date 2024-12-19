@@ -1,5 +1,6 @@
 [
   { "id": 1, "name": "Tour 1", "win_point": 2, "draw_point": 1, "innings_win_point": 1, "follow_on_win_point": 1, "round_count": 1, "is_removed": false, "tour_type": "test" },
   { "id": 2, "name": "Tour 2", "win_point": 2, "draw_point": 1, "innings_win_point": 1, "follow_on_win_point": 1, "round_count": 1, "is_removed": false, "tour_type": "test" },
-  { "id": 3, "name": "Golden Duck", "win_point": 5, "draw_point": 2, "innings_win_point": 2, "follow_on_win_point": 2, "round_count": 1, "is_removed": false, "tour_type": "test" }
+  { "id": 3, "name": "Golden Duck", "win_point": 5, "draw_point": 2, "innings_win_point": 2, "follow_on_win_point": 2, "round_count": 1, "is_removed": false, "tour_type": "test" },
+  { "id": 4, "name": "T10", "win_point": 5, "draw_point": 0, "innings_win_point": 0, "follow_on_win_point": 0, "round_count": 1, "is_removed": false, "tour_type": "t10" }
 ]

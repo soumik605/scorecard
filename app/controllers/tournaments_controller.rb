@@ -41,11 +41,11 @@ class TournamentsController < ApplicationController
 
   def leaderboard    
     @players_data = []
+    captain_ids = @matches.pluck("captain_a", "captain_b").flatten.map(&:to_s)
+    @players = @players.filter{|p| captain_ids.include? p["id"].to_s }
 
     @players.each do |player|
       player_matches = @matches.filter{|m| [m["captain_a"], m["captain_b"]].include? player["id"]  }
-      p player_matches.count
-      p player
       win_matches = player_matches.filter{|m| m["winner_captain_id"].present? && m["winner_captain_id"] == player["id"] }
       loose_matches = player_matches.filter{|m| m["winner_captain_id"].present? && m["winner_captain_id"] != player["id"] }
       win_point = win_matches.pluck("win_point").compact.select { |x| x.is_a?(Numeric) && x != 0 }.sum
