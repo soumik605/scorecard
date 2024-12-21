@@ -10,7 +10,7 @@ module PlayersHelper
     out = innings.filter{ |i| i["is_not_out"] == false}.count
     average = out > 0 ? total_run/out : nil
     zero_count = innings.filter{ |i| i["runs"] == 0}.count
-    range_1_count = innings.filter{ |i| i["runs"] >= 0 && i["runs"] <= 30}.count
+    range_1_count = innings.filter{ |i| i["runs"] >= 1 && i["runs"] <= 30}.count
     range_2_count = innings.filter{ |i| i["runs"] >= 31 && i["runs"] <= 49}.count
     range_3_count = innings.filter{ |i| i["runs"] >= 50 && i["runs"] <= 99}.count
     range_4_count = innings.filter{ |i| i["runs"] >= 100}.count
