@@ -1,8 +1,8 @@
-# databases:
-#   - name: mysite
-#     databaseName: mysite
-#     user: mysite
-#     plan: free
+databases:
+  - name: scorecarddb
+    databaseName: scorecarddb
+    user: scorecarddb_user
+    plan: free
 
 services:
   - type: web
