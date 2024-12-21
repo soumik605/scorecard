@@ -1,21 +1,24 @@
 .w-full
-  = link_to "<- Tournaments list", root_path, class: "mb-4 px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
-  
+	= link_to "<- Tournaments list", root_path, class: "mb-4 px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
+	
+	%div{"data-controller" => "tabs", "data-tabs-active-tab-class" => "-mb-px border-l border-t border-r rounded-t"}
+		%ul.list-reset.flex.border-b
+			%li.-mb-px.mr-1{"data-action" => "click->tabs#change:prevent", "data-tabs-target" => "tab"}
+				%a.bg-white.inline-block.py-2.px-4.text-blue-500.hover:text-blue-700.font-semibold.no-underline{href: "#"} Test Records
+			%li.mr-1{"data-action" => "click->tabs#change:prevent", "data-tabs-target" => "tab"}
+				%a.bg-white.inline-block.py-2.px-4.text-blue-500.hover:text-blue-700.font-semibold.no-underline{href: "#"} T10 Records
+			
+		.hidden{"data-tabs-target" => "panel"}
+			= render "players/test_record", match: @match
+		.hidden{"data-tabs-target" => "panel"}
+			= render "players/t10_record", match: @match
+
+	
+	-# - if user_signed_in?
+	-#   .mt-6.mb-10 
+	-#     = render "players/add_player"
+	-#     = render "players/edit_players"
 
 
-  .mt-6 
-    .text-lg.mb-3.text-center Batting Records
-    = render "players/run_stat", players: @players
 
-  .mt-10
-    .text-lg.mb-3.text-center Bowling Records
-    = render "players/wicket_stat", players: @players
-  
-  -# - if user_signed_in?
-  -#   .mt-6.mb-10 
-  -#     = render "players/add_player"
-  -#     = render "players/edit_players"
-
-
-
-  
+	

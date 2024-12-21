@@ -1,3 +1,12 @@
+- all_wicket_stats = []
+- players.each do |pl|
+  - arr = getPlayerWicketData(pl, @performances, @matches, tour_type, @tours)
+  - arr << pl["name"]
+  - all_wicket_stats << arr
+
+- all_wicket_stats = all_wicket_stats.sort { |a, b| b[0] <=> a[0] }
+
+
 .relative.overflow-x-auto
   %table.w-full.text-sm.text-left.rtl:text-right.text-gray-500
     %thead.text-xs.text-gray-700.uppercase.bg-gray-50
@@ -21,23 +30,22 @@
 
       
     %tbody
-      - players.each do |pl|
-        - wicket_data = getPlayerWicketData(pl, @performances, @matches)
+      - all_wicket_stats.each do |pl|
         %tr.border-b
           %th.px-6.py-3.bg-slate-100.text-black.sticky.left-0{scope: "row"}
-            %h5.whitespace-nowrap= pl["name"]
+            %h5.whitespace-nowrap= pl[7]
           %td.px-6.py-3
-            %h5.whitespace-nowrap= wicket_data[0]
+            %h5.whitespace-nowrap= pl[0]
           %td.px-6.py-3
-            %h5.whitespace-nowrap= wicket_data[1]
+            %h5.whitespace-nowrap= pl[1]
           %td.px-6.py-3
-            %h5.whitespace-nowrap= wicket_data[2]
+            %h5.whitespace-nowrap= pl[2]
           %td.px-6.py-3
-            %h5.whitespace-nowrap= wicket_data[3]
+            %h5.whitespace-nowrap= pl[3]
           %td.px-6.py-3
-            %h5.whitespace-nowrap= wicket_data[4]
+            %h5.whitespace-nowrap= pl[4]
           %td.px-6.py-3
-            %h5.whitespace-nowrap= wicket_data[5]
+            %h5.whitespace-nowrap= pl[5]
           %td.px-6.py-3
-            %h5.whitespace-nowrap= wicket_data[6]
+            %h5.whitespace-nowrap= pl[6]
           

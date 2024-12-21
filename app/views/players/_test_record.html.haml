@@ -1,0 +1,7 @@
+.mt-6 
+	.text-lg.mb-3.text-center Batting Records
+	= render "players/run_stat", players: @players, tour_type: "test"
+
+.mt-10
+	.text-lg.mb-3.text-center Bowling Records
+	= render "players/wicket_stat", players: @players, tour_type: "test"

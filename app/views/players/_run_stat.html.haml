@@ -1,3 +1,11 @@
+- all_run_stats = []
+- players.each do |pl|
+  - arr = getPlayerRunData(pl, @performances, @matches, tour_type, @tours)
+  - arr << pl["name"]
+  - all_run_stats << arr
+
+- all_run_stats = all_run_stats.sort { |a, b| b[0] <=> a[0] }
+
 .relative.overflow-x-auto
   %table.w-full.text-sm.text-left.rtl:text-right.text-gray-500
     %thead.text-xs.text-gray-700.uppercase.bg-gray-50
@@ -29,31 +37,30 @@
 
       
     %tbody
-      - players.each do |pl|
-        - run_data = getPlayerRunData(pl, @performances, @matches)
+      - all_run_stats.each do |pl|
         %tr.border-b
           %th.px-6.py-3.bg-slate-100.text-black.sticky.left-0{scope: "row"}
-            %h5.whitespace-nowrap= pl["name"]
+            %h5.whitespace-nowrap= pl[11]
           %td.px-6.py-3
-            %h5.whitespace-nowrap= run_data[0]
+            %h5.whitespace-nowrap= pl[0]
           %td.px-6.py-3
-            %h5.whitespace-nowrap= run_data[1]
+            %h5.whitespace-nowrap= pl[1]
           %td.px-6.py-3
-            %h5.whitespace-nowrap= run_data[2]
+            %h5.whitespace-nowrap= pl[2]
           %td.px-6.py-3
-            %h5.whitespace-nowrap= run_data[3]
+            %h5.whitespace-nowrap= pl[3]
           %td.px-6.py-3
-            %h5.whitespace-nowrap= run_data[4]
+            %h5.whitespace-nowrap= pl[4]
           %td.px-6.py-3
-            %h5.whitespace-nowrap= run_data[5]
+            %h5.whitespace-nowrap= pl[5]
           %td.px-6.py-3
-            %h5.whitespace-nowrap= run_data[6]
+            %h5.whitespace-nowrap= pl[6]
           %td.px-6.py-3
-            %h5.whitespace-nowrap= run_data[7]
+            %h5.whitespace-nowrap= pl[7]
           %td.px-6.py-3
-            %h5.whitespace-nowrap= run_data[8]
+            %h5.whitespace-nowrap= pl[8]
           %td.px-6.py-3
-            %h5.whitespace-nowrap= run_data[9]
+            %h5.whitespace-nowrap= pl[9]
           %td.px-6.py-3
-            %h5.whitespace-nowrap= run_data[10]
+            %h5.whitespace-nowrap= pl[10]
           
