@@ -12,18 +12,45 @@ class Match < ApplicationRecord
   scope :won_by_follow_on, -> { where(is_won_by_follow_on: true) }
   scope :drawn, -> { where(is_draw: true) }
 
-  def self.most_wins_by_innings
-    where(is_won_by_innings: true).select('winner_team_id, COUNT(*) AS wins')
-                                  .group('winner_team_id')
-                                  .order('wins DESC')
-                                  .limit(1) 
+  def self.most_wins_by_innings matches, players
+    captain_follow_on_wins = Hash.new(0)
+    matches.each do |match|
+      if match["is_won_by_innings"] && match["winner_captain_id"]
+        captain_follow_on_wins[match["winner_captain_id"]] += 1
+      end
+    end
+
+    sorted_captains = captain_follow_on_wins.sort_by { |_, count| -count }
+    player = players.find{|p| p["id"] == sorted_captains[0][0]}
+    text =  "<b>#{player["name"]} (#{sorted_captains[0][1]})</b><br >"
+
+    if sorted_captains.count > 1
+      player = players.find{|p| p["id"] == sorted_captains[1][0]}
+      text +=  "#{player["name"]} (#{sorted_captains[1][1]})"
+    end
+
+    return text
   end
 
-  def self.most_wins_by_follow_on
-    where(is_won_by_follow_on: true).select('winner_team_id, COUNT(*) AS wins')
-                                    .group('winner_team_id')
-                                    .order('wins DESC')
-                                    .limit(1) 
+
+  def self.most_wins_by_follow_on matches, players
+    captain_follow_on_wins = Hash.new(0)
+    matches.each do |match|
+      if match["is_won_by_follow_on"] && match["winner_captain_id"]
+        captain_follow_on_wins[match["winner_captain_id"]] += 1
+      end
+    end
+
+    sorted_captains = captain_follow_on_wins.sort_by { |_, count| -count }
+    player = players.find{|p| p["id"] == sorted_captains[0][0]}
+    text =  "<b>#{player["name"]} (#{sorted_captains[0][1]})</b><br >"
+
+    if sorted_captains.count > 1
+      player = players.find{|p| p["id"] == sorted_captains[1][0]}
+      text +=  "#{player["name"]} (#{sorted_captains[1][1]})"
+    end
+
+    return text
   end
 
   def player_of_the_match

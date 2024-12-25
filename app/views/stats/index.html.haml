@@ -1,12 +1,16 @@
-.text-xl.text-center.font-bold Stats
+.w-full
+  = link_to "<- Tournaments list", tournaments_path, class: "mb-8 px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
 
-- if @stats.present?
-  .relative.overflow-x-auto.mt-4
-    .grid.grid-cols-12.col-gap-2
-      - @stats.each_with_index do |stat, index|
-        .col-span-6.py-3.px-2{class: index % 2 == 0 ? "bg-slate-100" : "bg-white"}
-          %h5= stat[0]
-        .col-span-6.py-3.px-2{class: index % 2 == 0 ? "bg-slate-100" : "bg-white"}
-          %h5= stat[1]
+
+  .text-xl.text-center.font-bold Stats
+
+  - if @stats.present?
+    .relative.overflow-x-auto.mt-4.mb-6
+      .grid.grid-cols-12.col-gap-2
+        - @stats.each_with_index do |stat, index|
+          .col-span-6.py-4.px-2{class: index % 2 == 0 ? "bg-slate-100" : "bg-white"}
+            %h5.text-sm= stat[0]
+          .col-span-6.py-4.px-2{class: index % 2 == 0 ? "bg-slate-100" : "bg-white"}
+            %h5.text-sm.text-right= stat[1].html_safe
+        
       
-    

@@ -19,16 +19,36 @@ class Performance < ApplicationRecord
 
   def self.best_batting_innings performances, players
     valid_data = performances.reject { |record| record["runs"].nil? }
-    best_innings = valid_data.max_by { |record| record["runs"] }
-    player = players.find{|p| p["id"] == best_innings["player_id"]}
-    return "#{player['name']} (#{best_innings["runs"]})"
+    best_innings = valid_data.sort_by { |record| -record["runs"] }
+
+    return "-" unless best_innings.present?
+
+    player = players.find{|p| p["id"] == best_innings[0]["player_id"]}
+    text = "<b>#{player['name']} (#{best_innings[0]["runs"]})</b><br >"
+
+    if best_innings.count > 1
+      player = players.find{|p| p["id"] == best_innings[1]["player_id"]}
+      text += "#{player['name']} (#{best_innings[1]["runs"]})"
+    end
+
+    return text
   end
 
   def self.best_bowling_innings performances, players
     valid_data = performances.reject { |record| record["wickets"].nil? }
-    best_innings = valid_data.max_by { |record| record["wickets"] }
-    player = players.find{|p| p["id"] == best_innings["player_id"]}
-    return "#{player['name']} (#{best_innings["wickets"]})"
+    best_innings = valid_data.sort_by { |record| -record["wickets"] }
+
+    return "-" unless best_innings.present?
+
+    player = players.find{|p| p["id"] == best_innings[0]["player_id"]}
+    text = "<b>#{player['name']} (#{best_innings[0]["wickets"]})</b><br >"
+
+    if best_innings.count > 1
+      player = players.find{|p| p["id"] == best_innings[1]["player_id"]}
+      text += "#{player['name']} (#{best_innings[1]["wickets"]})"
+    end
+
+    return text
   end
   
 end

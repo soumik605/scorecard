@@ -14,6 +14,7 @@ module PlayersHelper
     not_out = performances.filter{ |i| i["is_not_out"] == true}.count
     out = performances.filter{ |i| i["is_not_out"] == false}.count
     average = out > 0 ? total_run/out : nil
+    run_per_innings = performances.count == 0 ? "" : total_run/(performances.count)
     zero_count = performances.filter{ |i| i["runs"] == 0}.count
     range_1_count = performances.filter{ |i| i["runs"] >= 1 && i["runs"] <= 30}.count
     range_2_count = performances.filter{ |i| i["runs"] >= 31 && i["runs"] <= 49}.count
@@ -28,7 +29,7 @@ module PlayersHelper
       highest = is_not_out ? "#{max_value}*" : max_value
     end
 
-    return [total_run, performances.count, average, player_match_ids.count, highest, not_out, zero_count, range_1_count, range_2_count, range_3_count, range_4_count]
+    return [total_run, performances.count, average, run_per_innings, player_match_ids.count, highest, not_out, zero_count, range_1_count, range_2_count, range_3_count, range_4_count]
   end
 
 

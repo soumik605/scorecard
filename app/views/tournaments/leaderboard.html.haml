@@ -5,33 +5,33 @@
   %table.w-full.text-sm.text-left.rtl:text-right.text-gray-500
     %thead.text-xs.text-gray-700.uppercase.bg-gray-50
       %tr
-        %th.px-6.py-3{scope: "col"}
+        %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
           Rank
-        %th.px-6.py-3{scope: "col"}
+        %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
           Name
-        %th.px-6.py-3{scope: "col"}
+        %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
           Point
-        %th.px-6.py-3{scope: "col"}
+        %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
           Win %
-        %th.px-6.py-3{scope: "col"}
+        %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
           Complete
-        %th.px-6.py-3{scope: "col"}
+        %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
           Pending
        
     %tbody
       - @players_data.each_with_index do |player, index|
         %tr.border-b{class: index < 3 ? "bg-green-100" : "bg-orange-100"}
           %th.px-6.py-4.font-medium.text-gray-900.whitespace-nowrap{scope: "row"}
-            = index + 1
+            .text-center= index + 1
           %td.px-6.py-4
-            = player[0]
+            .text-center= player[0]
           %td.px-6.py-4
-            = player[3]
+            .text-center= player[3]
           %td.px-6.py-4
-            = player[4]
+            .text-center= player[4]
           %td.px-6.py-4
-            = player[1]
+            .text-center= player[1]
           %td.px-6.py-4
-            = player[2]
+            .text-center= player[2]
        
       
