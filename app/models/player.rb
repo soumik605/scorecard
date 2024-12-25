@@ -174,7 +174,81 @@ class Player < ApplicationRecord
                                         # .try(:name)
   end
 
-  
+  def self.most_run_as_player performances, matches, players, is_captain
+    captain_matches = {}
+    matches.each do |match|
+      captain_matches[match["captain_a"]] ||= []
+      captain_matches[match["captain_a"]] << match["id"]
+      captain_matches[match["captain_b"]] ||= []
+      captain_matches[match["captain_b"]] << match["id"]
+    end
+
+    captain_runs = Hash.new(0)
+    performances.each do |performance|
+      captain_matches.each do |captain_id, match_ids|
+        if is_captain
+          if match_ids.include?(performance["match_id"])
+            captain_runs[captain_id] += performance["runs"] if performance["player_id"] == captain_id && performance["runs"].present?
+          end
+        else
+          unless match_ids.include?(performance["match_id"])
+            captain_runs[captain_id] += performance["runs"] if performance["player_id"] == captain_id && performance["runs"].present?
+          end
+        end
+      end
+    end
+
+    most_runs_captain = captain_runs.sort_by { |_, runs| -runs }
+    return "-" unless most_runs_captain.present?
+
+    player = players.find{|p| p["id"] == most_runs_captain[0][0]}
+    text = "<b>#{player['name']} (#{most_runs_captain[0][1]})</b><br >"
+
+    if most_runs_captain.count>1
+      player = players.find{|p| p["id"] == most_runs_captain[1][0]}
+      text += "#{player['name']} (#{most_runs_captain[1][1]})"
+    end
+
+    return text
+  end
+
+  def self.most_wicket_as_player performances, matches, players, is_captain
+    captain_matches = {}
+    matches.each do |match|
+      captain_matches[match["captain_a"]] ||= []
+      captain_matches[match["captain_a"]] << match["id"]
+      captain_matches[match["captain_b"]] ||= []
+      captain_matches[match["captain_b"]] << match["id"]
+    end
+
+    captain_wickets = Hash.new(0)
+    performances.each do |performance|
+      captain_matches.each do |captain_id, match_ids|
+        if is_captain
+          if match_ids.include?(performance["match_id"])
+            captain_wickets[captain_id] += performance["wickets"] if performance["player_id"] == captain_id && performance["wickets"].present?
+          end
+        else
+          unless match_ids.include?(performance["match_id"])
+            captain_wickets[captain_id] += performance["wickets"] if performance["player_id"] == captain_id && performance["wickets"].present?
+          end
+        end
+      end
+    end
+
+    most_wickets_captain = captain_wickets.sort_by { |_, wickets| -wickets }
+    return "-" unless most_wickets_captain.present?
+
+    player = players.find{|p| p["id"] == most_wickets_captain[0][0]}
+    text = "<b>#{player['name']} (#{most_wickets_captain[0][1]})</b><br >"
+
+    if most_wickets_captain.count>1
+      player = players.find{|p| p["id"] == most_wickets_captain[1][0]}
+      text += "#{player['name']} (#{most_wickets_captain[1][1]})"
+    end
+
+    return text
+  end
 
   
 end

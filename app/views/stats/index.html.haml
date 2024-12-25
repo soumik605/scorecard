@@ -1,13 +1,25 @@
-.w-full
-  = link_to "<- Tournaments list", tournaments_path, class: "mb-8 px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
+.w-full.py-4
 
 
-  .text-xl.text-center.font-bold Stats
-
-  - if @stats.present?
+  - if @player_stats.present?
     .relative.overflow-x-auto.mt-4.mb-6
+      .flex.w-full.justify-between.items-center.mb-6
+        = link_to "<-", tournaments_path, class: "px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
+        .text-md.font-bold.text-center Player Stat
+        .text-sm= ""
+      
       .grid.grid-cols-12.col-gap-2
-        - @stats.each_with_index do |stat, index|
+        - @player_stats.each_with_index do |stat, index|
+          .col-span-6.py-4.px-2{class: index % 2 == 0 ? "bg-slate-100" : "bg-white"}
+            %h5.text-sm= stat[0]
+          .col-span-6.py-4.px-2{class: index % 2 == 0 ? "bg-slate-100" : "bg-white"}
+            %h5.text-sm.text-right= stat[1].html_safe
+
+  - if @captain_stats.present?
+    .relative.overflow-x-auto.mt-8.mb-6
+      .text-md.font-bold.mb-6.text-center Captain Stat
+      .grid.grid-cols-12.col-gap-2
+        - @captain_stats.each_with_index do |stat, index|
           .col-span-6.py-4.px-2{class: index % 2 == 0 ? "bg-slate-100" : "bg-white"}
             %h5.text-sm= stat[0]
           .col-span-6.py-4.px-2{class: index % 2 == 0 ? "bg-slate-100" : "bg-white"}
