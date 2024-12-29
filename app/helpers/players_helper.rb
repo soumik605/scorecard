@@ -54,4 +54,25 @@ module PlayersHelper
   end
 
 
+  def getPlayerName id, players
+    players.find{|p| p["id"] == id }["name"]
+  end
+
+  def getPlayerPhoto id, players
+    players.find{|p| p["id"] == id }["photo_name"]
+  end
+
+  def getH2HClass wins, looses
+
+    if wins == looses
+      return "bg-blue-300"
+    elsif wins > looses
+      return "bg-green-200"
+    else
+      return "bg-red-200"
+    end
+
+  end
+
+
 end

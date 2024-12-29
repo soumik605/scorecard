@@ -12,7 +12,12 @@ Rails.application.routes.draw do
       get :leaderboard
     end
   end
-  resources :stats
+  resources :stats do 
+    collection do
+      get :head_to_head
+    end
+  end
+  
   resources :matches
   resources :performances
   resources :players

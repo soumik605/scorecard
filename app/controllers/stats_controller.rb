@@ -25,4 +25,30 @@ class StatsController < ApplicationController
     @captain_stats << ["Most wicket as captain", Player.most_wicket_as_player(@performances, @matches, @players, true)]
   end
 
+
+  def head_to_head
+    @head_to_head = Hash.new { |hash, key| hash[key] = Hash.new { |h, k| h[k] = { wins: 0, losses: 0 } } }
+
+    @matches.each do |match|
+      captain_a = match["captain_a"]
+      captain_b = match["captain_b"]
+      winner = match["winner_captain_id"]
+    
+      if winner == captain_a
+        @head_to_head[captain_a][captain_b][:wins] += 1
+        @head_to_head[captain_b][captain_a][:losses] += 1
+      elsif winner == captain_b
+        @head_to_head[captain_b][captain_a][:wins] += 1
+        @head_to_head[captain_a][captain_b][:losses] += 1
+      end
+    end
+    
+    puts "Head-to-head results:"
+    @head_to_head.each do |captain_a, opponents|
+      opponents.each do |captain_b, results|
+        puts "Captain #{captain_a} vs Captain #{captain_b}: #{results[:wins]} wins, #{results[:losses]} losses"
+      end
+    end
+  end
+
 end
