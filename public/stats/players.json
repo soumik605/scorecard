@@ -1,7 +1,7 @@
 [
   { "id": 1, "name": "Soumik", "photo_name": "Soumik.jpg" },
   { "id": 2, "name": "Soudip", "photo_name": "Soudip.jpeg" },
-  { "id": 3, "name": "Ajim", "photo_name": "Ajim.jpg" },
+  { "id": 3, "name": "Ajim", "photo_name": "Ajim.jpeg" },
   { "id": 4, "name": "Tushar", "photo_name": "Tushar.jpeg" },
   { "id": 5, "name": "Saikat", "photo_name": "Saikat.jpeg" },
   { "id": 6, "name": "Surya", "photo_name": "Default.jpg" },
