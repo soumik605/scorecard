@@ -5,23 +5,32 @@
   - if user_signed_in?
     = link_to "Edit", edit_tournament_path(@tour), class: "focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 "
 
-  - if @matches.present?
-    - @matches.each do |match|
-      .my-3
-        = link_to match_path(match["id"]), data: {turbo_frame: "_top"}, class: "block w-full p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100" do
-          .text-xs
-            %b= "##{match['id']}"
-            %span= match["match_type"].try(:humanize)
-          - cap1 = @players.find{|p| p["id"] == match["captain_a"]}
-          - cap2 = @players.find{|p| p["id"] == match["captain_b"]}
+  .mt-8
+    - if @matches.present?
+      - @matches.each do |match|
+        .my-3
+          = link_to match_path(match["id"]), data: {turbo_frame: "_top"}, class: "block w-full px-6 py-2" do
+            - cap1 = @players.find{|p| p["id"] == match["captain_a"]}
+            - cap2 = @players.find{|p| p["id"] == match["captain_b"]}
+            - cls = getResultClass(cap1["id"], cap2["id"], match["winner_captain_id"])
+            
+            .flex.items-center.justify-between.gap-6.rounded-full.p-2.shadow-lg{class: cls}
+              = image_tag cap1["photo_name"], class: "playerPhoto border-2"
+              %div
+                .text-sm.text-center.font-bold= "##{match['id']}"
+                .text-sm.text-center= match["match_type"].try(:humanize)
 
-          %h5.mb-2.tracking-tight.text-gray-900
-            %span{class: match["winner_captain_id"].present? ? match["winner_captain_id"] == cap1["id"] ? "font-bold text-green-500 text-3xl" : "text-light text-red-500 text-sm" : "font-bold"}= cap1["name"]
-            %span vs
-            %span{class: match["winner_captain_id"].present? ? match["winner_captain_id"] == cap2["id"] ? "font-bold text-green-500 text-3xl" : "text-light text-red-500 text-sm" : "font-bold"}= cap2["name"]
-          
-          -# - pm = match.player_of_the_match
-          -# - if pm.present?
-          -#   .my-1
-          -#     %span.text-xs Player of the match
-          -#     %span.text-md.font-bold= match.player_of_the_match
+              = image_tag cap2["photo_name"], class: "playerPhoto border-2"
+              -# = image_tag getPlayerPhoto(cap2, @players), class: "playerPhoto"
+
+
+            -# %h5.mb-2.tracking-tight.text-gray-900
+            -#   %span{class: match["winner_captain_id"].present? ? match["winner_captain_id"] == cap1["id"] ? "font-bold text-green-500 text-3xl" : "text-light text-red-500 text-sm" : "font-bold"}= cap1["name"]
+            -#   %span vs
+            -#   %span{class: match["winner_captain_id"].present? ? match["winner_captain_id"] == cap2["id"] ? "font-bold text-green-500 text-3xl" : "text-light text-red-500 text-sm" : "font-bold"}= cap2["name"]
+            
+            -# - pm = match.player_of_the_match
+            -# - if pm.present?
+            -#   .my-1
+            -#     %span.text-xs Player of the match
+            -#     %span.text-md.font-bold= match.player_of_the_match
