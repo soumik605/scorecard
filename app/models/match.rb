@@ -53,6 +53,52 @@ class Match < ApplicationRecord
     return text
   end
 
+  def self.best_win_percent_against_captain matches, players
+    match_stats = Hash.new { |hash, key| hash[key] = { total_matches: 0, wins: 0 } }
+    matches.each do |match|
+      player_a = match["captain_a"]
+      player_b = match["captain_b"]
+      winner = match["winner_captain_id"]
+
+      match_stats[[player_a, player_b]][:total_matches] += 1
+      match_stats[[player_b, player_a]][:total_matches] += 1
+
+      match_stats[[winner, player_a == winner ? player_b : player_a]][:wins] += 1
+    end
+
+    win_percentages = match_stats
+                      .select { |_, stats| stats[:total_matches] >= 5 }
+                      .map do |(winner, loser), stats|
+                        {
+                          player_id: winner,
+                          against: loser,
+                          win_percentage: (stats[:wins].to_f / stats[:total_matches]) * 100
+                        }
+                      end
+
+    best_players = win_percentages.sort_by { |entry| -entry[:win_percentage] }
+    
+    player = players.find{|p| p["id"] == best_players[0][:player_id]}
+    against = players.find{|p| p["id"] == best_players[0][:against]}
+    text =  "<b>#{player["name"]} (#{best_players[0][:win_percentage].round(2)}%) vs #{against["name"]}</b><br >"
+
+    if best_players.size >= 2
+      player = players.find{|p| p["id"] == best_players[1][:player_id]}
+      against = players.find{|p| p["id"] == best_players[1][:against]}
+      text +=  "#{player["name"]} (#{best_players[1][:win_percentage].round(2)}%) vs #{against["name"]}"
+    end
+
+
+    # if best_players.size >= 2
+    #   puts "Best: Player #{best_players[0][:player_id]} with #{best_players[0][:win_percentage].round(2)}% win against Player #{best_players[0][:against]}"
+    #   puts "Second Best: Player #{best_players[1][:player_id]} with #{best_players[1][:win_percentage].round(2)}% win against Player #{best_players[1][:against]}"
+    # else
+    #   puts "Not enough data for minimum 4 matches to determine best and second best."
+    # end
+
+    return text
+  end
+
   def player_of_the_match
     if winner_team.present?
       data = {}

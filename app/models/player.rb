@@ -250,5 +250,34 @@ class Player < ApplicationRecord
     return text
   end
 
+  def self.most_consicutive_innings_without_duck performances, players
+    streaks = Hash.new { |hash, key| hash[key] = { current_streak: 0, max_streak: 0 } }
+
+    performances.each do |entry|
+      player_id = entry["player_id"]
+      runs = entry["runs"]
+      next unless runs.present?
+
+      if runs > 0
+        streaks[player_id][:current_streak] += 1
+        streaks[player_id][:max_streak] = [streaks[player_id][:current_streak], streaks[player_id][:max_streak]].max
+      else
+        streaks[player_id][:current_streak] = 0
+      end
+    end
+
+    best_player = streaks.sort_by { |_, stats| -stats[:max_streak] }
+    
+    player = players.find{|p| p["id"] == best_player[0][0]}
+    text = "<b>#{player['name']} (#{best_player[0][1][:max_streak]}), Current: #{best_player[0][1][:current_streak]}</b><br >"
+
+    if best_player.count>1
+      player = players.find{|p| p["id"] == best_player[1][0]}
+      text += "#{player['name']} (#{best_player[1][1][:max_streak]}), Current: #{best_player[1][1][:current_streak]}"
+    end
+
+    return text
+  end
+
   
 end

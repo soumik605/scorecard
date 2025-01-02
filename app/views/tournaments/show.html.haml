@@ -5,22 +5,25 @@
   - if user_signed_in?
     = link_to "Edit", edit_tournament_path(@tour), class: "focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 "
 
-  .mt-8
+  .mt-8.grid.grid-cols-12.gap-2
     - if @matches.present?
       - @matches.each do |match|
-        .my-3
-          = link_to match_path(match["id"]), data: {turbo_frame: "_top"}, class: "block w-full px-6 py-2" do
+        .col-span-6
+          = link_to match_path(match["id"]), data: {turbo_frame: "_top"}, class: "block w-full py-1" do
             - cap1 = @players.find{|p| p["id"] == match["captain_a"]}
             - cap2 = @players.find{|p| p["id"] == match["captain_b"]}
-            - cls = getResultClass(cap1["id"], cap2["id"], match["winner_captain_id"])
-            
-            .flex.items-center.justify-between.gap-6.rounded-full.p-2.shadow-lg{class: cls}
-              = image_tag cap1["photo_name"], class: "playerPhoto border-2"
-              %div
-                .text-sm.text-center.font-bold= "##{match['id']}"
-                .text-sm.text-center= match["match_type"].try(:humanize)
+            -# - cls = getResultClass(cap1["id"], cap2["id"], match["winner_captain_id"])
 
-              = image_tag cap2["photo_name"], class: "playerPhoto border-2"
+            - photo_a_cls = match["winner_captain_id"] == match["captain_a"] ? "playerTourPhoto border-2" : "playerTourPhoto border-2 grayscale"
+            - photo_b_cls = match["winner_captain_id"] == match["captain_b"] ? "playerTourPhoto border-2" : "playerTourPhoto border-2 grayscale"
+
+            .flex.items-center.justify-between.gap-1.rounded-full.p-1.shadow-lg.bg-blue-100
+              = image_tag cap1["photo_name"], class: photo_a_cls
+              %div
+                .text-xs.text-center.font-bold= "##{match['id']}"
+                .text-xs.text-center= match["match_type"].try(:humanize)
+
+              = image_tag cap2["photo_name"], class: photo_b_cls
               -# = image_tag getPlayerPhoto(cap2, @players), class: "playerPhoto"
 
 
