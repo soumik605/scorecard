@@ -2,6 +2,7 @@
 - players.each do |pl|
   - arr = getPlayerRunData(pl, @performances, @matches, tour_type, @tours)
   - arr << pl["name"]
+  - arr << pl["id"]
   - all_run_stats << arr
 
 - all_run_stats = all_run_stats.sort { |a, b| b[0] <=> a[0] }
@@ -42,7 +43,7 @@
       - all_run_stats.each do |pl|
         %tr.border-b
           %th.px-6.py-3.bg-slate-100.text-black.sticky.left-0{scope: "row"}
-            %h5.whitespace-nowrap.text-center= pl[12]
+            = link_to pl[12], player_path(pl[13]), class: "whitespace-nowrap text-center"
           %td.px-6.py-3
             %h5.whitespace-nowrap.text-center= pl[0]
           %td.px-6.py-3

@@ -1,0 +1,14 @@
+.flex.w-full.justify-center
+  = image_tag @player["photo_name"], class: "playerPhoto"
+.text-lg.text-center= @player["name"]
+
+.my-4
+  .mt-2.bg-slate-100.p-4.rounded
+    .text-sm.text-center.mb-2 Runs
+    = bar_chart @run_counts.sort.to_h, library: { scales: { y: { ticks: { autoSkip: false }}}}, xtitle: "No of time scored"
+
+
+
+  .mt-6.bg-slate-100.p-4.rounded
+    .text-sm.text-center.mb-2 Wickets
+    = bar_chart @wicket_counts.sort.to_h,  library: { scales: { y: { ticks: { autoSkip: false }}}}, xtitle: "No of time taken"

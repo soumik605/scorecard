@@ -5,6 +5,25 @@ class PlayersController < ApplicationController
   def index 
   end
 
+  def show
+    @player = @players.find{|p| p["id"].to_s == params[:id].to_s}
+
+    player_performances = @performances.filter{|perf| perf["player_id"].to_s == params[:id].to_s}
+
+    @run_counts = player_performances.each_with_object(Hash.new(0)) do |player, counts|
+      if player["runs"].present?
+        counts[player["runs"]] += 1
+      end
+    end
+
+    @wicket_counts = player_performances.each_with_object(Hash.new(0)) do |player, counts|
+      if player["wickets"].present?
+        counts[player["wickets"]] += 1
+      end
+    end
+    
+  end
+
   def create
     @player = Player.new(player_params)
     respond_to do |format|

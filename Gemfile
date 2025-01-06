@@ -79,3 +79,4 @@ gem 'haml'
 gem "haml-rails", "~> 2.0"
 gem 'devise'
 gem 'html2haml'
+gem "chartkick"
