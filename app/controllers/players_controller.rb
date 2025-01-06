@@ -16,6 +16,9 @@ class PlayersController < ApplicationController
       end
     end
 
+    @total_run = player_performances.pluck("runs").reject { |record| record.nil? }.sum
+    @total_wicket = player_performances.pluck("wickets").reject { |record| record.nil? }.sum
+
     @wicket_counts = player_performances.each_with_object(Hash.new(0)) do |player, counts|
       if player["wickets"].present?
         counts[player["wickets"]] += 1
