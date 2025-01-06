@@ -25,6 +25,12 @@ class StatsController < ApplicationController
     @captain_stats << ["Most run as captain", Player.most_run_as_player(@performances, @matches, @players, true)]
     @captain_stats << ["Most wicket as captain", Player.most_wicket_as_player(@performances, @matches, @players, true)]
     @captain_stats << ["Best win % against a captain (min 5 match)", Match.best_win_percent_against_captain(@matches, @players)]
+
+    @run_counts = @performances.each_with_object(Hash.new(0)) do |player, counts|
+      if player["runs"].present? && player["runs"].to_i > 0
+        counts[player["runs"]] += 1
+      end
+    end
   end
 
 

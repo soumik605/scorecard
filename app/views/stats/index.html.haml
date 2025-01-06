@@ -24,5 +24,8 @@
             %h5.text-sm= stat[0]
           .col-span-6.py-4.px-2{class: index % 2 == 0 ? "bg-slate-100" : "bg-white"}
             %h5.text-sm.text-right= stat[1].html_safe
-        
-      
+  
+  - height = (@run_counts.keys.count * 35) + 50
+  .bg-slate-100.p-4.rounded.mt-10
+    .text-sm.text-center.mb-2 Runs
+    = bar_chart @run_counts.sort.to_h,  library: { scales: { y: { ticks: { autoSkip: false }}, x: { ticks: { autoSkip: false }}}}, xtitle: "No of time scored", height: "#{height}px"
