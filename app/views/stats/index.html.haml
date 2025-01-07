@@ -29,3 +29,7 @@
   .bg-slate-100.p-4.rounded.mt-10
     .text-sm.text-center.mb-2 Runs
     = bar_chart @run_counts.sort.to_h,  library: { scales: { y: { ticks: { autoSkip: false }}, x: { ticks: { autoSkip: false }}}}, xtitle: "No of time scored", height: "#{height}px"
+
+
+  .mt-6.bg-slate-100.rounded.p-4.w-full.overflow-auto
+    = line_chart @result, height: "400px", width: "600px", curve: true, points: false
