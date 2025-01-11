@@ -1,37 +1,30 @@
 = link_to "<- Matches list", tournament_path(@tour["id"]), class: "mb-4 px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
 
 - if @players_data.present?
-  .relative.overflow-x-auto
-  %table.w-full.text-sm.text-left.rtl:text-right.text-gray-500
+  %table.w-full.text-sm.text-left.rtl:text-right.text-gray-500.shadow-lg.border
     %thead.text-xs.text-gray-700.uppercase.bg-gray-50
       %tr
+        -# %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
+        -#   Rank
         %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
-          Rank
-        %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
-          Name
+          Player
         %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
           Point
         %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
           Win %
         %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
           Complete
-        %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
-          Pending
        
     %tbody
       - @players_data.each_with_index do |player, index|
-        %tr.border-b{class: index < 3 ? "bg-green-100" : "bg-orange-100"}
-          %th.px-6.py-4.font-medium.text-gray-900.whitespace-nowrap{scope: "row"}
-            .text-center= index + 1
+        %tr.border-b{class: index < 3 ? "bg-green-100" : "bg-gray-100"}
+          -# %th.px-6.py-4.font-medium.text-gray-900.whitespace-nowrap{scope: "row"}
+          -#   .text-center= index + 1
           %td.px-6.py-4
-            .text-center= player[0]
+            =image_tag player[0], class: "vsPlayerPhoto"
           %td.px-6.py-4
             .text-center= player[3]
           %td.px-6.py-4
             .text-center= player[4]
           %td.px-6.py-4
             .text-center= player[1]
-          %td.px-6.py-4
-            .text-center= player[2]
-       
-      

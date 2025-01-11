@@ -3,18 +3,18 @@
 	.text-lg.font-bold.text-center Head To Head
 	.text-sm= ""
 
-- @head_to_head.each do |player, value|
+- @head_to_head.to_a.shuffle.to_h.each do |player, value|
 	.p-4.mt-4
 		.grid.grid-cols-12.gap-2 
 			.col-span-3 
 				.flex.justify-center
-					= image_tag getPlayerPhoto(player, @players), class: "playerPhoto"
+					= image_tag getPlayerPhoto(player, @players), class: "playerPhoto shadow-lg border"
 				.text-sm.font-bold.text-center= "#{getPlayerName(player, @players)}"
 			.col-span-9
 				- value.each do |p, k|
 					- cls = getH2HClass(k[:wins], k[:losses])
 					.pl-6.py-1
-						.rounded-lg.p-3{class: cls}
+						.rounded-lg.p-3.shadow-md{class: cls}
 							.flex.justify-center.gap-6.items-center.px-2
 								.text-xl.font-bold="#{ k[:wins]} - #{k[:losses]}"
 								= image_tag getPlayerPhoto(p, @players), class: "vsPlayerPhoto"
