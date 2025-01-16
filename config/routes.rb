@@ -1,13 +1,11 @@
 Rails.application.routes.draw do
-  namespace :api do
-    get 'tournaments/index'
-  end
   devise_for :users
   root :to => "tournaments#index"
 
   namespace :api, defaults: {format: 'json'}  do
     resources :players
-    resources :tournaments, as: :tours
+    resources :tournaments
+    resources :stats
   end
  
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
