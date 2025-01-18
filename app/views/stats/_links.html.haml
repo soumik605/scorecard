@@ -1,0 +1,6 @@
+- active_class = "bg-blue-700 px-4 py-1 rounded-xl shadow text-white"
+- inactive_class = "bg-slate-300 px-4 py-1 rounded-xl shadow text-slate-500"
+
+.flex.items-center.gap-4 
+	= link_to "Test", test_stats_path, class: active == "test" ? active_class : inactive_class
+	= link_to "T10", t10_stats_path, class: active == "t10" ? active_class : inactive_class

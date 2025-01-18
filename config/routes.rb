@@ -20,6 +20,8 @@ Rails.application.routes.draw do
   end
   resources :stats do 
     collection do
+      get :test
+      get :t10
       get :head_to_head
     end
   end

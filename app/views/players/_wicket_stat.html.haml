@@ -14,19 +14,19 @@
       %tr
         %th.px-6.py-3.whitespace-nowrap.bg-slate-100.text-black.sticky.left-0{scope: "col"}
           Name
-        %th.px-6.py-3.whitespace-nowrap{scope: "col"}
+        %th.px-6.py-3.whitespace-nowrap.text-center{scope: "col"}
           Wickets
-        %th.px-6.py-3.whitespace-nowrap{scope: "col"}
-          Matches
-        %th.px-6.py-3.whitespace-nowrap{scope: "col"}
+        -# %th.px-6.py-3.whitespace-nowrap.text-center{scope: "col"}
+        -#   Matches
+        %th.px-6.py-3.whitespace-nowrap.text-center{scope: "col"}
           Innings
-        %th.px-6.py-3.whitespace-nowrap{scope: "col"}
+        %th.px-6.py-3.whitespace-nowrap.text-center{scope: "col"}
           3 wicket
-        %th.px-6.py-3.whitespace-nowrap{scope: "col"}
+        %th.px-6.py-3.whitespace-nowrap.text-center{scope: "col"}
           4 wicket
-        %th.px-6.py-3.whitespace-nowrap{scope: "col"}
+        %th.px-6.py-3.whitespace-nowrap.text-center{scope: "col"}
           5+ wicket
-        %th.px-6.py-3.whitespace-nowrap{scope: "col"}
+        %th.px-6.py-3.whitespace-nowrap.text-center{scope: "col"}
           No Wicket
 
       
@@ -37,8 +37,8 @@
             = link_to pl[7], player_path(pl[8]), class: "whitespace-nowrap text-center text-blue-800 underline"
           %td.px-6.py-3
             %h5.whitespace-nowrap.text-center= pl[0]
-          %td.px-6.py-3
-            %h5.whitespace-nowrap.text-center= pl[1]
+          -# %td.px-6.py-3
+          -#   %h5.whitespace-nowrap.text-center= pl[1]
           %td.px-6.py-3
             %h5.whitespace-nowrap.text-center= pl[2]
           %td.px-6.py-3
