@@ -5,7 +5,12 @@ Rails.application.routes.draw do
   namespace :api, defaults: {format: 'json'}  do
     resources :players
     resources :tournaments
-    resources :stats
+    resources :stats do 
+      collection do 
+        get :test
+        get :t10
+      end
+    end
   end
  
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
