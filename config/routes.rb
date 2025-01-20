@@ -34,5 +34,10 @@ Rails.application.routes.draw do
   resources :matches
   resources :performances
   resources :players
-  resources :rankings
+  resources :rankings do
+    collection do 
+      get :test
+      get :t10
+    end
+  end
 end

@@ -279,5 +279,48 @@ class Player < ApplicationRecord
     return text
   end
 
+
+
+  def self.batting_ranking performances, players
+    performances = performances.filter{|p| p["runs"].present?}
+    players_by_id = performances.group_by { |p| p["player_id"] }
+
+    rankings = players_by_id.map do |player_id, innings|
+      player = players.find{|p| p["id"].to_s == player_id.to_s}
+      last_10 = innings.sort_by { |i| -i["match_id"] }.first(10)
+      batting_points = last_10.sum { |i| i["runs"].to_i + (i["is_not_out"] ? 15 : 0) }
+      {
+        player_photo: player["photo_name"],
+        player_name: player["name"],
+        last_10_scores: last_10.map { |i| "#{i['runs']}#{i["is_not_out"] ? '*' : ''}"  },
+        points: batting_points
+      }
+    end
+
+    rankings = rankings.sort_by { |r| -r[:points] }
+    return rankings
+  end
+
+
+  def self.bowling_ranking performances, players
+    performances = performances.filter{|p| p["wickets"].present?}
+    players_by_id = performances.group_by { |p| p["player_id"] }
+
+    rankings = players_by_id.map do |player_id, innings|
+      player = players.find{|p| p["id"].to_s == player_id.to_s}
+      last_10 = innings.sort_by { |i| -i["match_id"] }.first(10)
+      bowling_points = last_10.sum { |i| i["wickets"].to_i * 15 }
+      {
+        player_photo: player["photo_name"],
+        player_name: player["name"],
+        last_10_scores: last_10.map { |i| i["wickets"] },
+        points: bowling_points
+      }
+    end
+
+    rankings = rankings.sort_by { |r| -r[:points] }
+    return rankings
+  end
+
   
 end

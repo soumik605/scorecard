@@ -1,28 +1,24 @@
-- if wickets.present?
+- if bowling_ranking.present?
   .relative.overflow-x-auto
-    %table.w-full.text-sm.text-left.rtl:text-right.text-gray-500
+    %table.w-full.text-xs.text-left.rtl:text-right.text-gray-500
       %thead.text-xs.text-gray-700.uppercase.bg-gray-50
         %tr
           %th.px-6.py-3.sticky.left-0.bg-gray-50{scope: "col"}
-            Name
+            Player
           %th.px-6.py-3{scope: "col"}
             Point
           %th.px-6.py-3{scope: "col"}
-            Wickets
-          %th.px-6.py-3{scope: "col"}
             Recent Form
-
         
       %tbody
-        - wickets.each_with_index do |wicket, index|
+        - bowling_ranking.each_with_index do |stat, index|
           %tr.border-b{class: index == 0 ? "bg-green-100" : ""}
             %th.px-6.py-4.font-medium.text-gray-900.whitespace-nowrap.sticky.left-0{scope: "row", class: index == 0 ? "bg-green-100" : "bg-white"}
-              %h5{class: index == 0 ? "text-2xl" : ""}= wicket[0]
+              .flex.justify-center  
+                = image_tag stat[:player_photo], class: "vsPlayerPhoto"
+              .text-xs.text-center{class: index == 0 ? "text-2xl" : ""}= stat[:player_name]
             %td.px-6.py-4
-              %h5{class: index == 0 ? "text-2xl" : ""}= wicket[1].try(:to_i)
+              .text-xs{class: index == 0 ? "text-2xl" : ""}= stat[:points]
             %td.px-6.py-4
-              %h5{class: index == 0 ? "text-2xl" : ""}= wicket[2]
-            %td.px-6.py-4
-              %h5.whitespace-nowrap{class: index == 0 ? "text-2xl" : ""}= wicket[3].join(", ")
-        
-        
+              .text-xs{class: index == 0 ? "text-2xl" : ""}= stat[:last_10_scores].to_sentence
+           
