@@ -39,18 +39,29 @@ class StatsController < ApplicationController
     @captain_stats << ["Most wicket as captain", Player.most_wicket_as_player(@performances, @matches, @players, true)]
     @captain_stats << ["Best win % against a captain (min 5 match)", Match.best_win_percent_against_captain(@matches, @players)]
 
-    @result = {}
+    @run_result = {}
     cumulative_runs = Hash.new(0)
-    innings_count = Hash.new(0)
+    run_innings_count = Hash.new(0)
+
+    @wicket_result = {}
+    cumulative_wickets = Hash.new(0)
+    wicket_innings_count = Hash.new(0)
 
     @performances.each do |entry|
       player_id = entry["player_id"]
       player = @players.find{|p| p["id"] == player_id}
       if entry["runs"].present? && [1,2,3,4,5].include?(player_id)
-        innings_count[player["name"]] += 1 
+        run_innings_count[player["name"]] += 1 
         cumulative_runs[player["name"]] += entry["runs"].try(:to_i) || 0
-        key = [player["name"], innings_count[player["name"]]]
-        @result[key] = cumulative_runs[player["name"]]
+        key = [player["name"], run_innings_count[player["name"]]]
+        @run_result[key] = cumulative_runs[player["name"]]
+      end
+
+      if entry["wickets"].present? && [1,2,3,4,5].include?(player_id)
+        wicket_innings_count[player["name"]] += 1 
+        cumulative_wickets[player["name"]] += entry["wickets"].try(:to_i) || 0
+        key = [player["name"], wicket_innings_count[player["name"]]]
+        @wicket_result[key] = cumulative_wickets[player["name"]]
       end
     end
 
