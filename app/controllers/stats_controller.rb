@@ -37,6 +37,7 @@ class StatsController < ApplicationController
     @captain_stats << ["Most win by follow on", Match.most_wins_by_follow_on(@matches, @players)] if tour_type == "test"
     @captain_stats << ["Most run as captain", Player.most_run_as_player(@performances, @matches, @players, true)]
     @captain_stats << ["Most wicket as captain", Player.most_wicket_as_player(@performances, @matches, @players, true)]
+    @captain_stats << ["Most consicutive win", Player.most_consicutive_win(@matches, @players)]
     @captain_stats << ["Best win % against a captain (min 5 match)", Match.best_win_percent_against_captain(@matches, @players)]
 
     @run_result = {}

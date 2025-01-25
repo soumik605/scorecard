@@ -17,7 +17,12 @@ class Player < ApplicationRecord
     
     if player_with_most_runs.count > 1
       player = players.find{|p| p["id"] == player_with_most_runs[1][0]}
-      text += "#{player['name']} (#{player_with_most_runs[1][1]})"
+      text += "#{player['name']} (#{player_with_most_runs[1][1]})<br >"
+    end
+
+    if player_with_most_runs.count > 2
+      player = players.find{|p| p["id"] == player_with_most_runs[2][0]}
+      text += "#{player['name']} (#{player_with_most_runs[2][1]})"
     end
 
     return text
@@ -34,7 +39,12 @@ class Player < ApplicationRecord
 
     if player_with_most_wickets.count > 1
       player = players.find{|p| p["id"] == player_with_most_wickets[1][0]}
-      text += "#{player['name']} (#{player_with_most_wickets[1][1]})"
+      text += "#{player['name']} (#{player_with_most_wickets[1][1]})<br >"
+    end
+
+    if player_with_most_wickets.count > 2
+      player = players.find{|p| p["id"] == player_with_most_wickets[2][0]}
+      text += "#{player['name']} (#{player_with_most_wickets[2][1]})"
     end
 
     return text
@@ -50,7 +60,12 @@ class Player < ApplicationRecord
 
     if player_with_most_zeros.count > 1
       player = players.find{|p| p["id"] == player_with_most_zeros[1][0]}
-      text += "#{player['name']} (#{player_with_most_zeros[1][1]})"
+      text += "#{player['name']} (#{player_with_most_zeros[1][1]})<br >"
+    end
+
+    if player_with_most_zeros.count > 2
+      player = players.find{|p| p["id"] == player_with_most_zeros[2][0]}
+      text += "#{player['name']} (#{player_with_most_zeros[2][1]})"
     end
 
     return text
@@ -66,7 +81,12 @@ class Player < ApplicationRecord
 
     if player_with_most_fiftys.count > 1
       player = players.find{|p| p["id"] == player_with_most_fiftys[1][0]}
-      text += "#{player['name']} (#{player_with_most_fiftys[1][1]})"
+      text += "#{player['name']} (#{player_with_most_fiftys[1][1]})<br >"
+    end
+
+    if player_with_most_fiftys.count > 2
+      player = players.find{|p| p["id"] == player_with_most_fiftys[2][0]}
+      text += "#{player['name']} (#{player_with_most_fiftys[2][1]})"
     end
 
     return text
@@ -82,7 +102,12 @@ class Player < ApplicationRecord
 
     if player_with_most_hundreads.count > 1
       player = players.find{|p| p["id"] == player_with_most_hundreads[1][0]}
-      text += "#{player['name']} (#{player_with_most_hundreads[1][1]})"
+      text += "#{player['name']} (#{player_with_most_hundreads[1][1]})<br >"
+    end
+
+    if player_with_most_hundreads.count > 2
+      player = players.find{|p| p["id"] == player_with_most_hundreads[2][0]}
+      text += "#{player['name']} (#{player_with_most_hundreads[2][1]})"
     end
 
     return text
@@ -111,7 +136,11 @@ class Player < ApplicationRecord
       text = "<b>#{player["name"]} (#{captain_win_percent[0][1].to_i}%)</b><br >"
       if captain_win_percent.count > 1
         player = players.find{|p| p["id"] == captain_win_percent[1][0]}
-        text += "#{player["name"]} (#{captain_win_percent[1][1].to_i}%)"
+        text += "#{player["name"]} (#{captain_win_percent[1][1].to_i}%)<br >"
+      end
+      if captain_win_percent.count > 2
+        player = players.find{|p| p["id"] == captain_win_percent[2][0]}
+        text += "#{player["name"]} (#{captain_win_percent[2][1].to_i}%)"
       end
     else
       player = players.find{|p| p["id"] == captain_win_percent[-1][0]}
@@ -119,7 +148,11 @@ class Player < ApplicationRecord
 
       if captain_win_percent.count > 1
         player = players.find{|p| p["id"] == captain_win_percent[-2][0]}
-        text += "#{player["name"]} (#{captain_win_percent[-2][1].to_i}%)"
+        text += "#{player["name"]} (#{captain_win_percent[-2][1].to_i}%)<br >"
+      end
+      if captain_win_percent.count > 2
+        player = players.find{|p| p["id"] == captain_win_percent[-3][0]}
+        text += "#{player["name"]} (#{captain_win_percent[-3][1].to_i}%)"
       end
     end
 
@@ -140,7 +173,12 @@ class Player < ApplicationRecord
 
     if captain_most_matches.count > 1
       player = players.find{|p| p["id"] == captain_most_matches[1][0]}
-      text += "#{player["name"]} (#{captain_most_matches[1][1]})"
+      text += "#{player["name"]} (#{captain_most_matches[1][1]})<br >"
+    end
+
+    if captain_most_matches.count > 2
+      player = players.find{|p| p["id"] == captain_most_matches[2][0]}
+      text += "#{player["name"]} (#{captain_most_matches[2][1]})"
     end
 
     return text
@@ -159,7 +197,12 @@ class Player < ApplicationRecord
 
     if captain_most_winning.count>1
       player = players.find{|p| p["id"] == captain_most_winning[1][0]}
-      text += "#{player['name']} (#{captain_most_winning[1][1]})"
+      text += "#{player['name']} (#{captain_most_winning[1][1]})<br >"
+    end
+
+    if captain_most_winning.count>2
+      player = players.find{|p| p["id"] == captain_most_winning[2][0]}
+      text += "#{player['name']} (#{captain_most_winning[2][1]})"
     end
 
     return text
@@ -206,7 +249,12 @@ class Player < ApplicationRecord
 
     if most_runs_captain.count>1
       player = players.find{|p| p["id"] == most_runs_captain[1][0]}
-      text += "#{player['name']} (#{most_runs_captain[1][1]})"
+      text += "#{player['name']} (#{most_runs_captain[1][1]})<br >"
+    end
+
+    if most_runs_captain.count>2
+      player = players.find{|p| p["id"] == most_runs_captain[2][0]}
+      text += "#{player['name']} (#{most_runs_captain[2][1]})"
     end
 
     return text
@@ -244,7 +292,12 @@ class Player < ApplicationRecord
 
     if most_wickets_captain.count>1
       player = players.find{|p| p["id"] == most_wickets_captain[1][0]}
-      text += "#{player['name']} (#{most_wickets_captain[1][1]})"
+      text += "#{player['name']} (#{most_wickets_captain[1][1]})<br >"
+    end
+
+    if most_wickets_captain.count>2
+      player = players.find{|p| p["id"] == most_wickets_captain[2][0]}
+      text += "#{player['name']} (#{most_wickets_captain[2][1]})"
     end
 
     return text
@@ -273,7 +326,55 @@ class Player < ApplicationRecord
 
     if best_player.count>1
       player = players.find{|p| p["id"] == best_player[1][0]}
-      text += "#{player['name']} (#{best_player[1][1][:max_streak]}), Current: #{best_player[1][1][:current_streak]}"
+      text += "#{player['name']} (#{best_player[1][1][:max_streak]}), Current: #{best_player[1][1][:current_streak]}<br >"
+    end
+
+    if best_player.count>2
+      player = players.find{|p| p["id"] == best_player[2][0]}
+      text += "#{player['name']} (#{best_player[2][1][:max_streak]}), Current: #{best_player[2][1][:current_streak]}"
+    end
+
+    return text
+  end
+
+
+
+  def self.most_consicutive_win matches, players
+    streaks = Hash.new { |hash, key| hash[key] = { current_streak: 0, max_streak: 0 } }
+
+    matches.each do |match|
+      captain_a = match["captain_a"]
+      captain_b = match["captain_b"]
+      winner_captain_id = match["winner_captain_id"]
+
+      if winner_captain_id.to_s == captain_a.to_s
+        streaks[captain_a][:current_streak] += 1
+        streaks[captain_a][:max_streak] = [streaks[captain_a][:current_streak], streaks[captain_a][:max_streak]].max
+      else
+        streaks[captain_a][:current_streak] = 0
+      end
+
+      if winner_captain_id.to_s == captain_b.to_s
+        streaks[captain_b][:current_streak] += 1
+        streaks[captain_b][:max_streak] = [streaks[captain_b][:current_streak], streaks[captain_b][:max_streak]].max
+      else
+        streaks[captain_b][:current_streak] = 0
+      end
+    end
+
+    best_player = streaks.sort_by { |_, stats| -stats[:max_streak] }
+    
+    player = players.find{|p| p["id"] == best_player[0][0]}
+    text = "<b>#{player['name']} (#{best_player[0][1][:max_streak]}), Current: #{best_player[0][1][:current_streak]}</b><br >"
+
+    if best_player.count>1
+      player = players.find{|p| p["id"] == best_player[1][0]}
+      text += "#{player['name']} (#{best_player[1][1][:max_streak]}), Current: #{best_player[1][1][:current_streak]}<br >"
+    end
+
+    if best_player.count>2
+      player = players.find{|p| p["id"] == best_player[2][0]}
+      text += "#{player['name']} (#{best_player[2][1][:max_streak]}), Current: #{best_player[2][1][:current_streak]}"
     end
 
     return text

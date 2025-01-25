@@ -28,7 +28,12 @@ class Performance < ApplicationRecord
 
     if best_innings.count > 1
       player = players.find{|p| p["id"] == best_innings[1]["player_id"]}
-      text += "#{player['name']} (#{best_innings[1]["runs"]})"
+      text += "#{player['name']} (#{best_innings[1]["runs"]})<br >"
+    end
+
+    if best_innings.count > 2
+      player = players.find{|p| p["id"] == best_innings[2]["player_id"]}
+      text += "#{player['name']} (#{best_innings[2]["runs"]})"
     end
 
     return text
@@ -45,7 +50,12 @@ class Performance < ApplicationRecord
 
     if best_innings.count > 1
       player = players.find{|p| p["id"] == best_innings[1]["player_id"]}
-      text += "#{player['name']} (#{best_innings[1]["wickets"]})"
+      text += "#{player['name']} (#{best_innings[1]["wickets"]})<br >"
+    end
+
+    if best_innings.count > 2
+      player = players.find{|p| p["id"] == best_innings[2]["player_id"]}
+      text += "#{player['name']} (#{best_innings[2]["wickets"]})"
     end
 
     return text

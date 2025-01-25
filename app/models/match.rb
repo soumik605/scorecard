@@ -26,7 +26,12 @@ class Match < ApplicationRecord
 
     if sorted_captains.count > 1
       player = players.find{|p| p["id"] == sorted_captains[1][0]}
-      text +=  "#{player["name"]} (#{sorted_captains[1][1]})"
+      text +=  "#{player["name"]} (#{sorted_captains[1][1]})<br >"
+    end
+
+    if sorted_captains.count > 2
+      player = players.find{|p| p["id"] == sorted_captains[2][0]}
+      text +=  "#{player["name"]} (#{sorted_captains[2][1]})"
     end
 
     return text
@@ -47,7 +52,12 @@ class Match < ApplicationRecord
 
     if sorted_captains.count > 1
       player = players.find{|p| p["id"] == sorted_captains[1][0]}
-      text +=  "#{player["name"]} (#{sorted_captains[1][1]})"
+      text +=  "#{player["name"]} (#{sorted_captains[1][1]})<br >"
+    end
+
+    if sorted_captains.count > 2
+      player = players.find{|p| p["id"] == sorted_captains[2][0]}
+      text +=  "#{player["name"]} (#{sorted_captains[2][1]})"
     end
 
     return text
@@ -87,7 +97,13 @@ class Match < ApplicationRecord
       if best_players.size >= 2
         player = players.find{|p| p["id"] == best_players[1][:player_id]}
         against = players.find{|p| p["id"] == best_players[1][:against]}
-        text +=  "#{player["name"]} (#{best_players[1][:win_percentage].round(2)}%) vs #{against["name"]}"
+        text +=  "#{player["name"]} (#{best_players[1][:win_percentage].round(2)}%) vs #{against["name"]}<br >"
+      end
+
+      if best_players.size >= 3
+        player = players.find{|p| p["id"] == best_players[2][:player_id]}
+        against = players.find{|p| p["id"] == best_players[2][:against]}
+        text +=  "#{player["name"]} (#{best_players[2][:win_percentage].round(2)}%) vs #{against["name"]}"
       end
     end
     
