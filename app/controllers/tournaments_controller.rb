@@ -1,6 +1,6 @@
 class TournamentsController < ApplicationController
   before_action :get_data
-  before_action :set_tournament, only: [:show, :edit, :update, :leaderboard, :head_to_head]
+  before_action :set_tournament, only: [:show, :edit, :update, :leaderboard, :head_to_head, :performances]
 
 
   def index
@@ -76,6 +76,10 @@ class TournamentsController < ApplicationController
         @head_to_head[captain_a][captain_b][:losses] += 1
       end
     end
+  end
+
+  def performances
+
   end
 
   private 

@@ -1,6 +1,6 @@
 - all_run_stats = []
 - players.each do |pl|
-  - arr = getPlayerRunData(pl, @performances, @matches, tour_type, @tours)
+  - arr = getPlayerRunData(pl, @performances, @matches, tour_type, tours)
   - arr << pl["name"]
   - arr << pl["id"]
   - all_run_stats << arr

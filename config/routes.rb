@@ -22,6 +22,7 @@ Rails.application.routes.draw do
     member do
       get :leaderboard
       get :head_to_head
+      get :performances
     end
   end
   resources :stats do 
