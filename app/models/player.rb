@@ -423,5 +423,32 @@ class Player < ApplicationRecord
     return rankings
   end
 
+  def self.allround_ranking performances, players
+    performances = performances.filter{|p| p["wickets"].present? || p["runs"].present?}
+    players_by_id = performances.group_by { |p| p["player_id"] }
+
+    rankings = players_by_id.map do |player_id, innings|
+      player = players.find{|p| p["id"].to_s == player_id.to_s}
+      last_10 = innings.sort_by { |i| -i["match_id"] }.first(10)
+      
+      allround_points = last_10.sum { |i| 
+        ((i["wickets"].try(:to_i) || 0) * 15) +
+        ((i["runs"].try(:to_i) || 0) + (i["is_not_out"] ? 15 : 0))
+      }
+
+      {
+        player_photo: player["photo_name"],
+        player_name: player["name"],
+        last_10_scores: last_10.map { |i| 
+        ["#{i['runs']}#{i["is_not_out"] ? '*' : ''}", i['wickets'].present? ? "(#{i['wickets']})" : ""].join(" ")
+      },
+        points: allround_points
+      }
+    end
+
+    rankings = rankings.sort_by { |r| -r[:points] }
+    return rankings
+  end
+
   
 end

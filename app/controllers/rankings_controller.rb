@@ -7,6 +7,7 @@ class RankingsController < ApplicationController
 
     @batting_ranking = Player.batting_ranking(@test_performances, @players)
     @bowling_ranking = Player.bowling_ranking(@test_performances, @players)
+    @allround_ranking = Player.allround_ranking(@test_performances, @players)
   end
 
 
@@ -17,6 +18,7 @@ class RankingsController < ApplicationController
 
     @batting_ranking = Player.batting_ranking(@t10_performances, @players)
     @bowling_ranking = Player.bowling_ranking(@t10_performances, @players)
+    @allround_ranking = Player.allround_ranking(@t10_performances, @players)
   end
 
 end
