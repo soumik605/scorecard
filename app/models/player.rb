@@ -389,16 +389,28 @@ class Player < ApplicationRecord
     rankings = players_by_id.map do |player_id, innings|
       player = players.find{|p| p["id"].to_s == player_id.to_s}
       last_10 = innings.sort_by { |i| -i["match_id"] }.first(10)
-      batting_points = last_10.sum { |i| i["runs"].to_i + (i["is_not_out"] ? 15 : 0) }
+      
+      ar = []
+      last_10.each do |i|
+        run = i["runs"].to_i
+        extra_run_point = (run / 3).to_i
+        extra_max_point = 25
+        extra_point = i["is_not_out"] ? [extra_run_point, extra_max_point].min : 0
+        point = run + extra_point
+        ar << point
+      end
+
+
+         
       {
         player_photo: player["photo_name"],
         player_name: player["name"],
         last_10_scores: last_10.map { |i| "#{i['runs']}#{i["is_not_out"] ? '*' : ''}"  },
-        points: batting_points
+        points: ar.sum
       }
     end
 
-    rankings = rankings.sort_by { |r| -r[:points] }
+    rankings = rankings.sort_by { |r| [-r[:points], -r[:player_name]] }
     return rankings
   end
 
@@ -419,7 +431,7 @@ class Player < ApplicationRecord
       }
     end
 
-    rankings = rankings.sort_by { |r| -r[:points] }
+    rankings = rankings.sort_by { |r| [-r[:points], -r[:player_name]] }
     return rankings
   end
 
@@ -430,23 +442,28 @@ class Player < ApplicationRecord
     rankings = players_by_id.map do |player_id, innings|
       player = players.find{|p| p["id"].to_s == player_id.to_s}
       last_10 = innings.sort_by { |i| -i["match_id"] }.first(10)
-      
-      allround_points = last_10.sum { |i| 
-        ((i["wickets"].try(:to_i) || 0) * 15) +
-        ((i["runs"].try(:to_i) || 0) + (i["is_not_out"] ? 15 : 0))
-      }
 
+      ar = []
+      last_10.each do |i|
+        run = i["runs"].to_i
+        extra_run_point = (run / 3).to_i
+        extra_max_point = 25
+        extra_point = i["is_not_out"] ? [extra_run_point, extra_max_point].min : 0
+        point = run + extra_point
+        ar << point
+      end
+      bowling_points = last_10.sum { |i| i["wickets"].to_i * 15 }
       {
         player_photo: player["photo_name"],
         player_name: player["name"],
         last_10_scores: last_10.map { |i| 
         ["#{i['runs']}#{i["is_not_out"] ? '*' : ''}", i['wickets'].present? ? "(#{i['wickets']})" : ""].join(" ")
       },
-        points: allround_points
+        points: ar.sum + bowling_points
       }
     end
 
-    rankings = rankings.sort_by { |r| -r[:points] }
+    rankings = rankings.sort_by { |r| [-r[:points], -r[:player_name]] }
     return rankings
   end
 
