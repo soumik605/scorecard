@@ -133,26 +133,26 @@ class Player < ApplicationRecord
 
     if type == "best"
       player = players.find{|p| p["id"] == captain_win_percent[0][0]}
-      text = "<b>#{player["name"]} (#{captain_win_percent[0][1].to_i}%)</b><br >"
+      text = "<b>#{player["name"]} (#{captain_win_percent[0][1].try(:round)}%)</b><br >"
       if captain_win_percent.count > 1
         player = players.find{|p| p["id"] == captain_win_percent[1][0]}
-        text += "#{player["name"]} (#{captain_win_percent[1][1].to_i}%)<br >"
+        text += "#{player["name"]} (#{captain_win_percent[1][1].try(:round)}%)<br >"
       end
       if captain_win_percent.count > 2
         player = players.find{|p| p["id"] == captain_win_percent[2][0]}
-        text += "#{player["name"]} (#{captain_win_percent[2][1].to_i}%)"
+        text += "#{player["name"]} (#{captain_win_percent[2][1].try(:round)}%)"
       end
     else
       player = players.find{|p| p["id"] == captain_win_percent[-1][0]}
-      text = "<b>#{player["name"]} (#{captain_win_percent[-1][1].to_i}%)</b><br >"
+      text = "<b>#{player["name"]} (#{captain_win_percent[-1][1].try(:round)}%)</b><br >"
 
       if captain_win_percent.count > 1
         player = players.find{|p| p["id"] == captain_win_percent[-2][0]}
-        text += "#{player["name"]} (#{captain_win_percent[-2][1].to_i}%)<br >"
+        text += "#{player["name"]} (#{captain_win_percent[-2][1].try(:round)}%)<br >"
       end
       if captain_win_percent.count > 2
         player = players.find{|p| p["id"] == captain_win_percent[-3][0]}
-        text += "#{player["name"]} (#{captain_win_percent[-3][1].to_i}%)"
+        text += "#{player["name"]} (#{captain_win_percent[-3][1].try(:round)}%)"
       end
     end
 
@@ -393,7 +393,7 @@ class Player < ApplicationRecord
       ar = []
       last_10.each do |i|
         run = i["runs"].to_i
-        extra_run_point = (run / 3).to_i
+        extra_run_point = (run / 3).try(:round)
         extra_max_point = 25
         extra_point = i["is_not_out"] ? [extra_run_point, extra_max_point].min : 0
         point = run + extra_point
@@ -446,7 +446,7 @@ class Player < ApplicationRecord
       ar = []
       last_10.each do |i|
         run = i["runs"].to_i
-        extra_run_point = (run / 3).to_i
+        extra_run_point = (run / 3).try(:round)
         extra_max_point = 25
         extra_point = i["is_not_out"] ? [extra_run_point, extra_max_point].min : 0
         point = run + extra_point

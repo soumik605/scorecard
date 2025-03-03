@@ -13,8 +13,8 @@ module PlayersHelper
     total_run = obj.map(&:first).sum
     not_out = performances.filter{ |i| i["is_not_out"] == true}.count
     out = performances.filter{ |i| i["is_not_out"] == false}.count
-    average = out > 0 ? total_run/out : nil
-    run_per_innings = performances.count == 0 ? "" : total_run/(performances.count)
+    average = out > 0 ? (total_run.try(:to_f)/out).try(:round) : nil
+    run_per_innings = performances.count == 0 ? "" : (total_run.try(:to_f)/(performances.count)).try(:round)
     zero_count = performances.filter{ |i| i["runs"] == 0}.count
     range_1_count = performances.filter{ |i| i["runs"] >= 1 && i["runs"] <= 30}.count
     range_2_count = performances.filter{ |i| i["runs"] >= 31 && i["runs"] <= 49}.count
