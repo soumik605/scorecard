@@ -11,20 +11,24 @@
         %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
           Point
         %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
-          Win %
+          Win
         %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
-          Complete
+          Played
+        %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
+          Win %
        
     %tbody
       - @players_data.each_with_index do |player, index|
         %tr.border-b{class: index < 3 ? "bg-green-100" : "bg-gray-100"}
           -# %th.px-6.py-4.font-medium.text-gray-900.whitespace-nowrap{scope: "row"}
           -#   .text-center= index + 1
-          %td.px-6.py-4
+          %td.px-6.py-4.flex.justify-center
             =image_tag player[0], class: "vsPlayerPhoto"
+          %td.px-6.py-4
+            .text-center= player[1]
+          %td.px-6.py-4
+            .text-center= player[2]
           %td.px-6.py-4
             .text-center= player[3]
           %td.px-6.py-4
             .text-center= player[4]
-          %td.px-6.py-4
-            .text-center= player[1]
