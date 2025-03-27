@@ -23,6 +23,7 @@ Rails.application.routes.draw do
       get :leaderboard
       get :head_to_head
       get :performances
+      get :next_match_suggestion
     end
   end
   resources :stats do 

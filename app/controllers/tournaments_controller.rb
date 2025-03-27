@@ -1,6 +1,6 @@
 class TournamentsController < ApplicationController
   before_action :get_data
-  before_action :set_tournament, only: [:show, :edit, :update, :leaderboard, :head_to_head, :performances]
+  before_action :set_tournament, only: [:show, :edit, :update, :leaderboard, :head_to_head, :performances, :next_match_suggestion]
 
 
   def index
@@ -85,6 +85,10 @@ class TournamentsController < ApplicationController
 
   def performances
 
+  end
+
+  def next_match_suggestion
+    @next_matches = Tournament.get_next_match_suggestion(@matches, @players)
   end
 
   private 
