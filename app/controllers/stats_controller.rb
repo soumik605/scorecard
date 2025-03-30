@@ -21,6 +21,7 @@ class StatsController < ApplicationController
     @captain_stats = []
     @player_stats = []
 
+    @player_stats << ["Most average", Player.most_average_as_player(@performances, @matches, @players, false)]
     @player_stats << ["Most run", Player.most_runs(@performances, @players)]
     @player_stats << ["Most wicket", Player.most_wickets(@performances, @players)]
     @player_stats << ["Most run in knock-out", Player.most_runs(@playoff_performances, @players)]
@@ -36,6 +37,7 @@ class StatsController < ApplicationController
     @player_stats << ["Most wicket as player", Player.most_wicket_as_player(@performances, @matches, @players, false)]
     @player_stats << ["Most consicutive innings without duck", Player.most_consicutive_innings_without_duck(@performances, @players)]
     
+    @captain_stats << ["Most average", Player.most_average_as_player(@performances, @matches, @players, true)]
     @captain_stats << ["Most matches as captain", Player.captain_most_matches(@matches, @teams, @players)]
     @captain_stats << ["Best win %", Player.captain_win_percentage(@matches, @teams, @players, "best")]
     @captain_stats << ["Worst win %", Player.captain_win_percentage(@matches, @teams, @players, "worst")]

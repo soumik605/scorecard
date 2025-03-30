@@ -5,6 +5,70 @@ class Player < ApplicationRecord
   has_many :captain_teams, class_name: 'Team', foreign_key: "captain_id"
 
 
+  def self.most_average_as_player(performances, matches, players, is_captain)
+    captain_matches = {}
+    matches.each do |match|
+      captain_matches[match["captain_a"]] ||= []
+      captain_matches[match["captain_a"]] << match["id"]
+      captain_matches[match["captain_b"]] ||= []
+      captain_matches[match["captain_b"]] << match["id"]
+    end
+  
+    captain_averages = {}
+  
+    # Collect total runs and innings count per player
+    performances.each do |performance|
+      captain_matches.each do |captain_id, match_ids|
+        if is_captain
+          if match_ids.include?(performance["match_id"])
+            if performance["player_id"] == captain_id
+              captain_averages[captain_id] ||= { total_runs: 0, innings: 0 }
+              if performance["runs"].present?
+                captain_averages[captain_id][:total_runs] += performance["runs"]
+                captain_averages[captain_id][:innings] += 1
+              end
+            end
+          end
+        else
+          unless match_ids.include?(performance["match_id"])
+            if performance["player_id"] == captain_id
+              captain_averages[captain_id] ||= { total_runs: 0, innings: 0 }
+              if performance["runs"].present?
+                captain_averages[captain_id][:total_runs] += performance["runs"]
+                captain_averages[captain_id][:innings] += 1
+              end
+            end
+          end
+        end
+      end
+    end
+  
+    # Calculate averages (avoid division by zero)
+    captain_averages.each do |captain_id, data|
+      data[:average] = data[:innings].zero? ? 0 : (data[:total_runs].to_f / data[:innings])
+    end
+  
+    most_average_captains = captain_averages.sort_by { |_, data| -data[:average] }
+  
+    return "-" unless most_average_captains.present?
+  
+    player = players.find { |p| p["id"] == most_average_captains[0][0] }
+    text = "<b>#{player['name']} (#{most_average_captains[0][1][:average].round(2)})</b><br >"
+  
+    if most_average_captains.count > 1
+      player = players.find { |p| p["id"] == most_average_captains[1][0] }
+      text += "#{player['name']} (#{most_average_captains[1][1][:average].round(2)})<br >"
+    end
+  
+    if most_average_captains.count > 2
+      player = players.find { |p| p["id"] == most_average_captains[2][0] }
+      text += "#{player['name']} (#{most_average_captains[2][1][:average].round(2)})"
+    end
+  
+    return text
+  end
+  
+
   def self.most_runs performances, players
     player_runs = performances.group_by { |entry| entry["player_id"] }.transform_values do |entries|
       entries.sum { |entry| entry["runs"].to_i } 
