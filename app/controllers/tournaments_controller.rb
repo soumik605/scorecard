@@ -40,27 +40,50 @@ class TournamentsController < ApplicationController
   end
 
   def leaderboard    
-    @players_data = []
-    captain_ids = @matches.pluck("captain_a", "captain_b").flatten.map(&:to_s)
-    @players = @players.filter{|p| captain_ids.include? p["id"].to_s }
 
-    @players.each do |player|
-      player_matches = @matches.filter{|m| [m["captain_a"], m["captain_b"]].include? player["id"]  }
-      win_matches = player_matches.filter{|m| m["winner_captain_id"].present? && m["winner_captain_id"] == player["id"] }
-      loose_matches = player_matches.filter{|m| m["winner_captain_id"].present? && m["winner_captain_id"] != player["id"] }
-      win_point = win_matches.pluck("win_point").compact.select { |x| x.is_a?(Numeric) && x != 0 }.sum
-      loose_point = loose_matches.pluck("loose_point").compact.select { |x| x.is_a?(Numeric) && x != 0 }.sum
-      win_percent = player_matches.present? ? (win_matches.count.to_f / player_matches.count.to_f) * 100 : 0
-      
-      win_percent = "#{win_percent.try(:round)}%"
-      win_match_count = win_matches.count
-      total_match_count = player_matches.count
-      total_point = win_point+loose_point
+    if @tour["tour_type"] == "solo_test"
+      points_file = File.open "public/stats/points.json"
+      @points = JSON.load points_file
 
-      @players_data << [player["photo_name"], total_point, win_match_count, total_match_count, win_percent ]
+      data = @points["#{@tour['id']}"]
+
+      @players_data = {}
+      data.each do |hash|
+        hash.each do |key, value|
+          @players_data[key] ||= { sum: 0, count: 0 }
+          @players_data[key][:sum] += value
+          @players_data[key][:count] += 1
+        end
+      end
+
+      @players_data.each do |key, val|
+        val[:average] = val[:sum].to_f / val[:count]
+      end
+
+      @players_data = @players_data.sort_by { |_, v| -v[:sum] }.to_h
+    else
+      @players_data = []
+      captain_ids = @matches.pluck("captain_a", "captain_b").flatten.map(&:to_s)
+      @players = @players.filter{|p| captain_ids.include? p["id"].to_s }
+  
+      @players.each do |player|
+        player_matches = @matches.filter{|m| [m["captain_a"], m["captain_b"]].include? player["id"]  }
+        win_matches = player_matches.filter{|m| m["winner_captain_id"].present? && m["winner_captain_id"] == player["id"] }
+        loose_matches = player_matches.filter{|m| m["winner_captain_id"].present? && m["winner_captain_id"] != player["id"] }
+        win_point = win_matches.pluck("win_point").compact.select { |x| x.is_a?(Numeric) && x != 0 }.sum
+        loose_point = loose_matches.pluck("loose_point").compact.select { |x| x.is_a?(Numeric) && x != 0 }.sum
+        win_percent = player_matches.present? ? (win_matches.count.to_f / player_matches.count.to_f) * 100 : 0
+        
+        win_percent = "#{win_percent.try(:round)}%"
+        win_match_count = win_matches.count
+        total_match_count = player_matches.count
+        total_point = win_point+loose_point
+  
+        @players_data << [player["photo_name"], total_point, win_match_count, total_match_count, win_percent ]
+      end
+  
+      @players_data = @players_data.sort_by { |photo_name, point, win, total, per| [-point, total, photo_name] }
     end
-
-    @players_data = @players_data.sort_by { |photo_name, point, win, total, per| [-point, total, photo_name] }
 
   end
 

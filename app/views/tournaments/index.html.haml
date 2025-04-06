@@ -43,11 +43,12 @@
 				
 	- if @tours.present?
 		- @tours.each do |tour|
+			- url = tour["tour_type"] == "solo_test" ? leaderboard_tournament_path(tour["id"]) : tournament_path(id: tour["id"])
 			.my-3
-				= link_to tournament_path(id: tour["id"]), class: "relative flex justify-between bg-blue-100 w-full px-4 py-10 border border-gray-200 rounded-lg shadow-lg hover:bg-gray-100" do
+				= link_to url, class: "relative flex justify-between bg-blue-100 w-full px-4 py-10 border border-gray-200 rounded-lg shadow-lg hover:bg-gray-100" do
 					%div
 						.absolute.top-0.right-0.h-full.p-1
-							- if tour["tour_type"] == "test"
+							- if tour["tour_type"] == "test" || tour["tour_type"] == "solo_test"
 								= image_tag 'test_cricket.png', class: "h-full w-auto scale-x-[-1]"
 							- elsif tour["tour_type"] == "t10"
 								= image_tag 't10_cricket.webp', class: "h-full w-auto scale-x-[-1]"
@@ -59,7 +60,7 @@
 						- if final.present? && final["winner_captain_id"].present?
 							- player = @players.find{|p| p["id"].to_s == final["winner_captain_id"].to_s} || nil
 							.text-sm.font-normal.text-gray-700.text-green-600= "Winner : #{player["name"]}"
-						- else
+						- elsif tour["win_point"].present?
 							.text-sm.font-normal.text-gray-700= "Win point : #{tour["win_point"]}"
 					-# .bg-slate-100.p-4.absolute.right-0.top-0.h-full{class: "[writing-mode:vertical-lr]"}
 					-# 	.text-lg.text-center.tracking-widest= tour["tour_type"].try(:humanize)

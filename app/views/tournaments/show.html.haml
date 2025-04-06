@@ -6,43 +6,46 @@
   
   .flex.gap-1.flex-wrap
     = link_to "Leaderboard", leaderboard_tournament_path(@tour["id"]), class: "focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 "
-    = link_to "Head to Head", head_to_head_tournament_path(@tour["id"]), class: "focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 "
-    = link_to "Performances", performances_tournament_path(@tour["id"]), class: "focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 "
-    - unless knockout.present?
-      = link_to "Match Suggestion", next_match_suggestion_tournament_path(@tour["id"]), class: "focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 "
+
+    - unless @tour["tour_type"] == "solo_test"
+      = link_to "Head to Head", head_to_head_tournament_path(@tour["id"]), class: "focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 "
+      = link_to "Performances", performances_tournament_path(@tour["id"]), class: "focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 "
+      - unless knockout.present?
+        = link_to "Match Suggestion", next_match_suggestion_tournament_path(@tour["id"]), class: "focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 "
   
   - if user_signed_in?
     = link_to "Edit", edit_tournament_path(@tour), class: "focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 "
 
-  .mt-8.grid.grid-cols-12.gap-2
-    - if @matches.present?
-      - @matches.reverse().each do |match|
-        %div{class: match["match_type"] == "group" ? "col-span-6" : "col-span-12 my-1"}
-          = link_to match_path(match["id"]), data: {turbo_frame: "_top"}, class: "block w-full py-1" do
-            - cap1 = @players.find{|p| p["id"] == match["captain_a"]}
-            - cap2 = @players.find{|p| p["id"] == match["captain_b"]}
-            -# - cls = getResultClass(cap1["id"], cap2["id"], match["winner_captain_id"])
+  - unless @tour["tour_type"] == "solo_test"
+    .mt-8.grid.grid-cols-12.gap-2
+      - if @matches.present?
+        - @matches.reverse().each do |match|
+          %div{class: match["match_type"] == "group" ? "col-span-6" : "col-span-12 my-1"}
+            = link_to match_path(match["id"]), data: {turbo_frame: "_top"}, class: "block w-full py-1" do
+              - cap1 = @players.find{|p| p["id"] == match["captain_a"]}
+              - cap2 = @players.find{|p| p["id"] == match["captain_b"]}
+              -# - cls = getResultClass(cap1["id"], cap2["id"], match["winner_captain_id"])
 
-            - photo_a_cls = match["winner_captain_id"] == match["captain_a"] ? "playerTourPhoto border-2" : "playerTourPhoto border-2 grayscale"
-            - photo_b_cls = match["winner_captain_id"] == match["captain_b"] ? "playerTourPhoto border-2" : "playerTourPhoto border-2 grayscale"
+              - photo_a_cls = match["winner_captain_id"] == match["captain_a"] ? "playerTourPhoto border-2" : "playerTourPhoto border-2 grayscale"
+              - photo_b_cls = match["winner_captain_id"] == match["captain_b"] ? "playerTourPhoto border-2" : "playerTourPhoto border-2 grayscale"
 
-            .flex.items-center.justify-between.gap-1.rounded-full.p-1.shadow-lg.bg-blue-100
-              = image_tag cap1["photo_name"], class: photo_a_cls
-              %div
-                .text-xs.text-center.font-bold= "##{match['id']}"
-                .text-xs.text-center= match["match_type"].try(:humanize)
+              .flex.items-center.justify-between.gap-1.rounded-full.p-1.shadow-lg.bg-blue-100
+                = image_tag cap1["photo_name"], class: photo_a_cls
+                %div
+                  .text-xs.text-center.font-bold= "##{match['id']}"
+                  .text-xs.text-center= match["match_type"].try(:humanize)
 
-              = image_tag cap2["photo_name"], class: photo_b_cls
-              -# = image_tag getPlayerPhoto(cap2, @players), class: "playerPhoto"
+                = image_tag cap2["photo_name"], class: photo_b_cls
+                -# = image_tag getPlayerPhoto(cap2, @players), class: "playerPhoto"
 
 
-            -# %h5.mb-2.tracking-tight.text-gray-900
-            -#   %span{class: match["winner_captain_id"].present? ? match["winner_captain_id"] == cap1["id"] ? "font-bold text-green-500 text-3xl" : "text-light text-red-500 text-sm" : "font-bold"}= cap1["name"]
-            -#   %span vs
-            -#   %span{class: match["winner_captain_id"].present? ? match["winner_captain_id"] == cap2["id"] ? "font-bold text-green-500 text-3xl" : "text-light text-red-500 text-sm" : "font-bold"}= cap2["name"]
-            
-            -# - pm = match.player_of_the_match
-            -# - if pm.present?
-            -#   .my-1
-            -#     %span.text-xs Player of the match
-            -#     %span.text-md.font-bold= match.player_of_the_match
+              -# %h5.mb-2.tracking-tight.text-gray-900
+              -#   %span{class: match["winner_captain_id"].present? ? match["winner_captain_id"] == cap1["id"] ? "font-bold text-green-500 text-3xl" : "text-light text-red-500 text-sm" : "font-bold"}= cap1["name"]
+              -#   %span vs
+              -#   %span{class: match["winner_captain_id"].present? ? match["winner_captain_id"] == cap2["id"] ? "font-bold text-green-500 text-3xl" : "text-light text-red-500 text-sm" : "font-bold"}= cap2["name"]
+              
+              -# - pm = match.player_of_the_match
+              -# - if pm.present?
+              -#   .my-1
+              -#     %span.text-xs Player of the match
+              -#     %span.text-md.font-bold= match.player_of_the_match
