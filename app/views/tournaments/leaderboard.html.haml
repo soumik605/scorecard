@@ -8,7 +8,7 @@
           %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
             Player
           %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
-            Run
+            Points
           %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
             Innings
           %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
@@ -24,7 +24,7 @@
             %td.px-6.py-4
               .text-center= data[1][:count]
             %td.px-6.py-4
-              .text-center= data[1][:average]
+              .text-center= data[1][:average].round(2)
 
   - else
     %table.w-full.text-sm.text-left.rtl:text-right.text-gray-500.shadow-lg.border
