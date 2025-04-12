@@ -114,6 +114,10 @@ class TournamentsController < ApplicationController
     @next_matches = Tournament.get_next_match_suggestion(@matches, @players)
   end
 
+  def rivalry
+    @rivalries = Tournament.get_toughest_rivalry(@matches)
+  end
+
   private 
 
   def set_tournament

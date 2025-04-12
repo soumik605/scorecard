@@ -25,6 +25,10 @@ Rails.application.routes.draw do
       get :performances
       get :next_match_suggestion
     end
+    
+    collection do
+      get :rivalry
+    end
   end
   resources :stats do 
     collection do
