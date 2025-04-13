@@ -60,7 +60,7 @@ class TournamentsController < ApplicationController
         val[:average] = val[:sum].to_f / val[:count]
       end
 
-      @players_data = @players_data.sort_by { |_, v| -v[:sum] }.to_h
+      @players_data = @players_data.sort_by { |_, v| -v[:average] }.to_h
     else
       @players_data = []
       captain_ids = @matches.pluck("captain_a", "captain_b").flatten.map(&:to_s)
