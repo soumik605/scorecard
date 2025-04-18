@@ -61,6 +61,26 @@ class TournamentsController < ApplicationController
       end
 
       @players_data = @players_data.sort_by { |_, v| -v[:average] }.to_h
+
+
+      player_series = Hash.new { |h, k| h[k] = { sum: 0, count: 0, data: {} } }
+      data.each do |match|
+        match.each do |player_id, value|
+          player = player_series[player_id]
+          player[:sum] += value
+          player[:count] += 1
+          avg = player[:sum].to_f / player[:count]
+          player[:data]["Game #{player[:count]}"] = avg
+        end
+      end
+
+      @player_chart_data = player_series.map do |player_id, val|
+        player = @players.find{|p| p["id"].to_s == player_id.to_s }
+        { name: player["name"], data: val[:data] }
+      end
+
+
+
     else
       @players_data = []
       captain_ids = @matches.pluck("captain_a", "captain_b").flatten.map(&:to_s)
