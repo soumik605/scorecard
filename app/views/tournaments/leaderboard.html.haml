@@ -27,7 +27,7 @@
               .text-center= data[1][:average].round(2)
 
     .my-6
-      = line_chart @player_chart_data, height: "400px", width: "600px", curve: true, points: false
+      = line_chart @player_chart_data, height: "400px", width: "100%", curve: true, points: false
 
   - else
     %table.w-full.text-sm.text-left.rtl:text-right.text-gray-500.shadow-lg.border
