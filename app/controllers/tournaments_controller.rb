@@ -70,7 +70,7 @@ class TournamentsController < ApplicationController
           player[:sum] += value
           player[:count] += 1
           avg = player[:sum].to_f / player[:count]
-          player[:data]["Game #{player[:count]}"] = avg
+          player[:data]["#{player[:count]}"] = avg
         end
       end
 
