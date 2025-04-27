@@ -1,0 +1,19 @@
+= link_to "<-", tournaments_path, class: "px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
+.w-full.px-6.mb-20
+  .text-lg.text-center.pt Create Team
+  .text-xs.text-center.pb-6.mt-2 Select player who will play 
+
+
+  .grid.grid-cols-12.gap-2
+    - @players.each do |p|
+      .flex.items-center.gap-2.py-1.col-span-4 
+        = check_box_tag :is_checked, "", false, :name => "is_checked", data: {player_name: p["name"]}, class: 'player_shuffle appearance-none h-4 w-4 border kriyam-bordercolor-1 kriyam-color-1 focus:text-violet-900 rounded-sm bg-white checked:bg-violet-900 checked:kriyam-bordercolor-1 focus:outline-none transition duration-200 my-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer'
+        .text-sm= p["name"]
+
+  .flex.justify-center.w-full
+    = button_tag "Create Teams", class: "go-primary-button mt-8", id: "create_team_button"
+
+  
+  .grid.grid-cols-12.gap-2.mt-6
+    #team1.py-4.col-span-6.text-center
+    #team2.py-4.col-span-6.text-center

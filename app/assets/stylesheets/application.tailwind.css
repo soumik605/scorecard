@@ -38,3 +38,9 @@
   border-radius: 50% !important;
   object-fit: cover !important;
 }
+
+.go-primary-button {
+  @apply px-6 py-2 cursor-pointer text-sm font-semibold text-white border rounded-xl shadow-sm hover:bg-violet-900;
+  background-color: #5e21d8;
+  border-color: #5e21d8;
+}

@@ -138,6 +138,10 @@ class TournamentsController < ApplicationController
     @rivalries = Tournament.get_toughest_rivalry(@matches)
   end
 
+  def create_team
+    
+  end
+
   private 
 
   def set_tournament
