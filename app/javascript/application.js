@@ -9,15 +9,13 @@ document.addEventListener("turbo:render", (e) => {
   createTeam()
 })
 
-document.addEventListener("ready", (e) => {
-  createTeam()
-})
+createTeam()
 
 
 function createTeam() {
   let create_team_button = document.getElementById("create_team_button")
+
   if (create_team_button) {
-    
     create_team_button.addEventListener("click", (e) => {
       let all_players = []
       let players = document.getElementsByClassName("player_shuffle")
