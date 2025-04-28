@@ -13,6 +13,9 @@ class ApplicationController < ActionController::Base
 
     performances_file = File.open "public/stats/performances.json"
     @performances = JSON.load performances_file
+
+    super_file = File.open "public/stats/super.json"
+    @super = JSON.load super_file
   end
 
 

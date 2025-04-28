@@ -54,14 +54,14 @@
 				
 	- if @tours.present?
 		- @tours.each do |tour|
-			- url = tour["tour_type"] == "solo_test" ? leaderboard_tournament_path(tour["id"]) : tournament_path(id: tour["id"])
+			- url = ["solo_test", "super_over"].include?(tour["tour_type"]) ? leaderboard_tournament_path(tour["id"]) : tournament_path(id: tour["id"])
 			.my-3
 				= link_to url, class: "relative flex justify-between bg-blue-100 w-full px-4 py-10 border border-gray-200 rounded-lg shadow-lg hover:bg-gray-100" do
 					%div
 						.absolute.top-0.right-0.h-full.p-1
 							- if tour["tour_type"] == "test" || tour["tour_type"] == "solo_test"
 								= image_tag 'test_cricket.png', class: "h-full w-auto scale-x-[-1]"
-							- elsif tour["tour_type"] == "t10"
+							- elsif tour["tour_type"] == "t10" || tour["tour_type"] == "super_over"
 								= image_tag 't10_cricket.webp', class: "h-full w-auto scale-x-[-1]"
 						- if tour["is_removed"] 
 							%spam removed

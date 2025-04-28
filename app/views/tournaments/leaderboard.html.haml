@@ -30,6 +30,34 @@
       .text-md.text-center.my-3 Average
       = line_chart @player_chart_data, height: "400px", width: "100%", curve: true, points: false
 
+  - elsif @tour["tour_type"] == "super_over"
+    %table.w-full.text-sm.text-left.rtl:text-right.text-gray-500.shadow-lg.border.mb-4
+      %thead.text-xs.text-gray-700.uppercase.bg-gray-50
+        %tr
+          %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
+            Player
+          %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
+            Played
+          %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
+            Win
+          %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
+        
+      %tbody
+        - @players_data.each_with_index do |data, index|
+          %tr.border-b{class: index < 3 ? "bg-green-100" : "bg-gray-100"}
+            %td.px-6.py-4.flex.justify-center
+              = image_tag @players.find{|p| p["id"].to_s == data[0].to_s}["photo_name"], class: "vsPlayerPhoto"
+            %td.px-6.py-4
+              .text-center= data[1][:match]
+            %td.px-6.py-4
+              .text-center= data[1][:win]
+            %td.px-6.py-4
+              .text-center= "#{data[1][:percent].round(0)}%"
+
+    .my-6
+      .text-md.text-center.my-3 Average
+      = line_chart @player_chart_data, height: "400px", width: "100%", curve: true, points: false
+
   - else
     %table.w-full.text-sm.text-left.rtl:text-right.text-gray-500.shadow-lg.border
       %thead.text-xs.text-gray-700.uppercase.bg-gray-50

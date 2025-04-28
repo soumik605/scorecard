@@ -79,7 +79,33 @@ class TournamentsController < ApplicationController
         { name: player["name"], data: val[:data] }
       end
 
+    elsif @tour["tour_type"] == "super_over"
+      data = @super["#{@tour['id']}"]
 
+      @players_data = {}
+      data.each do |oa|
+        oa.each_with_index do |ia, index|
+          
+          if index == 0
+            ia.each do |id|
+              @players_data[id] ||= { win: 0, match: 0 }
+              @players_data[id][:match] += 1
+              @players_data[id][:win] += 1
+            end
+          else
+            ia.each do |id|
+              @players_data[id] ||= { win: 0, match: 0 }
+              @players_data[id][:match] += 1
+            end
+          end
+        end
+      end
+
+      @players_data.each do |key, val|
+        val[:percent] =( val[:win].to_f / val[:match])*100
+      end
+
+      @players_data = @players_data.sort_by { |_, v| -v[:percent] }.to_h
 
     else
       @players_data = []
