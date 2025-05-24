@@ -149,6 +149,7 @@
   { "id": 154, "tournament_id": 4, "captain_a": 2, "captain_b": 12, "winner_captain_id": 2, "is_won_by_innings": false, "is_won_by_follow_on": false, "is_draw": false, "win_point": 5, "loose_point": 0, "match_type": "group" },
   { "id": 155, "tournament_id": 4, "captain_a": 1, "captain_b": 12, "winner_captain_id": 1, "is_won_by_innings": false, "is_won_by_follow_on": false, "is_draw": false, "win_point": 5, "loose_point": 0, "match_type": "group" },
   { "id": 156, "tournament_id": 4, "captain_a": 5, "captain_b": 12, "winner_captain_id": 5, "is_won_by_innings": false, "is_won_by_follow_on": false, "is_draw": false, "win_point": 5, "loose_point": 0, "match_type": "group" },
+  { "id": 157, "tournament_id": 4, "captain_a": 1, "captain_b": 4, "winner_captain_id": 1, "is_won_by_innings": false, "is_won_by_follow_on": false, "is_draw": false, "win_point": 5, "loose_point": 0, "match_type": "group" },
 
 
   { "id": 128, "tournament_id": 5, "captain_a": 5, "captain_b": 8, "winner_captain_id": 8, "is_won_by_innings": false, "is_won_by_follow_on": false, "is_draw": false, "win_point": 5, "loose_point": 0, "match_type": "group" },
