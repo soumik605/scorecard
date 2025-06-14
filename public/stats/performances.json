@@ -835,6 +835,13 @@
   {"id": null , "match_id": 157, "player_id": 4, "runs": 4, "wickets": 1, "is_not_out": false},
   {"id": null , "match_id": 157, "player_id": 5, "runs": 2, "wickets": 1, "is_not_out": false},
   {"id": null , "match_id": 157, "player_id": 6, "runs": 5, "wickets": null, "is_not_out": false},
+  {"id": null , "match_id": 157, "player_id": 7, "runs": 1, "wickets": null, "is_not_out": false}
+
+  {"id": null , "match_id": 157, "player_id": 1, "runs": 2, "wickets": 1, "is_not_out": true},
+  {"id": null , "match_id": 157, "player_id": 2, "runs": 5, "wickets": 3, "is_not_out": false},
+  {"id": null , "match_id": 157, "player_id": 4, "runs": 4, "wickets": 1, "is_not_out": false},
+  {"id": null , "match_id": 157, "player_id": 5, "runs": 2, "wickets": 1, "is_not_out": false},
+  {"id": null , "match_id": 157, "player_id": 6, "runs": 5, "wickets": null, "is_not_out": false},
   {"id": null , "match_id": 157, "player_id": 7, "runs": 1, "wickets": null, "is_not_out": false},
 
 
