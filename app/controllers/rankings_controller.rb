@@ -6,8 +6,13 @@ class RankingsController < ApplicationController
     @test_performances = @performances.filter{|p| @test_matches.pluck("id").include?(p["match_id"])}
 
     @batting_ranking = Player.batting_ranking(@test_performances, @players)
+    @highest_batting_ranking = Player.highest_batting_ranking(@test_performances, @players)
+
     @bowling_ranking = Player.bowling_ranking(@test_performances, @players)
+    @highest_bowling_ranking = Player.highest_bowling_ranking(@test_performances, @players)
+
     @allround_ranking = Player.allround_ranking(@test_performances, @players)
+    @highest_allround_ranking = Player.highest_allround_ranking(@test_performances, @players)
   end
 
 
@@ -17,8 +22,13 @@ class RankingsController < ApplicationController
     @t10_performances = @performances.filter{|p| @t10_matches.pluck("id").include?(p["match_id"])}
 
     @batting_ranking = Player.batting_ranking(@t10_performances, @players)
+    @highest_batting_ranking = Player.highest_batting_ranking(@t10_performances, @players)
+
     @bowling_ranking = Player.bowling_ranking(@t10_performances, @players)
+    @highest_bowling_ranking = Player.highest_bowling_ranking(@t10_performances, @players)
+
     @allround_ranking = Player.allround_ranking(@t10_performances, @players)
+    @highest_allround_ranking = Player.highest_allround_ranking(@t10_performances, @players)
   end
 
   def solo_test
@@ -42,7 +52,46 @@ class RankingsController < ApplicationController
     # Sort by average descending
     @sorted_result = result.sort_by { |_, v| -v[:avg] }.to_h
 
-   
+
+    solo_test_max_avg
+  end
+
+
+  private 
+
+  def solo_test_max_avg
+    max_record = nil
+
+    (1..13).each do |key|
+      string_key = key.to_s
+      player = @players.find { |p| p["id"] == key }
+
+      # All values (latest first)
+      all_values = @points["6"].reverse.map { |h| h[string_key] }.compact
+
+      # Skip if less than 10 entries
+      next if all_values.size < 10
+
+      # Loop through all possible 10-value windows
+      (0..(all_values.size - 10)).each do |i|
+        window = all_values[i, 10]
+        sum = window.sum
+        avg = (sum.to_f / window.size).round(2)
+
+        if max_record.nil? || avg > max_record[:avg]
+          max_record = {
+            player_id: key,
+            player_name: player["name"],
+            photo: player["photo_name"],
+            avg: avg,
+            sum: sum,
+            values: window
+          }
+        end
+      end
+    end
+
+    @highest_ranking = max_record
   end
 
 end

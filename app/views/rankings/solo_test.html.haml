@@ -8,6 +8,10 @@
     .mb-6
       = render "rankings/links", active: "solo_test"
 
+    .text-sm.mb-3.mx-5
+      Highest Points Achived by 
+      %b= "#{@highest_ranking[:player_name]} (#{@highest_ranking[:sum]})"
+
     .relative.overflow-x-auto
       %table.w-full.text-xs.text-left.rtl:text-right.text-gray-500
         %thead.text-xs.text-gray-700.uppercase.bg-gray-50

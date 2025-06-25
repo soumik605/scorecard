@@ -479,6 +479,117 @@ class Player < ApplicationRecord
   end
 
 
+  def self.highest_batting_ranking(performances, players)
+    performances = performances.select { |p| p["runs"].present? }
+    players_by_id = performances.group_by { |p| p["player_id"] }
+
+    highest_record = nil
+
+    players_by_id.each do |player_id, innings|
+      player = players.find { |p| p["id"].to_s == player_id.to_s }
+
+      sorted_innings = innings.sort_by { |i| -i["match_id"].to_i }
+
+      # Sliding window of 10 matches
+      (0..(sorted_innings.size - 10)).each do |i|
+        window = sorted_innings[i, 10]
+
+        points = window.sum do |inning|
+          runs = inning["runs"].to_i
+          extra = inning["is_not_out"] ? [runs / 3, 25].min : 0
+          runs + extra
+        end
+
+        if highest_record.nil? || points > highest_record[:points]
+          highest_record = {
+            player_photo: player["photo_name"],
+            player_name: player["name"],
+            points: points
+          }
+        end
+      end
+    end
+
+    return highest_record
+  end
+
+
+  def self.highest_bowling_ranking(performances, players)
+    performances = performances.select { |p| p["wickets"].present? }
+    players_by_id = performances.group_by { |p| p["player_id"] }
+
+    highest_record = nil
+
+    players_by_id.each do |player_id, innings|
+      player = players.find { |p| p["id"].to_s == player_id.to_s }
+
+      sorted_innings = innings.sort_by { |i| -i["match_id"].to_i }
+
+      (0..(sorted_innings.size - 10)).each do |i|
+        window = sorted_innings[i, 10]
+
+        points = window.sum { |inning| inning["wickets"].to_i * 15 }
+
+        if highest_record.nil? || points > highest_record[:points]
+          highest_record = {
+            player_photo: player["photo_name"],
+            player_name: player["name"],
+            last_10_scores: window.map { |i| i["wickets"] },
+            points: points
+          }
+        end
+      end
+    end
+
+    return highest_record
+  end
+
+
+  def self.highest_allround_ranking(performances, players)
+    performances = performances.select { |p| p["runs"].present? || p["wickets"].present? }
+    players_by_id = performances.group_by { |p| p["player_id"] }
+
+    highest_record = nil
+
+    players_by_id.each do |player_id, innings|
+      player = players.find { |p| p["id"].to_s == player_id.to_s }
+      sorted_innings = innings.sort_by { |i| -i["match_id"].to_i }
+
+      (0..(sorted_innings.size - 10)).each do |i|
+        window = sorted_innings[i, 10]
+
+        batting_points = window.sum do |inning|
+          runs = inning["runs"].to_i
+          extra = inning["is_not_out"] ? [runs / 3, 25].min : 0
+          runs + extra
+        end
+
+        bowling_points = window.sum { |inning| inning["wickets"].to_i * 15 }
+
+        total_points = batting_points + bowling_points
+
+        if highest_record.nil? || total_points > highest_record[:points]
+          highest_record = {
+            player_photo: player["photo_name"],
+            player_name: player["name"],
+            last_10_scores: window.map do |i|
+              run_display = i["runs"].present? ? "#{i['runs']}#{i["is_not_out"] ? '*' : ''}" : "-"
+              wicket_display = i["wickets"].present? ? "(#{i['wickets']})" : ""
+              "#{run_display} #{wicket_display}".strip
+            end,
+            points: total_points
+          }
+        end
+      end
+    end
+
+    return highest_record
+  end
+
+
+
+
+
   def self.bowling_ranking performances, players
     performances = performances.filter{|p| p["wickets"].present?}
     players_by_id = performances.group_by { |p| p["player_id"] }
