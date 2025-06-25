@@ -24,6 +24,17 @@ class PlayersController < ApplicationController
         counts[player["wickets"]] += 1
       end
     end
+
+    @player_points = {}
+    @total_points = 0
+     @points.values.each do |k|
+      k.each do |obj|
+        if obj.keys.include?(params[:id].to_s)
+          @total_points += obj[params[:id].to_s]
+          @player_points["#{obj[params[:id].to_s]}"] = (@player_points["#{obj[params[:id].to_s]}"] || 0) + 1
+        end
+      end
+    end
     
   end
 

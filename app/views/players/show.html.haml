@@ -6,7 +6,8 @@
 
 .my-4
   .mt-2.bg-slate-100.p-4.rounded
-    .text-sm.text-center.mb-2= "Runs (#{@total_run})"
+    .text-sm.text-center.mb-1= "Runs (#{@total_run})"
+    .text-sm.text-center.mb-2=  "Average (#{@total_run / @run_counts.values.sum})"
     - height = (@run_counts.keys.count * 15) + 50
     = bar_chart @run_counts.sort.to_h, library: { scales: { y: { ticks: { autoSkip: false }}}}, xtitle: "No of time scored", height: "#{height}px"
 
@@ -16,3 +17,9 @@
     .text-sm.text-center.mb-2=  "Wickets (#{@total_wicket})"
     - height = (@wicket_counts.keys.count * 15) + 100
     = bar_chart @wicket_counts.sort.to_h,  library: { scales: { y: { ticks: { autoSkip: false }}}}, xtitle: "No of time taken", height: "#{height}px"
+
+  .mt-6.bg-slate-100.p-4.rounded
+    .text-sm.text-center.mb-1=  "Points (#{@total_points})"
+    .text-sm.text-center.mb-2=  "Average (#{@total_points / @player_points.values.sum})"
+    - height = (@player_points.keys.count * 15) + 50
+    = bar_chart @player_points.sort.to_h,  library: { scales: { y: { ticks: { autoSkip: false }}}}, xtitle: "No of time scored", height: "#{height}px"
