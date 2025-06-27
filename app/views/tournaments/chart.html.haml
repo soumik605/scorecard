@@ -1,0 +1,77 @@
+
+.flex.w-full.justify-between.items-center.mb-6
+	= link_to "<-", tournament_path(@tour["id"]), class: "px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
+
+
+%canvas#progressChart{ width: 600, height: 1000 }
+#matchCount.text-sm.text-center.mt-4 Match - 0
+
+:javascript
+	let players = #{raw @players_runs.to_json};
+
+	const ctx = document.getElementById('progressChart').getContext('2d');
+	const barColors = [
+		'rgba(255, 0, 0, 0.7)',
+		'rgba(54, 162, 235, 0.7)',
+		'rgba(255, 206, 86, 0.7)',
+		'rgba(75, 192, 192, 0.7)',
+		'rgba(153, 102, 255, 0.7)',
+		'rgba(194, 98, 3, 0.7)',
+		'rgba(255, 99, 208, 0.7)'
+	];
+
+	const chart = new Chart(ctx, {
+		type: 'bar',
+		data: {
+			labels: players.map(p => p.name),
+			datasets: [{
+				label: 'Average',
+				data: players.map(() => 0),
+				backgroundColor: barColors.slice(0, players.length),
+				skipNull: true,
+				borderRadius: 5
+			}]
+		},
+		options: {
+			indexAxis: 'x',
+			scales: {
+				x: {
+					beginAtZero: true,
+					suggestedMax: 60
+				}
+			}
+		}
+	});
+
+	let currentMatch = 1;
+	const totalMatches = players[0].runs.length;
+	const intervalMs = 1000;
+
+	const interval = setInterval(() => {
+		const averages = players.map(player => {
+			const runsSoFar = player.runs.slice(0, currentMatch);
+			const total = runsSoFar.reduce((a, b) => a + b, 0);
+			return total / runsSoFar.length;
+		});
+
+		const combined = players.map((player, i) => ({
+			name: player.name,
+			average: averages[i],
+			color: barColors[i]
+		}));
+
+		combined.sort((a, b) => b.average - a.average);
+
+		chart.data.labels = combined.map(p => p.name);
+		chart.data.datasets[0].data = combined.map(p => p.average);
+		chart.data.datasets[0].backgroundColor = combined.map(p => p.color);
+		chart.update();
+
+		let matchCount = document.getElementById('matchCount')
+		matchCount.innerText = `Match - ${currentMatch}`
+
+		currentMatch++;
+		if (currentMatch > totalMatches) {
+			clearInterval(interval);
+		}
+	}, intervalMs);

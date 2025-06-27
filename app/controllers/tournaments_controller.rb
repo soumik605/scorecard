@@ -1,6 +1,6 @@
 class TournamentsController < ApplicationController
   before_action :get_data
-  before_action :set_tournament, only: [:show, :edit, :update, :leaderboard, :head_to_head, :performances, :next_match_suggestion]
+  before_action :set_tournament, only: [:show, :edit, :update, :leaderboard, :head_to_head, :performances, :next_match_suggestion, :chart]
 
 
   def index
@@ -165,7 +165,26 @@ class TournamentsController < ApplicationController
   end
 
   def create_team
-    
+  end
+  
+  
+  def chart
+    @players_runs = []
+
+    if @tour["tour_type"] == "solo_test"
+      points_file = File.open "public/stats/points.json"
+      @points = JSON.load points_file
+      
+      data = @points["#{@tour['id']}"]
+      
+      @players.each do |pl|
+        player_runs = data.map { |d| d[pl["id"].to_s] }
+        player_runs = player_runs.compact
+        @players_runs << { name: pl["name"], runs: player_runs, image_url: pl["photo_name"] } if player_runs.present?
+      end
+    end
+
+    # p @players_runs
   end
 
   private 

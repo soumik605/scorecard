@@ -24,6 +24,7 @@ Rails.application.routes.draw do
       get :head_to_head
       get :performances
       get :next_match_suggestion
+      get :chart
     end
     
     collection do
