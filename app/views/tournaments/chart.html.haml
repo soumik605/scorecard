@@ -37,7 +37,10 @@
 			scales: {
 				x: {
 					beginAtZero: true,
-					suggestedMax: 60
+				},
+				y: {
+					min: 0,
+					max: 50
 				}
 			}
 		}
@@ -45,7 +48,7 @@
 
 	let currentMatch = 1;
 	const totalMatches = players[0].runs.length;
-	const intervalMs = 1000;
+	const intervalMs = 2000;
 
 	const interval = setInterval(() => {
 		const averages = players.map(player => {
