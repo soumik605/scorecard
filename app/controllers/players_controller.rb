@@ -35,7 +35,10 @@ class PlayersController < ApplicationController
         end
       end
     end
-    
+
+    @player_points = @player_points.sort_by { |k, v| k.to_i }.to_h
+
+    p @player_points
   end
 
   def create

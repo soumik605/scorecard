@@ -22,4 +22,4 @@
     .text-sm.text-center.mb-1=  "Points (#{@total_points})"
     .text-sm.text-center.mb-2=  "Average (#{@total_points / @player_points.values.sum})"
     - height = (@player_points.keys.count * 15) + 50
-    = bar_chart @player_points.sort.to_h,  library: { scales: { y: { ticks: { autoSkip: false }}}}, xtitle: "No of time scored", height: "#{height}px"
+    = bar_chart @player_points, library: { scales: { y: { ticks: { autoSkip: false }}}}, xtitle: "No of time scored", height: "#{height}px"
