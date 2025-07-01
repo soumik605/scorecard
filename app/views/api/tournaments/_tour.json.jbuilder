@@ -1,7 +1,11 @@
-@matches = @matches.filter{|m| m["tournament_id"] == tour["id"]}
-@final = @matches.present? ? @matches.find{|m| m["match_type"] == "final"} : {}
+@final = @matches.find{|m| (m["tournament_id"] == tour["id"]) && (m["match_type"] == "final")}
 
-json.tour do 
-  json.tour_details tour
-  json.winner @players.find{|p| p["id"].to_s == @final["winner_captain_id"].to_s}
+json.merge! tour
+json.winner do
+  if @final.present? && @final["winner_captain_id"].present?
+    winner = @players.find{|p| p["id"].to_s == @final["winner_captain_id"].to_s}
+    json.merge! winner || nil
+  else 
+    json.merge! nil
+  end
 end

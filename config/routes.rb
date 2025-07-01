@@ -4,7 +4,11 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: {format: 'json'}  do
     resources :players
-    resources :tournaments
+    resources :tournaments do
+      member do
+        get :leaderboard
+      end
+    end
     resources :stats do 
       collection do 
         get :test
