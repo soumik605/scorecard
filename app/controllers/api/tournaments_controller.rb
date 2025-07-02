@@ -8,6 +8,11 @@ class Api::TournamentsController < ApplicationController
 
   def show
     @matches = @matches.sort_by { |match| -match["id"] }
+    if @tour["tour_type"] == "super_over"
+      @super = @super["#{@tour['id']}"]
+    elsif @tour["tour_type"] == "solo_test"
+      @points = @points["#{@tour['id']}"]
+    end
   end
 
   def leaderboard    

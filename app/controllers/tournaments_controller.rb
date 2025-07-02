@@ -157,7 +157,7 @@ class TournamentsController < ApplicationController
   end
 
   def next_match_suggestion
-    @next_matches = Tournament.get_next_match_suggestion(@matches, @players)
+    @next_matches = Tournament.get_next_match_suggestion(@all_matches, @players)
   end
 
   def rivalry
@@ -191,6 +191,10 @@ class TournamentsController < ApplicationController
 
   def set_tournament
     @tour = @tours.find{ |t| t["id"].to_s == params[:id].to_s}
+
+    team_tours = @tours.filter{ |t| ["test", "t10"].include?(t["tour_type"])}
+    @all_matches = @matches.filter{|m| team_tours.pluck("id").include?(m["tournament_id"]) }
+
     @matches = @matches.filter{|m| m["tournament_id"].to_s == params[:id].to_s}
   end
 

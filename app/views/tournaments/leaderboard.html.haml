@@ -13,11 +13,11 @@
             %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
               Player
             %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
-              Points
+              Average
             %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
               Innings
             %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
-              Average
+              Points
           
         %tbody
           - @players_data.each_with_index do |data, index|
@@ -25,11 +25,11 @@
               %td.px-6.py-4.flex.justify-center
                 = image_tag @players.find{|p| p["id"].to_s == data[0].to_s}["photo_name"], class: "vsPlayerPhoto"
               %td.px-6.py-4
-                .text-center= data[1][:sum]
+                .text-center= data[1][:average].round(2)
               %td.px-6.py-4
                 .text-center= data[1][:count]
               %td.px-6.py-4
-                .text-center= data[1][:average].round(2)
+                .text-center= data[1][:sum]
 
     .my-6
       .text-md.text-center.my-3 Average

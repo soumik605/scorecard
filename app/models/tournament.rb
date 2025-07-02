@@ -11,34 +11,59 @@ class Tournament < ApplicationRecord
   
   
   def self.get_next_match_suggestion(matches, players)
-    all_matches = matches
+    all_matches = matches.map(&:dup) # Avoid mutating original
     active_player_ids = [1, 2, 3, 4, 5]
+    current_tournament_id = 4
+    penalty_weight = 3
 
     next_matches = []
 
     20.times do
-      match_count = Hash.new(0)
-      matchup_count = Hash.new(0)
-  
+      overall_matchup_count = Hash.new(0)
+      current_tournament_matchup_count = Hash.new(0)
+
       all_matches.each do |match|
         pair = [match["captain_a"], match["captain_b"]].sort
-        matchup_count[pair] += 1
-        match_count[match["captain_a"]] += 1 if active_player_ids.include?(match["captain_a"])
-        match_count[match["captain_b"]] += 1 if active_player_ids.include?(match["captain_b"])
+        overall_matchup_count[pair] += 1
+
+        if match["tournament_id"] == current_tournament_id
+          current_tournament_matchup_count[pair] += 1
+        end
       end
-     
-      l_captain = match_count.group_by{|k, v| v}.min_by{|k, v| k}.last.to_h
-      l_captain_matchups = matchup_count.select { |k, _| k.include?(l_captain.keys[0]) }
-      min_matchup = l_captain_matchups.select { |k, _| active_player_ids.include?(k[0]) && active_player_ids.include?(k[1]) }.min_by { |_, v| v }
-      
-      player_a_name = players.find {|p| p["id"] == min_matchup[0][0]}["photo_name"]
-      player_b_name = players.find {|p| p["id"] == min_matchup[0][1]}["photo_name"]
-      next_matches << [[player_a_name, player_b_name], min_matchup[1]]
-      all_matches << { "captain_a" => min_matchup[0][0], "captain_b" => min_matchup[0][1] }
-    end  
+
+      # Compute scores for each possible pair
+      candidate_scores = []
+      active_player_ids.combination(2).each do |pair|
+        overall = overall_matchup_count[pair] || 0
+        current = current_tournament_matchup_count[pair] || 0
+        score = overall + (current * penalty_weight)
+        candidate_scores << { pair: pair, score: score, overall: overall, current: current }
+      end
+
+      candidate_scores = candidate_scores.shuffle
+
+      # Pick pair with lowest score
+      selected = candidate_scores.min_by { |c| c[:score] }
+      pair = selected[:pair]
+
+      # Append the simulated match to all_matches
+      all_matches << {
+        "captain_a" => pair[0],
+        "captain_b" => pair[1],
+        "tournament_id" => current_tournament_id
+      }
+
+      # Get names for output
+      player_a_name = players.find { |p| p["id"] == pair[0] }["photo_name"]
+      player_b_name = players.find { |p| p["id"] == pair[1] }["photo_name"]
+
+      next_matches << [[player_a_name, player_b_name], selected[:overall], selected[:current]]
+    end
 
     next_matches
   end
+
+
 
   def self.get_toughest_rivalry matches
     rivalries = Hash.new { |h, k| h[k] = { total: 0, wins: Hash.new(0) } }

@@ -2,11 +2,24 @@
 
 .text-md.font-bold.my-2.text-center Next Matches Suggestion
 .grid.grid-cols-12.gap-2.mb-4
+  - before = []
   - @next_matches.each_with_index do |match, index|
-    .bg-slate-100.p-4.rounded-lg.col-span-6
-      .text-xs
+    - current = [match[1], match[2]]
+    - if before != current
+      .py-1.flex.col-span-12.justify-center 
+        .text-xs.text-center -
+
+    - before = current
+    .bg-slate-100.p-4.rounded-lg.col-span-12
+      .text-xs.flex.items-center.justify-between
         .flex.items-center.gap-1.justify-center
           = image_tag match[0][0], class: "playerTourPhoto border-2"
           = image_tag match[0][1], class: "playerTourPhoto border-2"
-        .text-xs.text-center= "(Played #{match[1]} times before)"
+        %div
+          .text-xs.text-right
+            Total: 
+            %b= "#{match[1]} times"
+          .text-xs.text-right
+            This tournament: 
+            %b= "#{match[2]} times"
 
