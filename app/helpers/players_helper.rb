@@ -54,6 +54,26 @@ module PlayersHelper
   end
 
 
+
+  def getPlayerPointData player_id, points
+    matches = points.values.flatten
+    player_points = matches.pluck("#{player_id}")
+    player_points = player_points.reject { |record| record.nil? }
+    
+    innings_count = player_points.count
+    total_points = player_points.sum
+    average = (total_points.to_f / innings_count).round(2)
+    highest = player_points.max
+    zero_count = player_points.count { |num| num <= 0 }
+    range_1_count = player_points.count { |num| num >= 1 && num <= 30 }
+    range_2_count = player_points.count { |num| num >= 31 && num <= 49 }
+    range_3_count = player_points.count { |num| num >= 50 && num <= 99 }
+    range_4_count = player_points.count { |num| num >= 100 }
+
+    return [total_points, innings_count, average, highest, zero_count, range_1_count, range_2_count, range_3_count, range_4_count]
+  end
+
+
   def getPlayerName id, players
     players.find{|p| p["id"] == id }["name"]
   end

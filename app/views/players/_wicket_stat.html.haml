@@ -3,7 +3,7 @@
   - arr = getPlayerWicketData(pl, @performances, @matches, tour_type, @tours)
   - arr << pl["name"]
   - arr << pl["id"]
-  - all_wicket_stats << arr
+  - all_wicket_stats << arr if arr[0].present? && arr[0] > 0
 
 - all_wicket_stats = all_wicket_stats.sort { |a, b| b[0] <=> a[0] }
 

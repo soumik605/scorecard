@@ -3,7 +3,7 @@
   - arr = getPlayerRunData(pl, @performances, @matches, tour_type, tours)
   - arr << pl["name"]
   - arr << pl["id"]
-  - all_run_stats << arr
+  - all_run_stats << arr if arr[1].present? && arr[1] > 0
 
 - all_run_stats = all_run_stats.sort { |a, b| b[0] <=> a[0] }
 
