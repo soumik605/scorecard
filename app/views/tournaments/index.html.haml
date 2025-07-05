@@ -54,7 +54,7 @@
 				
 	- if @tours.present?
 		- @tours.each do |tour|
-			- url = ["solo_test", "super_over"].include?(tour["tour_type"]) ? leaderboard_tournament_path(tour["id"]) : tournament_path(id: tour["id"])
+			- url = tournament_path(id: tour["id"])
 			.my-3
 				= link_to url, class: "relative flex justify-between bg-blue-100 w-full px-4 py-10 border border-gray-200 rounded-lg shadow-lg hover:bg-gray-100" do
 					%div

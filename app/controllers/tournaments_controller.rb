@@ -80,7 +80,7 @@ class TournamentsController < ApplicationController
       end
 
     elsif @tour["tour_type"] == "super_over"
-      data = @super["#{@tour['id']}"]
+      data = @super
 
       @players_data = {}
       data.each do |oa|
@@ -196,6 +196,9 @@ class TournamentsController < ApplicationController
     @all_matches = @matches.filter{|m| team_tours.pluck("id").include?(m["tournament_id"]) }
 
     @matches = @matches.filter{|m| m["tournament_id"].to_s == params[:id].to_s}
+    
+    @points = @points[params[:id].to_s]
+    @super = @super[params[:id].to_s]
   end
 
   def tournament_params
