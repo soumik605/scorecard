@@ -10,11 +10,15 @@ if @tour["tour_type"] == "super_over"
     end
   end
 elsif @tour["tour_type"] == "solo_test"
-  json.matches @points do |match|
-    json.array! match do |m|
+  json.matches @points.reverse do |match|
+    json.array! match.each do |m|
       plr = @players.find{|p| p["id"].to_s == m[0].to_s}
-      json.merge! plr
-      json.points m[1]
+      if plr
+        plr["point"] = m[1]
+        json.set! :id, plr["id"]
+        json.set! :name, plr["name"]
+        json.set! :point, plr["point"]
+      end
     end
   end
 else
