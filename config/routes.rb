@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     resources :tournaments do
       member do
         get :leaderboard
+        get :head_to_head
       end
     end
     resources :stats do 
