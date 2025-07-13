@@ -85,11 +85,11 @@ module PlayersHelper
   def getH2HClass wins, looses
 
     if wins == looses
-      return "bg-blue-300"
+      return "bg-gradient-to-r from-blue-100 to-blue-300"
     elsif wins > looses
-      return "bg-green-200"
+      return "bg-gradient-to-r from-green-100 to-green-300"
     else
-      return "bg-red-200"
+      return "bg-gradient-to-r from-red-100 to-red-300"
     end
 
   end

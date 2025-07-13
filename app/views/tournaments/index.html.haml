@@ -50,28 +50,32 @@
 						%path{d: "M12 4.5v15m7.5-7.5h-15", "stroke-linecap" => "round", "stroke-linejoin" => "round"}
 					.text-xs New
 
-
-				
-	- if @tours.present?
-		- @tours.each do |tour|
-			- url = tournament_path(id: tour["id"])
-			.my-3
-				= link_to url, class: "relative flex justify-between bg-blue-100 w-full px-4 py-10 border border-gray-200 rounded-lg shadow-lg hover:bg-gray-100" do
-					%div
-						.absolute.top-0.right-0.h-full.p-1
-							- if tour["tour_type"] == "test" || tour["tour_type"] == "solo_test"
-								= image_tag 'test_cricket.png', class: "h-full w-auto scale-x-[-1]"
-							- elsif tour["tour_type"] == "t10" || tour["tour_type"] == "super_over"
-								= image_tag 't10_cricket.webp', class: "h-full w-auto scale-x-[-1]"
-						- if tour["is_removed"] 
-							%spam removed
-						%h5.mb-1.text-xl.font-bold.tracking-tight.text-gray-900= tour["name"]
-						- matches = @matches.filter{|m| m["tournament_id"] == tour["id"]}
-						- final = matches.present? ? matches.find{|m| m["match_type"] == "final"} : nil
-						- if final.present? && final["winner_captain_id"].present?
-							- player = @players.find{|p| p["id"].to_s == final["winner_captain_id"].to_s} || nil
-							.text-sm.font-normal.text-gray-700.text-green-600= "Winner : #{player["name"]}"
-						- elsif tour["win_point"].present?
-							.text-sm.font-normal.text-gray-700= "Win point : #{tour["win_point"]}"
-					-# .bg-slate-100.p-4.absolute.right-0.top-0.h-full{class: "[writing-mode:vertical-lr]"}
-					-# 	.text-lg.text-center.tracking-widest= tour["tour_type"].try(:humanize)
+	.px-4
+		- if @tours.present?
+			- @tours.sort_by { |item| item["isComplete"] ? 1 : 0 }.each do |tour|
+				- url = tournament_path(id: tour["id"])
+				- matches = @matches.filter{|m| m["tournament_id"] == tour["id"]}
+				- final = matches.present? ? matches.find{|m| m["match_type"] == "final"} : nil
+				.my-6
+					= link_to url, class: "relative flex justify-between bg-blue-100 w-full px-4 #{final.present? ? 'py-3' : 'py-10'} border border-gray-200 rounded-lg shadow-xl hover:bg-gray-100" do
+						.flex.items-center.justify-between.w-full
+							%div
+								%h5.mb-1.text-xl.font-bold.tracking-tight.text-gray-900.cursor.typewriter-animation= tour["name"]
+								.text-sm.font-normal.text-gray-700.bg-gradient-to-r.from-blue-300.px-2.py-1.rounded-lg.font-semibold= tour["tour_type"].humanize
+							
+							- if final.present? && final["winner_captain_id"].present?
+								- player = @players.find{|p| p["id"].to_s == final["winner_captain_id"].to_s} || nil
+								= image_tag player["photo_name"], class: "playerPhoto"
+							- else
+								.absolute.top-0.right-0.h-full.p-1
+									- if tour["tour_type"] == "test" || tour["tour_type"] == "solo_test"
+										= image_tag 'test_cricket.png', class: "h-full w-auto scale-x-[-1]"
+									- elsif tour["tour_type"] == "t10" || tour["tour_type"] == "super_over"
+										= image_tag 't10_cricket.webp', class: "h-full w-auto scale-x-[-1]"
+								- if tour["is_removed"] 
+									%spam removed
+							
+							
+								-# .text-sm.font-normal.text-gray-700.text-green-600= "Winner : #{player["name"]}"
+						-# .bg-slate-100.p-4.absolute.right-0.top-0.h-full{class: "[writing-mode:vertical-lr]"}
+						-# 	.text-lg.text-center.tracking-widest= tour["tour_type"].try(:humanize)
