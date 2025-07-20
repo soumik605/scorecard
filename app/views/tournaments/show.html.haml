@@ -68,10 +68,10 @@
 							- cap2 = @players.find{|p| p["id"] == match["captain_b"]}
 							-# - cls = getResultClass(cap1["id"], cap2["id"], match["winner_captain_id"])
 
-							- photo_a_cls = match["winner_captain_id"] == match["captain_a"] ? "playerTourPhoto border-2" : "playerTourPhoto border-2 grayscale"
-							- photo_b_cls = match["winner_captain_id"] == match["captain_b"] ? "playerTourPhoto border-2" : "playerTourPhoto border-2 grayscale"
+							- photo_a_cls = match["winner_captain_id"] != match["captain_b"] ? "playerTourPhoto border-2" : "playerTourPhoto border-2 grayscale"
+							- photo_b_cls = match["winner_captain_id"] != match["captain_a"] ? "playerTourPhoto border-2" : "playerTourPhoto border-2 grayscale"
 
-							.flex.items-center.justify-between.gap-1.rounded-full.p-1.shadow-lg.bg-blue-100
+							.flex.items-center.justify-between.gap-1.rounded-full.p-1.shadow-lg{class: match["is_draw"] ? "bg-purple-300" : "bg-blue-100"}
 								= image_tag cap1["photo_name"], class: photo_a_cls
 								%div
 									.text-xs.text-center.font-bold= "##{match['id']}"
@@ -91,3 +91,14 @@
 							-#   .my-1
 							-#     %span.text-xs Player of the match
 							-#     %span.text-md.font-bold= match.player_of_the_match
+
+
+
+
+-# soumik 26/8 - 14/5 = 0.45
+-# soudip 39/8 - 39/8 = 0
+-# ajim   48/15 - 19/6 = 0.03
+-# tushar 15/6 - 17/6 = -0.33
+-# saikat 39/8 - 39/8 = 0
+-# surya  26/7 - 36/15 = 1.31
+-# sayan  24/10 - 54/14 = -1.45

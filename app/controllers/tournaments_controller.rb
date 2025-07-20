@@ -116,14 +116,16 @@ class TournamentsController < ApplicationController
         player_matches = @matches.filter{|m| [m["captain_a"], m["captain_b"]].include? player["id"]  }
         win_matches = player_matches.filter{|m| m["winner_captain_id"].present? && m["winner_captain_id"] == player["id"] }
         loose_matches = player_matches.filter{|m| m["winner_captain_id"].present? && m["winner_captain_id"] != player["id"] }
+        draw_matches = player_matches.filter{|m| !m["winner_captain_id"].present?}
         win_point = win_matches.pluck("win_point").compact.select { |x| x.is_a?(Numeric) && x != 0 }.sum
         loose_point = loose_matches.pluck("loose_point").compact.select { |x| x.is_a?(Numeric) && x != 0 }.sum
+        draw_point = draw_matches.pluck("draw_point").compact.select { |x| x.is_a?(Numeric) && x != 0 }.sum
         win_percent = player_matches.present? ? (win_matches.count.to_f / player_matches.count.to_f) * 100 : 0
         
         win_percent = "#{win_percent.try(:round)}%"
         win_match_count = win_matches.count
         total_match_count = player_matches.count
-        total_point = win_point+loose_point
+        total_point = win_point+loose_point+draw_point
   
         @players_data << [player["photo_name"], total_point, win_match_count, total_match_count, win_percent ]
       end
