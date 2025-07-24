@@ -65,7 +65,7 @@
 /* Animation */
 .typewriter-animation {
   animation: 
-    typewriter 3s steps(30) 1s 1 normal both, 
+    typewriter 1s steps(150) 0s 1 normal both, 
     blinkingCursor 1000ms steps(60) normal both;
 }
 @keyframes typewriter {

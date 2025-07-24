@@ -189,6 +189,47 @@ class TournamentsController < ApplicationController
     # p @players_runs
   end
 
+  def memory
+    @d3_matches = [] 
+    
+    @matches.each do |m|
+      arr = []
+      tour = @tours.find{|t| t["id"] == m["tournament_id"]}
+      cap_a = @players.find{|p| p["id"] == m["captain_a"]}
+      cap_b = @players.find{|p| p["id"] == m["captain_b"]}
+      if m["winner_captain_id"] == m["captain_a"]
+        arr << [cap_a["name"], cap_b["name"], "#{tour['name']}  ##{m['id']}"]
+      elsif m["winner_captain_id"] == m["captain_b"]
+        arr << [cap_b["name"], cap_a["name"], "#{tour['name']}  ##{m['id']}"]
+      end
+
+      perfs = @performances.filter{|p| p["match_id"] == m["id"]}.group_by{|p| p["player_id"]}
+      highest_scorer = perfs.max_by { |player_id, performances| performances.sum { |p| p["runs"].to_i } }
+      if highest_scorer
+        player_id, performances = highest_scorer
+        total_runs = performances.sum { |p| p["runs"].to_i }
+        plr = @players.find{|p| p["id"] == player_id}
+        arr << ["#{plr['name']} - #{total_runs} runs"]
+      else
+        arr << ["No runs"]
+      end
+
+      highest_wicket = perfs.max_by { |player_id, performances| performances.sum { |p| p["wickets"].to_i } }
+      if highest_wicket
+        player_id, performances = highest_wicket
+        total_wickets = performances.sum { |p| p["wickets"].to_i }
+        plr = @players.find{|p| p["id"] == player_id}
+        arr << ["#{plr['name']} - #{total_wickets} wickets"]
+      else
+        arr << ["No wickets"]
+      end
+
+
+      @d3_matches << arr.flatten
+    end
+
+  end
+
   private 
 
   def set_tournament
