@@ -35,7 +35,7 @@
       .text-md.text-center.my-3 Average
       = line_chart @player_chart_data, height: "400px", width: "100%", curve: true, points: false
 
-  - elsif @tour["tour_type"] == "super_over"
+  - elsif @tour["tour_type"] == "super_over" || @tour["tour_type"] == "test15"
     %table.w-full.text-sm.text-left.rtl:text-right.text-gray-500.shadow-lg.border.mb-4
       %thead.text-xs.text-gray-700.uppercase.bg-gray-50
         %tr

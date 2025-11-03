@@ -57,6 +57,27 @@
 									.w-full.bg-red-200.rounded-xl
 										.text-md.text-red-600 L
 
+	
+	- if @tour["tour_type"] == "test15"
+		- players = @players.filter{|p| [1,2,3,4,5,6].include?(p["id"])}
+		.w-full.mt-4
+			.flex.justify-stretch.sticky.top-0.bg-slate-200.py-3
+				- players.each do |pl|
+					.w-full.flex.justify-center
+						= image_tag pl["photo_name"], class: "vsPlayerPhoto"
+
+			%div
+				- @test15.reverse.each_with_index do |s, index|
+					.flex.justify-stretch.py-2.border-b
+						- players.each do |pl|
+							.w-full.text-center.p-1
+								- if s[0].include?(pl["id"])
+									.w-full.bg-green-200.rounded-xl
+										.text-md.text-green-800 W
+								- elsif s[1].include?(pl["id"])
+									.w-full.bg-red-200.rounded-xl
+										.text-md.text-red-600 L
+
 		
 	- if  ["t10", "text"].include? @tour["tour_type"]
 		.mt-8.grid.grid-cols-12.gap-2

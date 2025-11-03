@@ -19,6 +19,9 @@ class ApplicationController < ActionController::Base
 
     points_file = File.open "public/stats/points.json"
     @points = JSON.load points_file
+
+    test15_file = File.open "public/stats/test15.json"
+    @test15 = JSON.load test15_file
   end
 
 

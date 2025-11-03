@@ -79,8 +79,8 @@ class TournamentsController < ApplicationController
         { name: player["name"], data: val[:data] }
       end
 
-    elsif @tour["tour_type"] == "super_over"
-      data = @super
+    elsif @tour["tour_type"] == "super_over" || @tour["tour_type"] == "test15"
+      data = @tour["tour_type"] == "super_over" ? @super : @test15
 
       @players_data = {}
       data.each do |oa|
@@ -242,6 +242,7 @@ class TournamentsController < ApplicationController
     
     @points = @points[params[:id].to_s]
     @super = @super[params[:id].to_s]
+    @test15 = @test15[params[:id].to_s]
   end
 
   def tournament_params
