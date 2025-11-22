@@ -1,8 +1,8 @@
 .w-full.min-h-screen.bg-gradient-to-br.from-slate-50.to-blue-50.dark:from-gray-900.dark:to-gray-800.text-gray-800.dark:text-gray-100.font-sans
 	/ ==== TOP NAVIGATION BAR ====
 	.sticky.top-0.z-50.backdrop-blur-md.bg-white-60.dark:bg-gray-900.border-b.border-gray-200.dark:border-gray-700
-		.max-w-7xl.mx-auto.flex.flex-wrap.items-center.justify-center.gap-4.py-4.px-4
-			- nav_items = [{ name: "Players", path: players_path, icon: "users" },{ name: "Stats", path: test_stats_path, icon: "chart-bar" },{ name: "Ranking", path: test_rankings_path, icon: "trophy" },{ name: "H2H", path: head_to_head_stats_path, icon: "arrows-right-left" },{ name: "Rivalry", path: rivalry_tournaments_path, icon: "fire" },{ name: "Create Team", path: create_team_tournaments_path, icon: "users-plus" },{ name: "Memory", path: memory_tournaments_path, icon: "sparkles" }]			
+		.max-w-7xl.mx-auto.flex.flex-wrap.items-center.justify-center.gap-3.p-2
+			- nav_items = [{ name: "Players", path: players_path, icon: "users" },{ name: "Stats", path: test_stats_path, icon: "chart-bar" },{ name: "Ranking", path: test_rankings_path, icon: "trophy" },{ name: "H2H", path: head_to_head_stats_path, icon: "arrows-right-left" },{ name: "Rivalry", path: rivalry_tournaments_path, icon: "fire" },{ name: "Create", path: create_team_tournaments_path, icon: "users-plus" },{ name: "Memory", path: memory_tournaments_path, icon: "sparkles" }]			
 			- nav_items.each do |item|
 				= link_to item[:path], class: "flex flex-col items-center gap-2 p-3 rounded-2xl bg-white/70 dark:bg-gray-800/70 hover:bg-blue-100/80 dark:hover:bg-blue-800/40 shadow-sm hover:shadow-lg transition-all duration-300 w-20" do
 					%div.text-blue-500.group-hover:text-blue-700.transition-all.duration-300
@@ -43,7 +43,7 @@
 			Explore Tournaments
 
 		- if @tours.present?
-			.grid.grid-cols-1.sm:grid-cols-2.lg:grid-cols-3.xl:grid-cols-4.gap-8
+			.grid.grid-cols-1.sm:grid-cols-2.lg:grid-cols-3.xl:grid-cols-4.gap-6
 				- @tours.sort_by { |item| item["isComplete"] ? 1 : 0 }.each do |tour|
 					- url = tournament_path(id: tour["id"])
 					- gradient = case tour["tour_type"]

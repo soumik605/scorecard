@@ -1,6 +1,6 @@
 - knockout = @matches.find {|m| ["final", "q1", "q2"].include?(m["match_type"]) }
 
-.w-full
+.w-full.h-screen.overflow-auto
 	.mb-4   
 		= link_to "<- Tournaments list", root_path, class: "mb-4 px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
 	
@@ -20,7 +20,7 @@
 	- if @tour["tour_type"] == "solo_test"
 		- players = @players.filter{|p| [1,2,3,4,5,6].include?(p["id"])}
 		.w-full.mt-4
-			.flex.justify-stretch.sticky.top-0.bg-slate-200.py-3
+			.flex.justify-stretch.sticky.top-0.py-3
 				- players.each do |pl|
 					.w-full.flex.justify-center
 						= image_tag pl["photo_name"], class: "vsPlayerPhoto"
@@ -30,7 +30,7 @@
 					- max = point.values.max
 					.flex.justify-stretch.py-1{class: index == 9 ? "border-b-4" : "border-b"}
 						- players.each do |pl|
-							.w-full{class: max == point[pl["id"].try(:to_s)] ? "bg-green-200 rounded-xl" : "bg-white"  }
+							.w-full{class: max == point[pl["id"].try(:to_s)] ? "bg-green-200 rounded-xl text-black" : ""  }
 								- if point[pl["id"].to_s].present?
 									- if point[pl["id"].to_s].to_i > 0
 										.text-lg.text-center= point[pl["id"].to_s]
@@ -40,14 +40,14 @@
 	- if @tour["tour_type"] == "super_over"
 		- players = @players.filter{|p| [1,2,3,4,5,6].include?(p["id"])}
 		.w-full.mt-4
-			.flex.justify-stretch.sticky.top-0.bg-slate-200.py-3
+			.flex.justify-stretch.sticky.top-0.py-3
 				- players.each do |pl|
 					.w-full.flex.justify-center
 						= image_tag pl["photo_name"], class: "vsPlayerPhoto"
 
 			%div
 				- @super.reverse.each_with_index do |s, index|
-					.flex.justify-stretch.py-2.border-b
+					.flex.justify-stretch.py-2
 						- players.each do |pl|
 							.w-full.text-center.p-1
 								- if s[0].include?(pl["id"])
@@ -61,14 +61,14 @@
 	- if @tour["tour_type"] == "test15"
 		- players = @players.filter{|p| [1,2,3,4,5,6].include?(p["id"])}
 		.w-full.mt-4
-			.flex.justify-stretch.sticky.top-0.bg-slate-200.py-3
+			.flex.justify-stretch.sticky.top-0.py-3
 				- players.each do |pl|
 					.w-full.flex.justify-center
 						= image_tag pl["photo_name"], class: "vsPlayerPhoto"
 
 			%div
 				- @test15.reverse.each_with_index do |s, index|
-					.flex.justify-stretch.py-2.border-b
+					.flex.justify-stretch.py-2
 						- players.each do |pl|
 							.w-full.text-center.p-1
 								- if s[0].include?(pl["id"])
@@ -95,8 +95,8 @@
 							.flex.items-center.justify-between.gap-1.rounded-full.p-1.shadow-lg{class: match["is_draw"] ? "bg-purple-300" : "bg-blue-100"}
 								= image_tag cap1["photo_name"], class: photo_a_cls
 								%div
-									.text-xs.text-center.font-bold= "##{match['id']}"
-									.text-xs.text-center= match["match_type"].try(:humanize)
+									.text-xs.text-center.font-bold.text-black= "##{match['id']}"
+									.text-xs.text-center.text-black= match["match_type"].try(:humanize)
 
 								= image_tag cap2["photo_name"], class: photo_b_cls
 								-# = image_tag getPlayerPhoto(cap2, @players), class: "playerPhoto"

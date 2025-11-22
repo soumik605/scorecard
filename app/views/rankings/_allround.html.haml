@@ -5,9 +5,9 @@
     
   .relative.overflow-x-auto
     %table.w-full.text-xs.text-left.rtl:text-right.text-gray-500
-      %thead.text-xs.text-gray-700.uppercase.bg-gray-50
+      %thead.text-xs.text-gray-700.uppercase
         %tr
-          %th.px-6.py-3.sticky.left-0.bg-gray-50{scope: "col"}
+          %th.px-6.py-3.sticky.left-0{scope: "col"}
             Player
           %th.px-6.py-3{scope: "col"}
             Point
@@ -16,8 +16,8 @@
         
       %tbody
         - allround_ranking.each_with_index do |stat, index|
-          %tr.border-b{class: index == 0 ? "bg-green-100" : ""}
-            %th.px-6.py-4.font-medium.text-gray-900.whitespace-nowrap.sticky.left-0{scope: "row", class: index == 0 ? "bg-green-100" : "bg-white"}
+          %tr.border-b{class: index == 0 ? "" : ""}
+            %th.px-6.py-4.font-medium.text-gray-900.whitespace-nowrap.sticky.left-0{scope: "row", class: index == 0 ? "" : ""}
               .flex.justify-center  
                 = image_tag stat[:player_photo], class: "vsPlayerPhoto"
               .text-xs.text-center{class: index == 0 ? "text-2xl" : ""}= stat[:player_name]

@@ -10,9 +10,9 @@
 .mt-6 
   .relative.overflow-x-auto
     %table.w-full.text-sm.text-left.rtl:text-right.text-gray-500
-      %thead.text-xs.text-gray-700.uppercase.bg-gray-50
+      %thead.text-xs.uppercase
         %tr
-          %th.px-6.py-3.whitespace-nowrap.bg-slate-100.text-black.sticky.left-0{scope: "col"}
+          %th.px-6.py-3.whitespace-nowrap.sticky.left-0{scope: "col"}
             Name
           %th.px-6.py-3.whitespace-nowrap.text-center{scope: "col"}
             Points
@@ -38,8 +38,8 @@
         - all_point_stats.each do |pl|
           - if pl[1].present? && pl[1] > 0
             %tr.border-b
-              %th.px-6.py-3.bg-slate-100.text-black.sticky.left-0{scope: "row"}
-                = link_to pl[9], player_path(pl[10]), class: "whitespace-nowrap text-center text-blue-800 underline"
+              %th.px-6.py-3.text-black.sticky.left-0{scope: "row"}
+                = link_to pl[9], player_path(pl[10]), class: "whitespace-nowrap text-center text-gray-300"
               %td.px-6.py-3
                 %h5.whitespace-nowrap.text-center= pl[0]
               %td.px-6.py-3
