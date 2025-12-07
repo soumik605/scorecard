@@ -2,7 +2,8 @@ class AuctionsController < ApplicationController
   before_action :get_data
 
   def index
-    @room = Room.find_by(user_id: session[:user]["id"])
+    @room = nil
+    @room = Room.find_by(user_id: session[:user]["id"]) if session[:user].present?
   end
 
   
@@ -17,7 +18,6 @@ class AuctionsController < ApplicationController
     end
 
     @room = Room.new(user_id: session[:user]["id"])
-    p @room
     if @room.save
       redirect_to room_path(@room.id), notice: "Auction room created successfully!"
     else

@@ -1,30 +1,119 @@
-= @room.code
+/ ================================
+/ HEADER SECTION
+/ ================================
+= link_to 'Back to Auctions', auctions_path, class: "text-sm text-blue-600 hover:underline mb-4 inline-block border p-4 rounded-xl"
 
-.text-md.mt-10 My Players
-.grid.grid-cols-12.gap-2
-  - @my_picked_players.each do |player|
-    .col-span-3
-      .bg-neutral-primary-soft.block.max-w-sm.p-6.border.border-default.rounded-base.shadow-xs.hover:bg-neutral-secondary-medium
-        - plr = @auction_players.find {|ap| ap["id"] == player.player_id}
-        .text-xs.mb-2= plr["name"]
-        .text-xs.mb-2= "ODI    #{plr["odi_point"]}"
-        .text-xs.mb-2= "T20    #{plr["t20_point"]}"
-        .text-xs.mb-2= "Country    #{plr["country_code"]}"
-        .text-xs.mb-2= "#{plr["playertype"]}"
+.container.mx-auto.px-4.py-6
+	.bg-white.shadow-lg.rounded-xl.p-6.mb-8
+		.flex.flex-col.md:flex-row.md:items-center.md:justify-between
+			.mb-4.md:mb-0
+				.text-2xl.font-bold.text-gray-900 Hi #{session[:user]["name"]}
+				.text-sm.text-gray-500.mt-1 Welcome to your dashboard
+
+				.text-sm.text-gray-500.mt-1
+					- time_left = @room.end_date - Time.current
+					- if time_left > 0
+						- days = (time_left / 86400).to_i
+						- hours = ((time_left % 86400) / 3600).to_i
+						- minutes = ((time_left % 3600) / 60).to_i
+						Time Left: #{days}d #{hours}h #{minutes}m
+					- else
+						Time Left: Expired
 
 
-.text-md.mt-10 Available Players
-.grid.grid-cols-12.gap-2
-  - @available_to_pick_players.each do |player|
-    .col-span-3
-      .bg-neutral-primary-soft.block.max-w-sm.p-6.border.border-default.rounded-base.shadow-xs.hover:bg-neutral-secondary-medium
-        - plr = @auction_players.find {|ap| ap["id"] == player.player_id}
-        .text-xs.mb-2= plr["name"]
-        .text-xs.mb-2= "ODI    #{plr["odi_point"]}"
-        .text-xs.mb-2= "T20    #{plr["t20_point"]}"
-        .text-xs.mb-2= "Country    #{plr["country_code"]}"
-        .text-xs.mb-2= "#{plr["playertype"]}"
+			.grid.grid-cols-2.md:grid-cols-4.gap-4.mt-4.md:mt-0
+				.p-3.bg-gray-50.rounded-lg.shadow-sm.text-center
+					.text-xs.text-gray-500 Room Code
+					.text-lg.font-semibold.text-gray-900= @room.code
 
-        = form_with url: pick_rooms_path, method: :post do |f|
-          = f.hidden_field :picked_player_id, value: player["id"]
-          = f.submit "Pick", class: "inline-block px-4 py-2 text-xs border mt-3 font-medium text-center text-white bg-primary-base rounded-lg hover:bg-primary-dark focus:ring-4 focus:outline-none focus:ring-primary-light"
+				.p-3.bg-gray-50.rounded-lg.shadow-sm.text-center
+					.text-xs.text-gray-500 Spent Money 
+					.text-lg.font-semibold.text-gray-900= @total_spent_price
+
+				.p-3.bg-gray-50.rounded-lg.shadow-sm.text-center
+					.text-xs.text-gray-500 Available Money
+					.text-lg.font-semibold.text-gray-900= @total_available_price
+
+				.p-3.bg-gray-50.rounded-lg.shadow-sm.text-center
+					.text-xs.text-gray-500 Players Taken
+					.text-lg.font-semibold.text-gray-900= @my_picked_players.count
+
+
+/ ================================
+/ MY PLAYERS SECTION
+/ ================================
+.container.mx-auto.px-4.py-6
+	.flex.items-center.justify-between.mb-4
+		%h2.text-xl.font-bold.text-gray-300 My Players
+		.text-sm.text-gray-500 #{ @my_picked_players.count } players selected
+
+	.grid.grid-cols-2.sm:grid-cols-3.md:grid-cols-4.lg:grid-cols-6.gap-4
+		- @my_picked_players.each do |player|
+			- plr = @auction_players.find {|ap| ap["id"] == player.player_id}
+			.border.border-gray-200.bg-white.rounded-xl.shadow-sm.hover:shadow-md.transition.p-4.flex.flex-col
+				.font-semibold.text-gray-900.text-sm= plr["name"]
+				.text-xs.text-gray-600.font-medium.text-gray-800.mb-2= plr["playertype"]
+
+				.text-xs.text-gray-600.flex.justify-between
+					%span ODI Point:
+					%span.font-medium.text-gray-800= plr["odi_point"]
+
+				.text-xs.text-gray-600.flex.justify-between
+					%span T20 Point:
+					%span.font-medium.text-gray-800= plr["t20_point"]
+
+				.text-xs.text-gray-600.flex.justify-between
+					%span Country:
+					%span.font-medium.text-gray-800= plr["country_code"]
+
+
+				.text-xs.text-gray-600.flex.justify-between
+					%span Price:
+					%span.font-medium.text-gray-800= plr["price"]
+
+				- if @can_take_action
+					= form_with url: release_rooms_path, method: :post, class: "mt-4" do |f|
+						= f.hidden_field :picked_player_id, value: player["id"]
+						= f.submit "Release", class: "w-full text-xs bg-red-500 hover:bg-red-600 text-white font-medium py-1.5 rounded-lg transition"
+
+
+/ ================================
+/ AVAILABLE PLAYERS SECTION
+/ ================================
+.container.mx-auto.px-4.py-6.mt-8
+	.flex.items-center.justify-between.mb-4
+		%h2.text-xl.font-bold.text-gray-300 Available Players
+		.text-sm.text-gray-500 #{ @available_to_pick_players.count } available
+
+	.grid.grid-cols-2.sm:grid-cols-3.md:grid-cols-4.lg:grid-cols-6.gap-4
+		- @available_to_pick_players.each do |player|
+			- plr = @auction_players.find {|ap| ap["id"] == player.player_id}
+			.border.border-gray-200.bg-white.rounded-xl.shadow-sm.hover:shadow-md.transition.p-4.flex.flex-col
+				.font-semibold.text-gray-900.text-sm= plr["name"]
+				.text-xs.text-gray-600.font-medium.text-gray-800.mb-2= plr["playertype"]
+
+				.text-xs.text-gray-600.flex.justify-between
+					%span ODI Point:
+					%span.font-medium.text-gray-800= plr["odi_point"]
+
+				.text-xs.text-gray-600.flex.justify-between
+					%span T20 Point:
+					%span.font-medium.text-gray-800= plr["t20_point"]
+
+				.text-xs.text-gray-600.flex.justify-between
+					%span Country:
+					%span.font-medium.text-gray-800= plr["country_code"]
+
+				.text-xs.text-gray-600.flex.justify-between
+					%span Price:
+					%span.font-medium.text-gray-800= plr["price"]
+
+				- if @can_take_action
+					- if @my_picked_players.count >= 11
+						%button.mt-4.w-full.text-xs.bg-gray-400.text-white.font-medium.py-1.5.rounded-lg.transition.cursor-not-allowed Max players picked
+					- elsif @total_available_price < plr["price"]
+						%button.mt-4.w-full.text-xs.bg-gray-400.text-white.font-medium.py-1.5.rounded-lg.transition.cursor-not-allowed Not available fund
+					- else
+						= form_with url: pick_rooms_path, method: :post, class: "mt-4" do |f|
+							= f.hidden_field :picked_player_id, value: player["id"]
+							= f.submit "Pick", class: "w-full text-xs bg-green-500 hover:bg-green-600 text-white font-medium py-1.5 rounded-lg transition"

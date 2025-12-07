@@ -1,12 +1,22 @@
-%h1 Login
-= form_with url: login_path, local: true do |f|
-  - if flash[:alert]
-    %p{style: "color: red;"}= flash[:alert]
-  %div
-    = label_tag :name
-    = text_field_tag :name
-  %div
-    = label_tag :password
-    = password_field_tag :password
-  %div
-    = submit_tag "Login"
+.flex.items-center.justify-center.min-h-screen.bg-gray-100.p-4
+  = link_to 'Back to Home', auctions_path, class: "absolute top-4 left-4 text-sm text-blue-600 hover:underline border p-4 border-lg shadow-xl"
+
+  .w-full.max-w-md.bg-white.shadow-xl.rounded-2xl.p-8
+
+    %h1.text-3xl.font-bold.text-center.text-gray-800.mb-6 Login
+
+    - if flash[:alert]
+      %p.bg-red-100.text-red-700.border.border-red-300.p-3.rounded-lg.mb-4.text-sm.text-center= flash[:alert]
+
+    = form_with url: login_path, local: true, class: "space-y-5" do |f|
+
+      .flex.flex-col
+        = label_tag :name, "Username", class: "text-gray-700 font-medium mb-1"
+        = text_field_tag :name, nil, class: "text-black w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none"
+
+      .flex.flex-col
+        = label_tag :password, "Password", class: "text-gray-700 font-medium mb-1"
+        = password_field_tag :password, nil, class: "text-black w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none"
+
+      .pt-2
+        = submit_tag "Login", class: "w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-lg shadow-md transition"

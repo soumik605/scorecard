@@ -5,11 +5,23 @@ class RoomsController < ApplicationController
     @room = Room.find(params[:id])
     @available_to_pick_players = PickedPlayer.where(user_id: nil)
     @my_picked_players = PickedPlayer.where(user_id: session[:user]["id"])
+
+    my_picked_player_ids = @my_picked_players.pluck(:player_id)
+
+    @total_spent_price = @auction_players.map{|pp| my_picked_player_ids.include?(pp["id"]) ? pp["price"] : 0 }.sum
+    @total_available_price = 850 - @total_spent_price
+    @can_take_action = DateTime.current.between?(@room.start_date, @room.end_date)
   end
 
   def join
     @room = Room.find_by(code: params[:code])
     @user = User.find_by(id: session[:user]["id"])
+    
+    return redirect_to auctions_path, alert: "Invalid room code." if @room.nil?
+    
+    room_users = User.where(room_id: @room.id)
+    return redirect_to auctions_path, alert: "Room is full." if room_users.count >= 8
+
     if @room.present? && @user.present? && @user.update(room_id: @room.id)
       redirect_to room_path(@room.id), notice: "Joined room successfully!"
     else
@@ -25,6 +37,21 @@ class RoomsController < ApplicationController
         redirect_to request.referrer, notice: "Player picked successfully!"
       else 
         redirect_to request.referrer, alert: "Player already picked by other."
+      end
+    else
+      redirect_to request.referrer, alert: "Error picking player."
+    end
+
+  end
+
+  def release 
+    if params[:picked_player_id].present?
+      picked_player = PickedPlayer.find_by(id: params[:picked_player_id], user_id: session[:user]["id"])
+      if picked_player.present?
+        picked_player.update(user_id: nil)
+        redirect_to request.referrer, notice: "Player released successfully!"
+      else 
+        redirect_to request.referrer, alert: "Player already released by other."
       end
     else
       redirect_to request.referrer, alert: "Error picking player."
