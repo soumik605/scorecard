@@ -1,8 +1,8 @@
 class Player
-  has_many :player_teams
-  has_many :teams, through: :player_teams
-  has_many :performances, dependent: :destroy
-  has_many :captain_teams, class_name: 'Team', foreign_key: "captain_id"
+  # has_many :player_teams
+  # has_many :teams, through: :player_teams
+  # has_many :performances, dependent: :destroy
+  # has_many :captain_teams, class_name: 'Team', foreign_key: "captain_id"
 
 
   def self.most_average_as_player(performances, matches, players, is_captain)

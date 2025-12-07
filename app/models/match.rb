@@ -1,16 +1,16 @@
 class Match
-  belongs_to :tournament
-  belongs_to :winner_team, class_name: 'Team', optional: true # Winner team reference
-  has_many :teams, dependent: :destroy
-  has_many :performances, dependent: :destroy
+  # belongs_to :tournament
+  # belongs_to :winner_team, class_name: 'Team', optional: true # Winner team reference
+  # has_many :teams, dependent: :destroy
+  # has_many :performances, dependent: :destroy
 
-  after_update :add_points_in_teams
+  # after_update :add_points_in_teams
 
-  enum :match_type, { 'group stage': 1, 'qualifier1': 2, 'qualifier2': 3, 'final': 4  }
+  # enum :match_type, { 'group stage': 1, 'qualifier1': 2, 'qualifier2': 3, 'final': 4  }
   
-  scope :won_by_innings, -> { where(is_won_by_innings: true) }
-  scope :won_by_follow_on, -> { where(is_won_by_follow_on: true) }
-  scope :drawn, -> { where(is_draw: true) }
+  # scope :won_by_innings, -> { where(is_won_by_innings: true) }
+  # scope :won_by_follow_on, -> { where(is_won_by_follow_on: true) }
+  # scope :drawn, -> { where(is_draw: true) }
 
   def self.most_wins_by_innings matches, players
     captain_follow_on_wins = Hash.new(0)

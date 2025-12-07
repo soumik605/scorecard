@@ -3,7 +3,7 @@ class Tournament
 
   # after_create :create_matches
 
-  attr_accessor :captain_ids
+  # attr_accessor :captain_ids
 
   # validate :check_captain_count
 
