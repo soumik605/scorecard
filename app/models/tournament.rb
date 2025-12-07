@@ -1,13 +1,13 @@
 class Tournament
-  has_many :matches, dependent: :destroy
+  # has_many :matches, dependent: :destroy
 
-  after_create :create_matches
+  # after_create :create_matches
 
   attr_accessor :captain_ids
 
-  validate :check_captain_count
+  # validate :check_captain_count
 
-  enum :tour_type, { 'test': 1, 't20': 2  }
+  # enum :tour_type, { 'test': 1, 't20': 2  }
   
   
   def self.get_next_match_suggestion(matches, players)
