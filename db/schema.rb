@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_12_171008) do
+ActiveRecord::Schema[7.0].define(version: 2025_12_07_111709) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -23,6 +23,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_12_171008) do
     t.boolean "is_draw", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "match_type"
+    t.datetime "winner_updated_at"
     t.index ["tournament_id"], name: "index_matches_on_tournament_id"
   end
 
@@ -33,8 +35,18 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_12_171008) do
     t.integer "wickets"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "is_not_out"
     t.index ["match_id"], name: "index_performances_on_match_id"
     t.index ["player_id"], name: "index_performances_on_player_id"
+  end
+
+  create_table "picked_players", force: :cascade do |t|
+    t.string "team_type"
+    t.integer "buy_price"
+    t.integer "player_id"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "players", force: :cascade do |t|
@@ -42,6 +54,16 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_12_171008) do
     t.string "role"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "rooms", force: :cascade do |t|
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.bigint "user_id", null: false
+    t.string "code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_rooms_on_user_id"
   end
 
   create_table "teams", force: :cascade do |t|
@@ -65,6 +87,17 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_12_171008) do
     t.integer "draw_point"
     t.integer "innings_win_point"
     t.integer "follow_on_win_point"
+    t.integer "round_count"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "is_removed", default: false
+    t.integer "tour_type"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "name"
+    t.string "password_digest"
+    t.integer "room_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -72,5 +105,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_12_171008) do
   add_foreign_key "matches", "tournaments"
   add_foreign_key "performances", "matches"
   add_foreign_key "performances", "players"
+  add_foreign_key "rooms", "users"
   add_foreign_key "teams", "matches"
 end
