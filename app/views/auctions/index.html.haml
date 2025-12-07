@@ -1,0 +1,11 @@
+- if @room.present?
+  %h2 Auction Room: #{@room.code}
+  %p Welcome, #{@room.user.name}!
+- elsif session[:user]["name"] == "soumikadmin"
+  = link_to 'Create Auction Room', auctions_create_room_path, class: 'btn btn-primary'
+- else
+  = form_with url: join_rooms_path, method: :post, local: true do |form|
+    .form-group
+      = form.label :code, "Enter Auction Room Code"
+      = form.text_field :code, class: 'form-control', required: true
+    = form.submit 'Join Room', class: 'btn btn-success'

@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  devise_for :users
   root :to => "tournaments#index"
 
   namespace :api, defaults: {format: 'json'}  do
@@ -8,12 +7,6 @@ Rails.application.routes.draw do
       member do
         get :leaderboard
         get :head_to_head
-      end
-    end
-    resources :stats do 
-      collection do 
-        get :test
-        get :t10
       end
     end
   end
@@ -56,4 +49,28 @@ Rails.application.routes.draw do
       get :solo_test
     end
   end
+
+  namespace :auctions do
+    get :players
+    get :create_room
+  end
+
+  resources :rooms do
+    collection do
+      post :join
+      post :pick
+    end
+  end
+
+
+  get  '/auctions', to: "auctions#index"
+
+  get  '/register', to: 'users#new'
+  post '/register', to: 'users#create'
+
+  get  '/login', to: 'sessions#new'
+  post '/login', to: 'sessions#create'
+  delete '/logout', to: 'sessions#destroy'
+
+
 end

@@ -1,0 +1,31 @@
+.relative.overflow-x-auto.bg-neutral-primary-soft.shadow-xs.rounded-base.border.border-default
+  %table.w-full.max-w-xl.text-sm.text-left.rtl:text-right.text-body
+    %thead.bg-neutral-secondary-soft.border-b.border-default
+      %tr
+        -# %th.px-6.py-3.font-medium{scope: "col"}
+        -#   ID
+        %th.px-6.py-3.font-medium{scope: "col"}
+          Player name
+        %th.px-6.py-3.font-medium{scope: "col"}
+          Category
+        %th.px-6.py-3.font-medium{scope: "col"}
+          ODI Point
+        %th.px-6.py-3.font-medium{scope: "col"}
+          T20 Point
+        %th.px-6.py-3.font-medium{scope: "col"}
+          Country
+    %tbody
+      - @auction_players.each do |player|
+        %tr.odd:bg-neutral-primary.even:bg-neutral-secondary-soft.border-b.border-default
+          -# %th.px-6.py-4.font-medium.text-heading.whitespace-nowrap{scope: "row"}
+          -#   = player["id"]
+          %td.px-6.py-4
+            = player["name"]
+          %td.px-6.py-4
+            = player["playertype"]
+          %td.px-6.py-4
+            = player["odi_point"]
+          %td.px-6.py-4
+            = player["t20_point"]
+          %td.px-6.py-4
+            = player["country_code"]

@@ -1,9 +1,11 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
-  password_digest: MyString
+  user: one
+  team_type: MyString
+  buy_price: 1
 
 two:
-  name: MyString
-  password_digest: MyString
+  user: two
+  team_type: MyString
+  buy_price: 1

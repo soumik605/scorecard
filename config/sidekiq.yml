@@ -1,0 +1,5 @@
+:schedule:
+  hourly_job:
+    cron: '0 10-21,0 * * *'
+    class: SendPlayersToRoomJob
+    queue: default
