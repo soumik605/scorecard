@@ -1,4 +1,4 @@
-class Tournament < ApplicationRecord
+class Tournament
   has_many :matches, dependent: :destroy
 
   after_create :create_matches

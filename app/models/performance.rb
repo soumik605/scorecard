@@ -1,4 +1,4 @@
-class Performance < ApplicationRecord
+class Performance
   belongs_to :match
   belongs_to :player
 
