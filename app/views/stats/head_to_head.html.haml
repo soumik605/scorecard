@@ -9,7 +9,7 @@
 			.col-span-3 
 				.flex.justify-center
 					= image_tag getPlayerPhoto(player, @players), class: "playerPhoto shadow-lg border"
-				.text-md.font-bold.text-center.mt-4= "#{getPlayerName(player, @players)}"
+				.text-md.font-bold.text-center.mt-4.text-white= "#{getPlayerName(player, @players)}"
 				.text-md.font-bold.text-center.mt-1.bg-gradient-to-r.from-white.via-green-200.to-white= "#{value.values.pluck(:wins).sum} - #{value.values.pluck(:losses).sum}"
 			.col-span-9
 				- value.each do |p, k|
