@@ -1,0 +1,16 @@
+- if @users.present?
+  - @users.each do |user|
+    .bg-white.shadow-md.rounded-xl.p-6.mb-4
+      %h3.text-lg.font-semibold.text-gray-800.mb-2= user.name
+
+      - if @players.present?
+        - user_players = @players.where(user_id: user.id)
+
+        - if user_players.any?
+          %ul.list-disc.list-inside
+            - user_players.each do |player|
+              - plr = @auction_players.find {|ap| ap["id"] == player.player_id}
+              %li.text-gray-700= "#{plr["name"]} (₹#{plr["price"]})"
+        - else
+          %p.text-gray-600 No players selected.
+      

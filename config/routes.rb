@@ -61,6 +61,10 @@ Rails.application.routes.draw do
       post :pick
       post :release
     end
+
+    member do
+      get :players
+    end
   end
 
 

@@ -1,7 +1,10 @@
 / ================================
 / HEADER SECTION
 / ================================
-= link_to 'Back to Auctions', auctions_path, class: "text-sm text-blue-600 hover:underline mb-4 inline-block border p-4 rounded-xl"
+.flex.items-center.justify-between.w-full
+	= link_to 'Back to Auctions', auctions_path, class: "text-sm text-blue-600 hover:underline mb-4 inline-block border p-4 rounded-xl"
+	= link_to "Check Others", players_room_path(@room.id), method: :delete, class: "text-sm bg-blue-600 hover:bg-red-700 text-white font-semibold p-4 rounded-lg shadow-md transition"
+
 
 .container.mx-auto.px-4.py-6
 	.bg-white.shadow-lg.rounded-xl.p-6.mb-8

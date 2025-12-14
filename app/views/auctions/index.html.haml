@@ -2,7 +2,8 @@
   = link_to 'Back to Home', root_path, class: "absolute top-4 left-4 text-sm text-blue-600 hover:underline border p-4 border-lg shadow-xl mb-6 rounded-xl"
 
   - if session[:user].present?
-    = link_to "Logout", logout_path, method: :delete, class: "absolute top-4 right-4 text-sm bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-lg shadow-md transition"
+    .flex.items-center.gap-4
+      = link_to "Logout", logout_path, method: :delete, class: "absolute top-4 right-4 text-sm bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-lg shadow-md transition"
 
   .mt-20
   .text-xs.text-gray-500.mb-3 Note: Max 11 players can be selected. Total purse is 900. 

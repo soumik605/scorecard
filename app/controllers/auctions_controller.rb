@@ -2,8 +2,13 @@ class AuctionsController < ApplicationController
   before_action :get_data
 
   def index
+    @user = nil
+    @user = User.find_by(id: session[:user]["id"]) if session[:user].present?
+
     @room = nil
-    @room = Room.find_by(user_id: session[:user]["id"]) if session[:user].present?
+    if @user.present? && @user.room.present?
+      @room = @user.room
+    end
   end
 
   
