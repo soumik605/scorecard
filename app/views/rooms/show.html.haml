@@ -45,7 +45,8 @@
 .container.mx-auto.px-4.py-6
 	.flex.items-center.justify-between.mb-4
 		%h2.text-xl.font-bold.text-gray-300 My Players
-		.text-sm.text-gray-500 #{ @my_picked_players.count } players selected
+
+		.text-sm.text-gray-500 You can release a player only after 4 hours of picking them.
 
 	.grid.grid-cols-2.sm:grid-cols-3.md:grid-cols-4.lg:grid-cols-6.gap-4
 		- @my_picked_players.each do |player|
@@ -54,27 +55,27 @@
 				.font-semibold.text-gray-900.text-sm= plr["name"]
 				.text-xs.text-gray-600.font-medium.text-gray-800.mb-2= plr["playertype"]
 
-				.text-xs.text-gray-600.flex.justify-between
-					%span ODI Point:
-					%span.font-medium.text-gray-800= plr["odi_point"]
+				.flex.w-full.justify-between.items-center.mt-1
+					.text-xs.text-gray-600
+						.text-xs.text-center.font-bold.text-black= plr["odi_point"]
+						.text-xs.text-center ODI
 
-				.text-xs.text-gray-600.flex.justify-between
-					%span T20 Point:
-					%span.font-medium.text-gray-800= plr["t20_point"]
+					.text-xs.text-gray-600
+						.text-xs.text-center.font-bold.text-black= plr["t20_point"]
+						.text-xs.text-center T20
 
-				.text-xs.text-gray-600.flex.justify-between
-					%span Country:
-					%span.font-medium.text-gray-800= plr["country_code"]
+					.text-xs.text-gray-600
+						.text-xs.text-center.font-bold.text-black= plr["country_code"]
+						.text-xs.text-center Country
 
-
-				.text-xs.text-gray-600.flex.justify-between
-					%span Price:
-					%span.font-medium.text-gray-800= plr["price"]
-
-				- if @can_take_action
-					= form_with url: release_rooms_path, method: :post, class: "mt-4" do |f|
-						= f.hidden_field :picked_player_id, value: player["id"]
-						= f.submit "Release", class: "w-full text-xs bg-red-500 hover:bg-red-600 text-white font-medium py-1.5 rounded-lg transition"
+				%div 
+					.text-xs.text-center.font-medium.text-gray-700.mt-2 Picked at: #{player.updated_at.strftime("%A %I:%M %P")}
+				
+				- if @can_take_action && (player.updated_at + 4.hours) < Time.current
+					- if @can_take_action
+						= form_with url: release_rooms_path, method: :post, class: "mt-4" do |f|
+							= f.hidden_field :picked_player_id, value: player["id"]
+							= f.submit "Release (₹#{plr["price"]})", class: "w-full text-xs bg-red-500 hover:bg-red-600 text-white font-medium py-1.5 rounded-lg transition"
 
 
 / ================================
@@ -86,34 +87,34 @@
 		.text-sm.text-gray-500 #{ @available_to_pick_players.count } available
 
 	.grid.grid-cols-2.sm:grid-cols-3.md:grid-cols-4.lg:grid-cols-6.gap-4
-		- @available_to_pick_players.each do |player|
-			- plr = @auction_players.find {|ap| ap["id"] == player.player_id}
-			.border.border-gray-200.bg-white.rounded-xl.shadow-sm.hover:shadow-md.transition.p-4.flex.flex-col
-				.font-semibold.text-gray-900.text-sm= plr["name"]
-				.text-xs.text-gray-600.font-medium.text-gray-800.mb-2= plr["playertype"]
+		- @available_to_pick_players.each do |time, players|
+			%h3.text-md.font-semibold.text-gray-400.col-span-full.mt-4.mb-2 Released at: #{time.strftime("%A %I:%M %P")}
+			- players.each do |player|
+				- plr = @auction_players.find {|ap| ap["id"] == player.player_id}
+				.border.border-gray-200.bg-white.rounded-xl.shadow-sm.hover:shadow-md.transition.p-4.flex.flex-col
+					.font-semibold.text-gray-900.text-sm= plr["name"]
+					.text-xs.text-gray-600.font-medium.text-gray-800.mb-2= plr["playertype"]
 
-				.text-xs.text-gray-600.flex.justify-between
-					%span ODI Point:
-					%span.font-medium.text-gray-800= plr["odi_point"]
+					.flex.w-full.justify-between.items-center.mt-1
+						.text-xs.text-gray-600
+							.text-xs.text-center.font-bold.text-black= plr["odi_point"]
+							.text-xs.text-center ODI
 
-				.text-xs.text-gray-600.flex.justify-between
-					%span T20 Point:
-					%span.font-medium.text-gray-800= plr["t20_point"]
+						.text-xs.text-gray-600
+							.text-xs.text-center.font-bold.text-black= plr["t20_point"]
+							.text-xs.text-center T20
 
-				.text-xs.text-gray-600.flex.justify-between
-					%span Country:
-					%span.font-medium.text-gray-800= plr["country_code"]
+						.text-xs.text-gray-600
+							.text-xs.text-center.font-bold.text-black= plr["country_code"]
+							.text-xs.text-center Country
+					
 
-				.text-xs.text-gray-600.flex.justify-between
-					%span Price:
-					%span.font-medium.text-gray-800= plr["price"]
-
-				- if @can_take_action
-					- if @my_picked_players.count >= 11
-						%button.mt-4.w-full.text-xs.bg-gray-400.text-white.font-medium.py-1.5.rounded-lg.transition.cursor-not-allowed Max players picked
-					- elsif @total_available_price < plr["price"]
-						%button.mt-4.w-full.text-xs.bg-gray-400.text-white.font-medium.py-1.5.rounded-lg.transition.cursor-not-allowed Not available fund
-					- else
-						= form_with url: pick_rooms_path, method: :post, class: "mt-4" do |f|
-							= f.hidden_field :picked_player_id, value: player["id"]
-							= f.submit "Pick", class: "w-full text-xs bg-green-500 hover:bg-green-600 text-white font-medium py-1.5 rounded-lg transition"
+					- if @can_take_action && (player.release_time < Time.current)
+						- if @my_picked_players.count >= 25
+							%button.mt-4.w-full.text-xs.bg-gray-400.text-white.font-medium.py-1.5.rounded-lg.transition.cursor-not-allowed Max players picked
+						- elsif @total_available_price < plr["price"]
+							%button.mt-4.w-full.text-xs.bg-gray-400.text-white.font-medium.py-1.5.rounded-lg.transition.cursor-not-allowed Not available fund
+						- else
+							= form_with url: pick_rooms_path, method: :post, class: "mt-4" do |f|
+								= f.hidden_field :picked_player_id, value: player["id"]
+								= f.submit "Pick (₹#{plr["price"]})", class: "w-full text-xs bg-green-500 hover:bg-green-600 text-white font-medium py-1.5 rounded-lg transition"

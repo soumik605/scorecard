@@ -3,13 +3,13 @@ class RoomsController < ApplicationController
 
   def show
     @room = Room.find(params[:id])
-    @available_to_pick_players = PickedPlayer.where(user_id: nil)
+    @available_to_pick_players = PickedPlayer.where(user_id: nil).where("release_time <= ?", DateTime.current).order("release_time ASC").group_by(&:release_time)
     @my_picked_players = PickedPlayer.where(user_id: session[:user]["id"])
 
     my_picked_player_ids = @my_picked_players.pluck(:player_id)
 
     @total_spent_price = @auction_players.map{|pp| my_picked_player_ids.include?(pp["id"]) ? pp["price"] : 0 }.sum
-    @total_available_price = 850 - @total_spent_price
+    @total_available_price = 1750 - @total_spent_price
     @can_take_action = DateTime.current.between?(@room.start_date, @room.end_date)
   end
 
