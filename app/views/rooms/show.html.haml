@@ -74,11 +74,36 @@
 					.text-xs.text-center.font-medium.text-gray-700.mt-2 Picked at: #{player.updated_at.strftime("%A %I:%M %P")}
 					.text-xs.text-center.font-medium.text-gray-700.mt-2 Price: ₹#{plr["price"]}
 				
-				- if @can_take_action && (player.updated_at + 4.hours) < Time.current
-					- if @can_take_action
-						= form_with url: release_rooms_path, method: :post, class: "mt-4" do |f|
-							= f.hidden_field :picked_player_id, value: player["id"]
-							= f.submit "Release (₹#{plr["price"]})", class: "w-full text-xs bg-red-500 hover:bg-red-600 text-white font-medium py-1.5 rounded-lg transition"
+				- if @can_take_action && (player.updated_at - 4.hours) < Time.current
+					= form_with url: release_rooms_path, method: :post, class: "mt-4", data: { controller: "confirm-pick" } do |f|
+						= f.hidden_field :picked_player_id, value: player["id"]
+
+						%button.w-full.text-xs.bg-red-500.hover:bg-red-600.text-white.font-medium.py-1.5.rounded-lg.transition{
+							type: "button",
+							data: { action: "click->confirm-pick#open" }
+						}
+							Release (₹#{plr["price"]})
+
+						/ 🔔 Confirmation Modal
+						.fixed.inset-0.bg-black.bg-opacity-40.flex.items-center.justify-center.hidden{
+							data: { confirm_pick_target: "modal" }
+						}
+							.bg-white.rounded-xl.shadow-xl.w-80.p-5
+								%h3.text-sm.font-semibold.text-gray-800 Confirm Release
+								%p.text-xs.text-gray-600.mt-2
+									Are you sure you want to release this player?
+									%br/
+									This action cannot be undone.
+
+								.flex.justify-end.gap-2.mt-4
+									%button.text-xs.px-3.py-1.5.rounded-md.bg-gray-200.hover:bg-gray-300.text-black{
+										type: "button",
+										data: { action: "click->confirm-pick#close" }
+									}
+										Cancel
+
+									= f.submit "Confirm Release",
+										class: "text-xs px-3 py-1.5 rounded-md bg-red-500 hover:bg-red-600 text-white font-medium"
 
 
 / ================================
@@ -113,10 +138,33 @@
 
 					- if @can_take_action && (player.release_time < Time.current)
 						- if @my_picked_players.count >= 25
-							%button.mt-4.w-full.text-xs.bg-gray-400.text-white.font-medium.py-1.5.rounded-lg.transition.cursor-not-allowed Max players picked
+							%button.mt-4.w-full.text-xs.bg-gray-400.text-white.font-medium.py-1.5.rounded-lg.cursor-not-allowed Max players picked
 						- elsif @total_available_price < plr["price"]
-							%button.mt-4.w-full.text-xs.bg-gray-400.text-white.font-medium.py-1.5.rounded-lg.transition.cursor-not-allowed Not available fund
+							%button.mt-4.w-full.text-xs.bg-gray-400.text-white.font-medium.py-1.5.rounded-lg.cursor-not-allowed Not available fund
 						- else
-							= form_with url: pick_rooms_path, method: :post, class: "mt-4" do |f|
+							= form_with url: pick_rooms_path, method: :post, class: "mt-4", data: { controller: "confirm-pick" } do |f|
 								= f.hidden_field :picked_player_id, value: player["id"]
-								= f.submit "Pick (₹#{plr["price"]})", class: "w-full text-xs bg-green-500 hover:bg-green-600 text-white font-medium py-1.5 rounded-lg transition"
+
+								%button.w-full.text-xs.bg-green-500.hover:bg-green-600.text-white.font-medium.py-1.5.rounded-lg.transition{
+									type: "button",
+									data: { action: "click->confirm-pick#open" }
+								}
+									Pick (₹#{plr["price"]})
+
+								/ 🔔 Confirmation Modal
+								.fixed.inset-0.bg-black.bg-opacity-40.flex.items-center.justify-center.hidden{
+									data: { confirm_pick_target: "modal" }
+								}
+									.bg-white.rounded-xl.shadow-xl.w-80.p-5
+										%h3.text-sm.font-semibold.text-gray-800 Confirm Pick
+										%p.text-xs.text-gray-600.mt-2
+											Are you sure you want to pick this player for ₹#{plr["price"]}?
+
+										.flex.justify-end.gap-2.mt-4
+											%button.text-xs.px-3.py-1.5.rounded-md.bg-gray-200.hover:bg-gray-300.text-black{
+												type: "button",
+												data: { action: "click->confirm-pick#close" }
+											}
+												Cancel
+
+											= f.submit "Confirm", class: "text-xs px-3 py-1.5 rounded-md bg-green-500 hover:bg-green-600 text-white font-medium"
