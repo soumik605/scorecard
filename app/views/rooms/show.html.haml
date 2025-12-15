@@ -71,7 +71,7 @@
 					- if team_players.present?
 						- team_players.each do |player|
 							- plr = @auction_players.find {|ap| ap["id"] == player.player_id}
-							.rounded-xl.shadow-sm.hover:shadow-md.transition.p-4.flex.flex-col.cursor-move{ class: bg_class, draggable: true, data: { id: player.id, action: "dragstart->drag-drop#drag" }}
+							.rounded-xl.shadow-sm.hover:shadow-md.transition.p-4.flex.flex-col.cursor-move{ class: bg_class, draggable: true, data: { player_id: player.id, action: "dragstart->drag-drop#drag touchstart->drag-drop#touchStart" }}
 								.font-semibold.text-gray-900.text-sm= plr["name"]
 								.text-xs.text-gray-600.font-medium.text-gray-800.mb-2= plr["playertype"]
 
