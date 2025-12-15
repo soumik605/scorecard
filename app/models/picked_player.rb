@@ -1,4 +1,7 @@
 class PickedPlayer < ApplicationRecord
+  self.time_zone_aware_attributes = true
+  self.time_zone_aware_types = [:datetime, :timestamp]
+  
   belongs_to :user, optional: true
 
   before_update :check_if_player_can_be_released
