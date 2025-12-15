@@ -3,7 +3,7 @@ class RoomsController < ApplicationController
 
   def show
     @room = Room.find(params[:id])
-    @available_to_pick_players = PickedPlayer.where(user_id: nil).where("release_time <= ?", Time.current).order("release_time ASC").group_by(&:release_time)
+    @available_to_pick_players = PickedPlayer.where(user_id: nil).where("release_time <= ?", Time.current).order("release_time DESC").group_by(&:release_time)
     @my_picked_players = PickedPlayer.where(user_id: session[:user]["id"])
 
     my_picked_player_ids = @my_picked_players.pluck(:player_id)
