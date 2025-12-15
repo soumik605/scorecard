@@ -21,7 +21,7 @@ class PickedPlayer < ApplicationRecord
     if self.user.present?
       user_picked_players = PickedPlayer.where(user_id: self.user.id)
 
-      if self.released_time.present? && self.released_time > Time.zone.now
+      if self.released_time.present? && self.released_time > Time.current
         puts "ERROR: Player cannot be picked before release time."
         errors.add(:base, "Player cannot be picked before release time.")
         raise ActiveRecord::RecordInvalid.new(self)
