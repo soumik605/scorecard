@@ -6,8 +6,9 @@
       = link_to "Logout", logout_path, method: :delete, class: "absolute top-4 right-4 text-sm bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-lg shadow-md transition"
 
   .mt-20
-  .text-xs.text-gray-500.mb-3 Note: Max 11 players can be selected. Total purse is 900. 
-  .text-xs.text-gray-500.mb-6 2 random players will come at the start of every hour from 10 AM to 11 PM. 
+  .text-sm.text-gray-300.mb-3 Note: Max 25, Min 22 players can be selected. Total purse is 1750. 
+  .text-sm.text-gray-300.mb-3 0/3/4/5 random players will come after every 30 minute from 10 AM to 10 PM. 
+  .text-sm.text-gray-300.mb-6 Can't release a player within 4 hour of selection.
 
   - if session[:user].present?
     - if @room.present?

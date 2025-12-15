@@ -60,7 +60,7 @@ class RoomsController < ApplicationController
   end
 
     def players
-      @users = User.all
+      @users = User.all.where(room_id: params[:id])
       p @users
       @players = PickedPlayer.where(room_id: params[:id]).where.not(user_id: nil)
     end
