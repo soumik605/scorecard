@@ -33,7 +33,7 @@ class RoomsController < ApplicationController
     if params[:picked_player_id].present?
       picked_player = PickedPlayer.find_by(id: params[:picked_player_id], user_id: nil)
       if picked_player.present?
-        picked_player.update(user_id: session[:user]["id"])
+        picked_player.update(user_id: session[:user]["id"], last_pick_datetime: Time.now)
         redirect_to request.referrer, notice: "Player picked successfully!"
       else 
         redirect_to request.referrer, alert: "Player already picked by other."
@@ -47,7 +47,7 @@ class RoomsController < ApplicationController
   def release 
     if params[:picked_player_id].present?
       picked_player = PickedPlayer.find_by(id: params[:picked_player_id], user_id: session[:user]["id"])
-      if picked_player.present? && picked_player.update(user_id: nil)
+      if picked_player.present? && picked_player.update(user_id: nil, last_pick_datetime: nil)
         redirect_to request.referrer, notice: "Player released successfully!"
       else 
         redirect_to request.referrer, alert: picked_player.errors.full_messages.to_sentence
@@ -62,7 +62,7 @@ class RoomsController < ApplicationController
     @room = Room.find_by(id: params[:id])
     @users = User.all.where(room_id: params[:id])
     p @users
-    @players = PickedPlayer.where(room_id: params[:id]).where.not(user_id: nil).order("updated_at DESC")
+    @players = PickedPlayer.where(room_id: params[:id]).where.not(user_id: nil).order("last_pick_datetime DESC")
   end
 
   def update_team_type

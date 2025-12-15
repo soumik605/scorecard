@@ -1,48 +1,49 @@
 .container.mx-auto.px-4.py-10
-  = link_to 'Back to Home', root_path, class: "absolute top-4 left-4 text-sm text-blue-600 hover:underline border p-4 border-lg shadow-xl mb-6 rounded-xl"
+	= link_to 'Back to Home', root_path, class: "absolute top-4 left-4 text-sm text-blue-600 hover:underline border p-4 border-lg shadow-xl mb-6 rounded-xl"
 
-  - if session[:user].present?
-    .flex.items-center.gap-4
-      = link_to "Logout", logout_path, method: :delete, class: "absolute top-4 right-4 text-sm bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-lg shadow-md transition"
+	- if session[:user].present?
+		.flex.items-center.gap-4
+			= link_to "Logout", logout_path, method: :delete, class: "absolute top-4 right-4 text-sm bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-lg shadow-md transition"
 
-  .mt-20
-  .text-sm.text-gray-300.mb-3 Note: Max 25, Min 22 players can be selected. Total purse is 1750. 
-  .text-sm.text-gray-300.mb-3 0/3/4/5 random players will come after every 30 minute from 10 AM to 10 PM. 
-  .text-sm.text-gray-300.mb-6 Can't release a player within 4 hour of selection.
+	.mt-20
+	.text-sm.text-gray-300.mb-3 Note: Max 25, Min 22 players can be selected. Total purse is 1750. 
+	.text-sm.text-gray-300.mb-3 0/3/4/5 random players will come after every 30 minute from 10 AM to 10 PM. 
+	.text-sm.text-gray-300.mb-6 Can't release a player within 4 hour of selection.
 
-  - if session[:user].present?
-    - if @room.present?
+	- if session[:user].present?
+		- if @room.present?
 
-      .bg-white.shadow-lg.rounded-xl.p-8.mb-6
-        %h2.text-2xl.font-bold.text-gray-800.mb-2 Auction Room: #{@room.code}
-        %p.text-gray-600.text-sm.mb-6 Welcome, #{@room.user.name}!
+			.bg-white.shadow-lg.rounded-xl.p-8.mb-6
+				%h2.text-2xl.font-bold.text-gray-800.mb-2 Auction Room: #{@room.code}
+				%p.text-gray-600.text-sm.mb-6 Welcome, #{@room.user.name}!
 
-        = link_to 'Enter Auction Room', room_path(@room.id), class: "inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2.5 rounded-lg shadow-md transition"
+				= link_to 'Enter Auction Room', room_path(@room.id), class: "inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2.5 rounded-lg shadow-md transition"
+				= link_to "Check Players", auctions_players_path, class: "inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2.5 rounded-lg shadow-md transition"
 
-    - elsif session[:user]["name"] == "soumikadmin"
+		- elsif session[:user]["name"] == "soumikadmin"
 
-      .bg-white.shadow-md.rounded-xl.p-8.mb-6.text-center
-        %h2.text-xl.font-semibold.text-gray-800.mb-4 Admin Panel
-        = link_to 'Create Auction Room', auctions_create_room_path, class: "inline-block bg-purple-600 hover:bg-purple-700 text-white font-semibold px-5 py-2.5 rounded-lg shadow-md transition"
+			.bg-white.shadow-md.rounded-xl.p-8.mb-6.text-center
+				%h2.text-xl.font-semibold.text-gray-800.mb-4 Admin Panel
+				= link_to 'Create Auction Room', auctions_create_room_path, class: "inline-block bg-purple-600 hover:bg-purple-700 text-white font-semibold px-5 py-2.5 rounded-lg shadow-md transition"
 
-    - else
+		- else
 
-      .bg-white.shadow-md.rounded-xl.p-8.max-w-lg.mx-auto
-        %h2.text-xl.font-bold.text-gray-800.mb-6 Join Auction Room
+			.bg-white.shadow-md.rounded-xl.p-8.max-w-lg.mx-auto
+				%h2.text-xl.font-bold.text-gray-800.mb-6 Join Auction Room
 
-        = form_with url: join_rooms_path, method: :post, local: true, class: "space-y-4" do |form|
-          .flex.flex-col
-            = form.label :code, "Enter Auction Room Code", class: "text-sm font-medium text-gray-700 mb-1"
-            = form.text_field :code, class: "text-black border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500", required: true
+				= form_with url: join_rooms_path, method: :post, local: true, class: "space-y-4" do |form|
+					.flex.flex-col
+						= form.label :code, "Enter Auction Room Code", class: "text-sm font-medium text-gray-700 mb-1"
+						= form.text_field :code, class: "text-black border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500", required: true
 
-          = form.submit 'Join Room', class: "w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 rounded-lg shadow-sm transition"
+					= form.submit 'Join Room', class: "w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 rounded-lg shadow-sm transition"
 
-  - else
+	- else
 
-    .bg-white.shadow-md.rounded-xl.p-8.max-w-xl.mx-auto.text-center.space-y-4.mt-20
+		.bg-white.shadow-md.rounded-xl.p-8.max-w-xl.mx-auto.text-center.space-y-4.mt-20
 
-      %h2.text-2xl.font-bold.text-gray-800.mb-6 Welcome to the Auction League
+			%h2.text-2xl.font-bold.text-gray-800.mb-6 Welcome to the Auction League
 
-      = link_to 'Login to Participate in Auctions', login_path, class: "inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2.5 rounded-lg shadow-md transition w-full"
-      = link_to "Register", register_path, class: "inline-block bg-gray-700 hover:bg-gray-800 text-white font-semibold px-5 py-2.5 rounded-lg shadow-md transition w-full"
-      = link_to "Check Players", auctions_players_path, class: "inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2.5 rounded-lg shadow-md transition w-full"
+			= link_to 'Login to Participate in Auctions', login_path, class: "inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2.5 rounded-lg shadow-md transition w-full"
+			= link_to "Register", register_path, class: "inline-block bg-gray-700 hover:bg-gray-800 text-white font-semibold px-5 py-2.5 rounded-lg shadow-md transition w-full"
+			= link_to "Check Players", auctions_players_path, class: "inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2.5 rounded-lg shadow-md transition w-full"

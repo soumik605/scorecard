@@ -51,9 +51,10 @@ class PickedPlayer < ApplicationRecord
   def team_size_limit
     return if team_type.blank?
     
-    user_players = PickedPlayer.where(user_id: self.user.id)
+    user_players = nil
+    user_players = PickedPlayer.where(user_id: self.user.id) if self.user.present?
 
-    if user_players.where(team_type: team_type).where.not(id: id).count >= 11
+    if user_players.present? && user_players.where(team_type: team_type).where.not(id: id).count >= 11
       errors.add(:team_type, "can have only 11 players")
     end
   end
