@@ -40,9 +40,9 @@ class PickedPlayer < ApplicationRecord
       end
 
       total_price = user_picked_players.sum(:buy_price)
-      if total_price > 1650
-        puts "ERROR: Total price of picked players exceeds the limit of 1650."
-        errors.add(:base, "Total price of picked players exceeds the limit of 1650.")
+      if total_price > 1550
+        puts "ERROR: Total price of picked players exceeds the limit of 1550."
+        errors.add(:base, "Total price of picked players exceeds the limit of 1550.")
         raise ActiveRecord::RecordInvalid.new(self)
       end
     end

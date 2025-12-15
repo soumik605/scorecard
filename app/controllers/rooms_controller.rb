@@ -9,7 +9,7 @@ class RoomsController < ApplicationController
     my_picked_player_ids = @my_picked_players.pluck(:player_id)
 
     @total_spent_price = @auction_players.map{|pp| my_picked_player_ids.include?(pp["id"]) ? pp["price"] : 0 }.sum
-    @total_available_price = 1650 - @total_spent_price
+    @total_available_price = 1550 - @total_spent_price
     @can_take_action = Time.current.between?(@room.start_date, @room.end_date)
   end
 
