@@ -45,14 +45,14 @@
 / ================================
 / MY PLAYERS SECTION
 / ================================
-.container.mx-auto.px-4.py-6
+.container.mx-auto.px-2.py-6
 	.mb-4
 		%h2.text-xl.font-bold.text-gray-300 My Players (#{@my_picked_players.count})
 		.text-sm.text-gray-500 You can release a player only after 4 hours of picking them.
 
 	%div{"data-controller" => "drag-drop"}
 		- [["Unassigned", nil, "bg-slate-300"], ["ODI", "odi", "bg-blue-300"], ["T20", "t20", "bg-blue-500"]].each do |label, team, bg_class|
-			.mt-6.bg-white.bg-opacity-10.backdrop-blur-md.border-opacity-30.rounded-xl.p-4.shadow-lg{data: { team_type: team, action: "dragover->drag-drop#allow drop->drag-drop#drop" }}
+			.mt-6.bg-white.bg-opacity-10.backdrop-blur-md.border-opacity-30.rounded-xl.px-2.py-4.shadow-lg{data: { team_type: team, action: "dragover->drag-drop#allow drop->drag-drop#drop" }}
 				
 				- team_players = @my_picked_players.where(team_type: team)
 				- points = 0
@@ -67,15 +67,15 @@
 
 
 
-				.grid.grid-cols-2.sm:grid-cols-3.md:grid-cols-4.lg:grid-cols-6.gap-4
+				.flex.gap-4.overflow-x-auto
 					- if team_players.present?
 						- team_players.each do |player|
 							- plr = @auction_players.find {|ap| ap["id"] == player.player_id}
-							.rounded-xl.shadow-sm.hover:shadow-md.transition.p-4.flex.flex-col.cursor-move{ class: bg_class, draggable: true, data: { player_id: player.id, action: "dragstart->drag-drop#drag touchstart->drag-drop#touchStart" }}
+							.rounded-xl.shadow-sm.hover:shadow-md.transition.p-4.cursor-move{ class: bg_class, draggable: true, data: { player_id: player.id, action: "dragstart->drag-drop#drag touchstart->drag-drop#touchStart" }}
 								.font-semibold.text-gray-900.text-sm= plr["name"]
 								.text-xs.text-gray-600.font-medium.text-gray-800.mb-2= plr["playertype"]
 
-								.flex.w-full.justify-between.items-center.mt-1
+								.flex.w-full.justify-between.items-center.mt-1.gap-6
 									.text-xs.text-gray-600
 										.text-xs.text-center.font-bold.text-black= plr["odi_point"]
 										.text-xs.text-center ODI
