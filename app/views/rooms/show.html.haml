@@ -46,9 +46,8 @@
 / MY PLAYERS SECTION
 / ================================
 .container.mx-auto.px-4.py-6
-	.flex.items-center.justify-between.mb-4
-		%h2.text-xl.font-bold.text-gray-300 My Players
-
+	.mb-4
+		%h2.text-xl.font-bold.text-gray-300 My Players (#{@my_picked_players.count})
 		.text-sm.text-gray-500 You can release a player only after 4 hours of picking them.
 
 	.grid.grid-cols-2.sm:grid-cols-3.md:grid-cols-4.lg:grid-cols-6.gap-4
@@ -73,6 +72,7 @@
 
 				%div 
 					.text-xs.text-center.font-medium.text-gray-700.mt-2 Picked at: #{player.updated_at.strftime("%A %I:%M %P")}
+					.text-xs.text-center.font-medium.text-gray-700.mt-2 Price: ₹#{plr["price"]}
 				
 				- if @can_take_action && (player.updated_at + 4.hours) < Time.current
 					- if @can_take_action
@@ -86,12 +86,11 @@
 / ================================
 .container.mx-auto.px-4.py-6.mt-8
 	.flex.items-center.justify-between.mb-4
-		%h2.text-xl.font-bold.text-gray-300 Available Players
-		.text-sm.text-gray-500 #{ @available_to_pick_players.count } available
+		%h2.text-xl.font-bold.text-gray-300 Available Players (#{@available_to_pick_players.count})
 
 	.grid.grid-cols-2.sm:grid-cols-3.md:grid-cols-4.lg:grid-cols-6.gap-4
 		- @available_to_pick_players.each do |time, players|
-			%h3.text-md.font-semibold.text-gray-400.col-span-full.mt-4.mb-2 Released at: #{time.strftime("%A %I:%M %P")}
+			-# %h3.text-md.font-semibold.text-gray-400.col-span-full.mt-4.mb-2 Released at: #{time.strftime("%A %I:%M %P")}
 			- players.each do |player|
 				- plr = @auction_players.find {|ap| ap["id"] == player.player_id}
 				.border.border-gray-200.bg-white.rounded-xl.shadow-sm.hover:shadow-md.transition.p-4.flex.flex-col
