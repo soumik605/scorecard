@@ -10,7 +10,7 @@ class PickedPlayer < ApplicationRecord
   private 
 
   def check_if_player_can_be_released
-    if (self.updated_at.present? && self.updated_at > 4.hours.ago) || (self.user_id_was.present? && self.user_id.nil?)
+    if (self.user_id_was.present? && self.user_id.nil?)
       puts "ERROR: Player cannot be released within 4 hours of being picked."
       errors.add(:base, "Player cannot be released within 4 hours of being picked.")
       throw(:abort)
