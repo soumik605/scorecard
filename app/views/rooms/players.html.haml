@@ -8,14 +8,33 @@
 
 			- if @players.present?
 				- user_players = @players.where(user_id: user.id)
-				
-				.text-xs.text-gray-800= "Available Money : ₹#{1750 - user_players.sum(&:buy_price)}"
-				.text-xs.text-gray-800= "Total Spent : ₹#{user_players.sum(&:buy_price)}"
-				.text-xs.text-gray-800.mb-2= "Total Players : #{user_players.count}"
 
-				- if user_players.any?
-					%ul.list-disc.list-inside
-						- user_players.each do |player|
+				- [["Unassigned", nil, "bg-slate-300"], ["ODI", "odi", "bg-blue-300"], ["T20", "t20", "bg-blue-500"]].each do |label, team, bg_class|
+					- team_players = user_players.select {|up| up.team_type == team}
+					
+					- points = 0
+					- if team_players.present?
+						- team_players.each do |player|
 							- plr = @auction_players.find {|ap| ap["id"] == player.player_id}
-							%li.text-gray-700= "#{plr["name"]} (₹#{plr["price"]})"
+							- if plr
+								- points += plr["odi_point"].to_i if team == "odi"
+								- points += plr["t20_point"].to_i if team == "t20"
+
+
+					- if team_players.any?
+						%h4.text-md.font-medium.text-gray-700.mt-4.mb-2= "#{label}: #{points}"
+						%ul.list-disc.list-inside
+							- team_players.each do |player|
+								- plr = @auction_players.find {|ap| ap["id"] == player.player_id}
+								%li.text-gray-700= "#{plr["name"]} (₹#{plr["price"]})"
+				
+				-# .text-xs.text-gray-800= "Available Money : ₹#{1750 - user_players.sum(&:buy_price)}"
+				-# .text-xs.text-gray-800= "Total Spent : ₹#{user_players.sum(&:buy_price)}"
+				-# .text-xs.text-gray-800.mb-2= "Total Players : #{user_players.count}"
+
+				-# - if user_players.any?
+				-# 	%ul.list-disc.list-inside
+				-# 		- user_players.each do |player|
+				-# 			- plr = @auction_players.find {|ap| ap["id"] == player.player_id}
+				-# 			%li.text-gray-700= "#{plr["name"]} (₹#{plr["price"]})"
 				

@@ -47,11 +47,10 @@ class RoomsController < ApplicationController
   def release 
     if params[:picked_player_id].present?
       picked_player = PickedPlayer.find_by(id: params[:picked_player_id], user_id: session[:user]["id"])
-      if picked_player.present?
-        picked_player.update(user_id: nil)
+      if picked_player.present? && picked_player.update(user_id: nil)
         redirect_to request.referrer, notice: "Player released successfully!"
       else 
-        redirect_to request.referrer, alert: "Player already released by other."
+        redirect_to request.referrer, alert: picked_player.errors.full_messages.to_sentence
       end
     else
       redirect_to request.referrer, alert: "Error picking player."
@@ -59,11 +58,26 @@ class RoomsController < ApplicationController
 
   end
 
-    def players
-      @room = Room.find_by(id: params[:id])
-      @users = User.all.where(room_id: params[:id])
-      p @users
-      @players = PickedPlayer.where(room_id: params[:id]).where.not(user_id: nil).order("updated_at DESC")
+  def players
+    @room = Room.find_by(id: params[:id])
+    @users = User.all.where(room_id: params[:id])
+    p @users
+    @players = PickedPlayer.where(room_id: params[:id]).where.not(user_id: nil).order("updated_at DESC")
+  end
+
+  def update_team_type
+    @my_picked_players = PickedPlayer.where(user_id: session[:user]["id"])
+
+    player = @my_picked_players.find_by(id: params[:id])
+    team_type = params[:team_type]
+
+    if team_type.present? && @my_picked_players.where(team_type: team_type).count >= 11
+      redirect_to request.referrer, alert: "Max 11 players allowed."
+      return
     end
+
+    player.update!(team_type: team_type.presence)
+    redirect_to request.referrer, notice: "Player moved to #{team_type} team"
+  end
 
 end

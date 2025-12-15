@@ -64,6 +64,7 @@ Rails.application.routes.draw do
 
     member do
       get :players
+      patch :update_team_type
     end
   end
 

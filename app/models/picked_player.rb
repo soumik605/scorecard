@@ -6,15 +6,21 @@ class PickedPlayer < ApplicationRecord
 
   before_update :check_if_player_can_be_released
   after_update :check_user_available_price
+  validate :team_size_limit
+
+  enum team_type: {
+    odi: "odi",
+    t20: "t20"
+  }
 
   private 
 
   def check_if_player_can_be_released
-    if (self.user_id_was.present? && self.user_id.nil?)
-      puts "ERROR: Player cannot be released within 4 hours of being picked."
-      errors.add(:base, "Player cannot be released within 4 hours of being picked.")
-      throw(:abort)
-    end
+    # if (self.user_id_was.present? && self.user_id.nil?)
+    #   puts "ERROR: Player cannot be released within 4 hours of being picked."
+    #   errors.add(:base, "Player cannot be released within 4 hours of being picked.")
+    #   throw(:abort)
+    # end
   end
 
   def check_user_available_price
@@ -39,6 +45,16 @@ class PickedPlayer < ApplicationRecord
         errors.add(:base, "Total price of picked players exceeds the limit of 1750.")
         raise ActiveRecord::RecordInvalid.new(self)
       end
+    end
+  end
+
+  def team_size_limit
+    return if team_type.blank?
+    
+    user_players = PickedPlayer.where(user_id: self.user.id)
+
+    if user_players.where(team_type: team_type).where.not(id: id).count >= 11
+      errors.add(:team_type, "can have only 11 players")
     end
   end
 

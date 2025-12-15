@@ -50,60 +50,124 @@
 		%h2.text-xl.font-bold.text-gray-300 My Players (#{@my_picked_players.count})
 		.text-sm.text-gray-500 You can release a player only after 4 hours of picking them.
 
-	.grid.grid-cols-2.sm:grid-cols-3.md:grid-cols-4.lg:grid-cols-6.gap-4
-		- @my_picked_players.each do |player|
-			- plr = @auction_players.find {|ap| ap["id"] == player.player_id}
-			.border.border-gray-200.bg-white.rounded-xl.shadow-sm.hover:shadow-md.transition.p-4.flex.flex-col
-				.font-semibold.text-gray-900.text-sm= plr["name"]
-				.text-xs.text-gray-600.font-medium.text-gray-800.mb-2= plr["playertype"]
-
-				.flex.w-full.justify-between.items-center.mt-1
-					.text-xs.text-gray-600
-						.text-xs.text-center.font-bold.text-black= plr["odi_point"]
-						.text-xs.text-center ODI
-
-					.text-xs.text-gray-600
-						.text-xs.text-center.font-bold.text-black= plr["t20_point"]
-						.text-xs.text-center T20
-
-					.text-xs.text-gray-600
-						.text-xs.text-center.font-bold.text-black= plr["country_code"]
-						.text-xs.text-center Country
-
-				%div 
-					.text-xs.text-center.font-medium.text-gray-700.mt-2 Picked at: #{player.updated_at.strftime("%A %I:%M %P")}
-					.text-xs.text-center.font-medium.text-gray-700.mt-2 Price: ₹#{plr["price"]}
+	%div{"data-controller" => "drag-drop"}
+		- [["Unassigned", nil, "bg-slate-300"], ["ODI", "odi", "bg-blue-300"], ["T20", "t20", "bg-blue-500"]].each do |label, team, bg_class|
+			.mt-6{data: { team_type: team, action: "dragover->drag-drop#allow drop->drag-drop#drop" }}
 				
-				- if @can_take_action && (player.updated_at + 4.hours) < Time.current
-					= form_with url: release_rooms_path, method: :post, class: "mt-4", data: { controller: "confirm-pick" } do |f|
-						= f.hidden_field :picked_player_id, value: player["id"]
+				- team_players = @my_picked_players.where(team_type: team)
+				- points = 0
+				- if team_players.present?
+					- team_players.each do |player|
+						- plr = @auction_players.find {|ap| ap["id"] == player.player_id}
+						- if plr
+							- points += plr["odi_point"].to_i if team == "odi"
+							- points += plr["t20_point"].to_i if team == "t20"
+				
+				%h3.font-semibold.text-sm.mb-2= "#{label} (#{team_players.count}) - Total Points: #{points}"
 
-						%button.w-full.text-xs.bg-red-500.hover:bg-red-600.text-white.font-medium.py-1.5.rounded-lg.transition{
-							type: "button",
-							data: { action: "click->confirm-pick#open" }
-						}
-							Release (₹#{plr["price"]})
 
-						/ 🔔 Confirmation Modal
-						.fixed.inset-0.bg-black.bg-opacity-40.flex.items-center.justify-center.hidden{
-							data: { confirm_pick_target: "modal" }
-						}
-							.bg-white.rounded-xl.shadow-xl.w-80.p-5
-								%h3.text-sm.font-semibold.text-gray-800 Confirm Release
-								%p.text-xs.text-gray-600.mt-2
-									Are you sure you want to release this player?
-									%br/
-									This action cannot be undone.
 
-								.flex.justify-end.gap-2.mt-4
-									%button.text-xs.px-3.py-1.5.rounded-md.bg-gray-200.hover:bg-gray-300.text-black{
-										type: "button",
-										data: { action: "click->confirm-pick#close" }
-									}
-										Cancel
+				.grid.grid-cols-2.sm:grid-cols-3.md:grid-cols-4.lg:grid-cols-6.gap-4
+					- if team_players.present?
+						- team_players.each do |player|
+							- plr = @auction_players.find {|ap| ap["id"] == player.player_id}
+							.rounded-xl.shadow-sm.hover:shadow-md.transition.p-4.flex.flex-col.cursor-move{ class: bg_class, draggable: true, data: { id: player.id, action: "dragstart->drag-drop#drag" }}
+								.font-semibold.text-gray-900.text-sm= plr["name"]
+								.text-xs.text-gray-600.font-medium.text-gray-800.mb-2= plr["playertype"]
 
-									= f.submit "Confirm Release",
-										class: "text-xs px-3 py-1.5 rounded-md bg-red-500 hover:bg-red-600 text-white font-medium"
+								.flex.w-full.justify-between.items-center.mt-1
+									.text-xs.text-gray-600
+										.text-xs.text-center.font-bold.text-black= plr["odi_point"]
+										.text-xs.text-center ODI
+
+									.text-xs.text-gray-600
+										.text-xs.text-center.font-bold.text-black= plr["t20_point"]
+										.text-xs.text-center T20
+
+									.text-xs.text-gray-600
+										.text-xs.text-center.font-bold.text-black= plr["country_code"]
+										.text-xs.text-center Country
+
+								%div 
+									.text-xs.font-medium.text-gray-700.mt-3 #{player.updated_at.strftime("%A %I:%M %P")}
+									.text-xs.font-medium.text-gray-700.mt-1 ₹#{plr["price"]}
+
+								- if @can_take_action && (player.updated_at + 4.hours) < Time.current
+									= form_with url: release_rooms_path, method: :post, class: "mt-4", data: { controller: "confirm-pick" } do |f|
+										= f.hidden_field :picked_player_id, value: player["id"]
+
+										%button.w-full.text-xs.bg-red-500.hover:bg-red-600.text-white.font-medium.py-1.5.rounded-lg.transition{ type: "button", data: { action: "click->confirm-pick#open" }}
+											Release (₹#{plr["price"]})
+
+										.fixed.inset-0.bg-black.bg-opacity-40.flex.items-center.justify-center.hidden{data: { confirm_pick_target: "modal" }}
+											.bg-white.rounded-xl.shadow-xl.w-80.p-5
+												%h3.text-sm.font-semibold.text-gray-800 Confirm Release
+												%p.text-xs.text-gray-600.mt-2
+													Are you sure you want to release this player?
+													%br/
+													This action cannot be undone.
+
+												.flex.justify-end.gap-2.mt-4
+													%button.text-xs.px-3.py-1.5.rounded-md.bg-gray-200.hover:bg-gray-300.text-black{ type: "button", data: { action: "click->confirm-pick#close" }}
+														Cancel
+
+													= f.submit "Confirm Release", class: "text-xs px-3 py-1.5 rounded-md bg-red-500 hover:bg-red-600 text-white font-medium"
+
+
+
+		-# - @my_picked_players.each do |player|
+		-# 	- plr = @auction_players.find {|ap| ap["id"] == player.player_id}
+		-# 	.border.border-gray-200.bg-white.rounded-xl.shadow-sm.hover:shadow-md.transition.p-4.flex.flex-col
+		-# 		.font-semibold.text-gray-900.text-sm= plr["name"]
+		-# 		.text-xs.text-gray-600.font-medium.text-gray-800.mb-2= plr["playertype"]
+
+		-# 		.flex.w-full.justify-between.items-center.mt-1
+		-# 			.text-xs.text-gray-600
+		-# 				.text-xs.text-center.font-bold.text-black= plr["odi_point"]
+		-# 				.text-xs.text-center ODI
+
+		-# 			.text-xs.text-gray-600
+		-# 				.text-xs.text-center.font-bold.text-black= plr["t20_point"]
+		-# 				.text-xs.text-center T20
+
+		-# 			.text-xs.text-gray-600
+		-# 				.text-xs.text-center.font-bold.text-black= plr["country_code"]
+		-# 				.text-xs.text-center Country
+
+		-# 		%div 
+		-# 			.text-xs.text-center.font-medium.text-gray-700.mt-2 Picked at: #{player.updated_at.strftime("%A %I:%M %P")}
+		-# 			.text-xs.text-center.font-medium.text-gray-700.mt-2 Price: ₹#{plr["price"]}
+				
+		-# 		- if @can_take_action && (player.updated_at + 4.hours) < Time.current
+		-# 			= form_with url: release_rooms_path, method: :post, class: "mt-4", data: { controller: "confirm-pick" } do |f|
+		-# 				= f.hidden_field :picked_player_id, value: player["id"]
+
+		-# 				%button.w-full.text-xs.bg-red-500.hover:bg-red-600.text-white.font-medium.py-1.5.rounded-lg.transition{
+		-# 					type: "button",
+		-# 					data: { action: "click->confirm-pick#open" }
+		-# 				}
+		-# 					Release (₹#{plr["price"]})
+
+		-# 				/ 🔔 Confirmation Modal
+		-# 				.fixed.inset-0.bg-black.bg-opacity-40.flex.items-center.justify-center.hidden{
+		-# 					data: { confirm_pick_target: "modal" }
+		-# 				}
+		-# 					.bg-white.rounded-xl.shadow-xl.w-80.p-5
+		-# 						%h3.text-sm.font-semibold.text-gray-800 Confirm Release
+		-# 						%p.text-xs.text-gray-600.mt-2
+		-# 							Are you sure you want to release this player?
+		-# 							%br/
+		-# 							This action cannot be undone.
+
+		-# 						.flex.justify-end.gap-2.mt-4
+		-# 							%button.text-xs.px-3.py-1.5.rounded-md.bg-gray-200.hover:bg-gray-300.text-black{
+		-# 								type: "button",
+		-# 								data: { action: "click->confirm-pick#close" }
+		-# 							}
+		-# 								Cancel
+
+		-# 							= f.submit "Confirm Release",
+		-# 								class: "text-xs px-3 py-1.5 rounded-md bg-red-500 hover:bg-red-600 text-white font-medium"
 
 
 / ================================
