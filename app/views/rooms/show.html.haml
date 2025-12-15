@@ -52,7 +52,7 @@
 
 	%div{"data-controller" => "drag-drop"}
 		- [["Unassigned", nil, "bg-slate-300"], ["ODI", "odi", "bg-blue-300"], ["T20", "t20", "bg-blue-500"]].each do |label, team, bg_class|
-			.mt-6{data: { team_type: team, action: "dragover->drag-drop#allow drop->drag-drop#drop" }}
+			.mt-6.bg-white.bg-opacity-10.backdrop-blur-md.border-opacity-30.rounded-xl.p-4.shadow-lg{data: { team_type: team, action: "dragover->drag-drop#allow drop->drag-drop#drop" }}
 				
 				- team_players = @my_picked_players.where(team_type: team)
 				- points = 0
@@ -113,7 +113,8 @@
 
 													= f.submit "Confirm Release", class: "text-xs px-3 py-1.5 rounded-md bg-red-500 hover:bg-red-600 text-white font-medium"
 
-
+					- else 
+						.p-10
 
 		-# - @my_picked_players.each do |player|
 		-# 	- plr = @auction_players.find {|ap| ap["id"] == player.player_id}
