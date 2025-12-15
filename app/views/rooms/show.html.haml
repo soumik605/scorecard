@@ -74,7 +74,7 @@
 					.text-xs.text-center.font-medium.text-gray-700.mt-2 Picked at: #{player.updated_at.strftime("%A %I:%M %P")}
 					.text-xs.text-center.font-medium.text-gray-700.mt-2 Price: ₹#{plr["price"]}
 				
-				- if @can_take_action && (player.updated_at - 4.hours) < Time.current
+				- if @can_take_action && (player.updated_at + 4.hours) < Time.current
 					= form_with url: release_rooms_path, method: :post, class: "mt-4", data: { controller: "confirm-pick" } do |f|
 						= f.hidden_field :picked_player_id, value: player["id"]
 
