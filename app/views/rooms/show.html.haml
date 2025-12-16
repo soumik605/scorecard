@@ -203,9 +203,9 @@
 
 					- if @can_take_action && (player.release_time < Time.current)
 						- if @my_picked_players.count >= 25
-							%button.mt-4.w-full.text-xs.bg-gray-400.text-white.font-medium.py-1.5.rounded-lg.cursor-not-allowed Max players picked
+							%button.mt-4.w-full.text-xs.bg-gray-400.text-white.font-medium.py-1.5.rounded-lg.cursor-not-allowed Max players picked (₹#{plr["price"]})
 						- elsif @total_available_price < plr["price"]
-							%button.mt-4.w-full.text-xs.bg-gray-400.text-white.font-medium.py-1.5.rounded-lg.cursor-not-allowed Not available fund
+							%button.mt-4.w-full.text-xs.bg-gray-400.text-white.font-medium.py-1.5.rounded-lg.cursor-not-allowed Not available fund (₹#{plr["price"]})
 						- else
 							= form_with url: pick_rooms_path, method: :post, class: "mt-4", data: { controller: "confirm-pick" } do |f|
 								= f.hidden_field :picked_player_id, value: player["id"]
