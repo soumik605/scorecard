@@ -46,7 +46,7 @@ class RoomsController < ApplicationController
 
   def release 
     if params[:picked_player_id].present?
-      picked_player = PickedPlayer.find_by(id: params[:picked_player_id], user_id: session[:user]["id"])
+      picked_player = PickedPlayer.find_by(id: params[:picked_player_id], user_id: session[:user]["id"], team_type: nil)
       if picked_player.present? && picked_player.update(user_id: nil, last_pick_datetime: nil)
         redirect_to request.referrer, notice: "Player released successfully!"
       else 

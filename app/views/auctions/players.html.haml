@@ -15,6 +15,8 @@
         %th.px-6.py-3.font-medium{scope: "col"}
           T20 Point
         %th.px-6.py-3.font-medium{scope: "col"}
+          Price
+        %th.px-6.py-3.font-medium{scope: "col"}
           Country
     %tbody
       - @auction_players.each do |player|
@@ -29,5 +31,7 @@
             = player["odi_point"]
           %td.px-6.py-4
             = player["t20_point"]
+          %td.px-6.py-4
+            = player["price"]
           %td.px-6.py-4
             = player["country_code"]
