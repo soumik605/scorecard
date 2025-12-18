@@ -50,8 +50,8 @@
 				- plr = @auction_players.find {|ap| ap["id"] == player.player_id}
 				- country_player_count = @country_wise_picked_players[country]&.count || 0
 				.border.border-gray-200.bg-white.rounded-xl.shadow-sm.hover:shadow-md.transition.p-4.flex.flex-col
-					.font-semibold.text-gray-900.text-sm= plr["name"]
-					.text-xs.text-gray-600.font-medium.text-gray-800.mb-2= plr["playertype"]
+					.font-semibold.text-gray-900.text-sm.mb-2= plr["name"]
+					-# .text-xs.text-gray-600.font-medium.text-gray-800.mb-2= plr["playertype"]
 
 					.flex.w-full.justify-between.items-center.mt-1
 						.text-xs.text-gray-600

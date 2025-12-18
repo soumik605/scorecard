@@ -86,6 +86,7 @@ class RoomsController < ApplicationController
 
     @available_to_pick_players = PickedPlayer
                                   .where(user_id: nil)
+                                  .where("release_time <= ?", Time.current)
                                   .order(:release_time) # base ordering
                                   .group_by do |picked_player|
                                     auction_player = @auction_players_by_id[picked_player.player_id]
