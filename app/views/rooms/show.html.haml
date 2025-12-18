@@ -1,10 +1,7 @@
 / ================================
 / HEADER SECTION
 / ================================
-.flex.items-center.justify-between.w-full
-	= link_to 'Back to Auctions', auctions_path, class: "text-sm text-blue-600 hover:underline mb-4 inline-block border p-4 rounded-xl"
-	= link_to "Check Others", players_room_path(@room.id), method: :delete, class: "text-sm bg-blue-600 hover:bg-red-700 text-white font-semibold p-4 rounded-lg shadow-md transition"
-
+= render 'links', page: "buy"
 
 .container.mx-auto.px-4.py-6
 	.bg-white.shadow-lg.rounded-xl.p-6.mb-8
@@ -42,147 +39,16 @@
 					.text-lg.font-semibold.text-gray-900= @my_picked_players.count
 
 
-/ ================================
-/ MY PLAYERS SECTION
-/ ================================
-.container.mx-auto.px-2.py-6
-	.mb-4
-		%h2.text-xl.font-bold.text-gray-300 My Players (#{@my_picked_players.count})
-		.text-sm.text-gray-500 You can release a player only after 4 hours of picking them.
-
-	%div{"data-controller" => "drag-drop"}
-		- [["Unassigned", nil, "bg-slate-300"], ["ODI", "odi", "bg-blue-300"], ["T20", "t20", "bg-blue-500"]].each do |label, team, bg_class|
-			.mt-6.bg-white.bg-opacity-10.backdrop-blur-md.border-opacity-30.rounded-xl.px-2.py-4.shadow-lg{data: { team_type: team, action: "dragover->drag-drop#allow drop->drag-drop#drop" }}
-				
-				- team_players = @my_picked_players.where(team_type: team)
-				- points = 0
-				- if team_players.present?
-					- team_players.each do |player|
-						- plr = @auction_players.find {|ap| ap["id"] == player.player_id}
-						- if plr
-							- points += plr["odi_point"].to_i if team == "odi"
-							- points += plr["t20_point"].to_i if team == "t20"
-				
-				%h3.font-semibold.text-sm.mb-2= "#{label} (#{team_players.count}) - Total Points: #{points}"
-
-
-
-				.flex.gap-4.overflow-x-auto
-					- if team_players.present?
-						- team_players.each do |player|
-							- plr = @auction_players.find {|ap| ap["id"] == player.player_id}
-							.rounded-xl.shadow-sm.hover:shadow-md.transition.p-4.cursor-move{ class: bg_class, draggable: true, data: { player_id: player.id, action: "dragstart->drag-drop#drag touchstart->drag-drop#touchStart" }}
-								.font-semibold.text-gray-900.text-sm= plr["name"]
-								.text-xs.text-gray-600.font-medium.text-gray-800.mb-2= plr["playertype"]
-
-								.flex.w-full.justify-between.items-center.mt-1.gap-6
-									.text-xs.text-gray-600
-										.text-xs.text-center.font-bold.text-black= plr["odi_point"]
-										.text-xs.text-center ODI
-
-									.text-xs.text-gray-600
-										.text-xs.text-center.font-bold.text-black= plr["t20_point"]
-										.text-xs.text-center T20
-
-									.text-xs.text-gray-600
-										.text-xs.text-center.font-bold.text-black= plr["country_code"]
-										.text-xs.text-center Country
-
-								%div 
-									.text-xs.font-medium.text-gray-700.mt-3 #{player.last_pick_datetime.strftime("%A %I:%M %P")}
-									.text-xs.font-medium.text-gray-700.mt-1 ₹#{plr["price"]}
-
-								- if @can_take_action && (player.last_pick_datetime + 4.hours) < Time.current
-									= form_with url: release_rooms_path, method: :post, class: "mt-4", data: { controller: "confirm-pick" } do |f|
-										= f.hidden_field :picked_player_id, value: player["id"]
-
-										%button.w-full.text-xs.bg-red-500.hover:bg-red-600.text-white.font-medium.py-1.5.rounded-lg.transition{ type: "button", data: { action: "click->confirm-pick#open" }}
-											Release (₹#{plr["price"]})
-
-										.fixed.inset-0.bg-black.bg-opacity-40.flex.items-center.justify-center.hidden{data: { confirm_pick_target: "modal" }}
-											.bg-white.rounded-xl.shadow-xl.w-80.p-5
-												%h3.text-sm.font-semibold.text-gray-800 Confirm Release
-												%p.text-xs.text-gray-600.mt-2
-													Are you sure you want to release this player?
-													%br/
-													This action cannot be undone.
-
-												.flex.justify-end.gap-2.mt-4
-													%button.text-xs.px-3.py-1.5.rounded-md.bg-gray-200.hover:bg-gray-300.text-black{ type: "button", data: { action: "click->confirm-pick#close" }}
-														Cancel
-
-													= f.submit "Confirm Release", class: "text-xs px-3 py-1.5 rounded-md bg-red-500 hover:bg-red-600 text-white font-medium"
-
-					- else 
-						.p-10
-
-		-# - @my_picked_players.each do |player|
-		-# 	- plr = @auction_players.find {|ap| ap["id"] == player.player_id}
-		-# 	.border.border-gray-200.bg-white.rounded-xl.shadow-sm.hover:shadow-md.transition.p-4.flex.flex-col
-		-# 		.font-semibold.text-gray-900.text-sm= plr["name"]
-		-# 		.text-xs.text-gray-600.font-medium.text-gray-800.mb-2= plr["playertype"]
-
-		-# 		.flex.w-full.justify-between.items-center.mt-1
-		-# 			.text-xs.text-gray-600
-		-# 				.text-xs.text-center.font-bold.text-black= plr["odi_point"]
-		-# 				.text-xs.text-center ODI
-
-		-# 			.text-xs.text-gray-600
-		-# 				.text-xs.text-center.font-bold.text-black= plr["t20_point"]
-		-# 				.text-xs.text-center T20
-
-		-# 			.text-xs.text-gray-600
-		-# 				.text-xs.text-center.font-bold.text-black= plr["country_code"]
-		-# 				.text-xs.text-center Country
-
-		-# 		%div 
-		-# 			.text-xs.text-center.font-medium.text-gray-700.mt-2 Picked at: #{player.updated_at.strftime("%A %I:%M %P")}
-		-# 			.text-xs.text-center.font-medium.text-gray-700.mt-2 Price: ₹#{plr["price"]}
-				
-		-# 		- if @can_take_action && (player.updated_at + 4.hours) < Time.current
-		-# 			= form_with url: release_rooms_path, method: :post, class: "mt-4", data: { controller: "confirm-pick" } do |f|
-		-# 				= f.hidden_field :picked_player_id, value: player["id"]
-
-		-# 				%button.w-full.text-xs.bg-red-500.hover:bg-red-600.text-white.font-medium.py-1.5.rounded-lg.transition{
-		-# 					type: "button",
-		-# 					data: { action: "click->confirm-pick#open" }
-		-# 				}
-		-# 					Release (₹#{plr["price"]})
-
-		-# 				/ 🔔 Confirmation Modal
-		-# 				.fixed.inset-0.bg-black.bg-opacity-40.flex.items-center.justify-center.hidden{
-		-# 					data: { confirm_pick_target: "modal" }
-		-# 				}
-		-# 					.bg-white.rounded-xl.shadow-xl.w-80.p-5
-		-# 						%h3.text-sm.font-semibold.text-gray-800 Confirm Release
-		-# 						%p.text-xs.text-gray-600.mt-2
-		-# 							Are you sure you want to release this player?
-		-# 							%br/
-		-# 							This action cannot be undone.
-
-		-# 						.flex.justify-end.gap-2.mt-4
-		-# 							%button.text-xs.px-3.py-1.5.rounded-md.bg-gray-200.hover:bg-gray-300.text-black{
-		-# 								type: "button",
-		-# 								data: { action: "click->confirm-pick#close" }
-		-# 							}
-		-# 								Cancel
-
-		-# 							= f.submit "Confirm Release",
-		-# 								class: "text-xs px-3 py-1.5 rounded-md bg-red-500 hover:bg-red-600 text-white font-medium"
-
-
-/ ================================
-/ AVAILABLE PLAYERS SECTION
-/ ================================
-.container.mx-auto.px-4.py-6.mt-8
+.container.mx-auto.px-4.py-6.mt-2
 	.flex.items-center.justify-between.mb-4
-		%h2.text-xl.font-bold.text-gray-300 Available Players (#{@available_to_pick_players.count})
+		%h2.text-xl.font-bold.text-gray-300 Available Players (#{@available_to_pick_players.values.sum(&:count)})
 
 	.grid.grid-cols-2.sm:grid-cols-3.md:grid-cols-4.lg:grid-cols-6.gap-4
-		- @available_to_pick_players.each do |time, players|
-			-# %h3.text-md.font-semibold.text-gray-400.col-span-full.mt-4.mb-2 Released at: #{time.strftime("%A %I:%M %P")}
+		- @available_to_pick_players.each do |country, players|
+			%h3.text-md.font-semibold.text-gray-400.col-span-full.mt-4.mb-2 Country: #{country} (#{players.count})
 			- players.each do |player|
 				- plr = @auction_players.find {|ap| ap["id"] == player.player_id}
+				- country_player_count = @country_wise_picked_players[country]&.count || 0
 				.border.border-gray-200.bg-white.rounded-xl.shadow-sm.hover:shadow-md.transition.p-4.flex.flex-col
 					.font-semibold.text-gray-900.text-sm= plr["name"]
 					.text-xs.text-gray-600.font-medium.text-gray-800.mb-2= plr["playertype"]
@@ -206,6 +72,8 @@
 							%button.mt-4.w-full.text-xs.bg-gray-400.text-white.font-medium.py-1.5.rounded-lg.cursor-not-allowed Max players picked (₹#{plr["price"]})
 						- elsif @total_available_price < plr["price"]
 							%button.mt-4.w-full.text-xs.bg-gray-400.text-white.font-medium.py-1.5.rounded-lg.cursor-not-allowed Not available fund (₹#{plr["price"]})
+						- elsif country_player_count >= 6
+							%button.mt-4.w-full.text-xs.bg-gray-400.text-white.font-medium.py-1.5.rounded-lg.cursor-not-allowed Country limit reached
 						- else
 							= form_with url: pick_rooms_path, method: :post, class: "mt-4", data: { controller: "confirm-pick" } do |f|
 								= f.hidden_field :picked_player_id, value: player["id"]

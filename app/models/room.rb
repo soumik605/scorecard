@@ -10,8 +10,8 @@ class Room < ApplicationRecord
   private 
 
   def create_unique_code
-    self.start_date = Time.current
-    self.end_date = Time.current + 3.days
+    self.start_date = Time.current.beginning_of_day
+    self.end_date = Time.current.beginning_of_day + 7.days - 1.seconds
     self.code = loop do
       random_code = SecureRandom.random_number(900_000) + 100_000
       break random_code unless Room.exists?(code: random_code)
@@ -45,53 +45,45 @@ class Room < ApplicationRecord
   def add_players_to_room
     file_path = Rails.root.join("public/auction/players.json")
     players = JSON.parse(File.read(file_path))
-    selected_players = players.sample(200)
+    selected_players = players.sample(220)
 
     release_slots = generate_release_slots
 
-    player_index = 0
+    max_assignable = [selected_players.size, release_slots.size].min
 
-    release_slots.each do |slot_time|
-      break if player_index >= selected_players.size
-
-      # Random number of players per slot (1 to 4)
-      players_count = rand(3..5)
-
-      players_count.times do
-        break if player_index >= selected_players.size
-
-        player = selected_players[player_index]
-
-        PickedPlayer.create!(
-          room_id: self.id,
-          player_id: player["id"],
-          buy_price: player["price"],
-          release_time: slot_time
-        )
-
-        player_index += 1
-      end
+    selected_players.first(max_assignable).each_with_index do |player, index|
+      PickedPlayer.create!(
+        room_id: self.id,
+        player_id: player["id"],
+        buy_price: player["price"],
+        release_time: release_slots[index]
+      )
     end
   end
 
 
   def generate_release_slots
     slots = []
+
     current_date = start_date.to_date
+    last_date    = (end_date - 2.day).to_date
 
-    while current_date <= (end_date-1.day).to_date
-      start_time = current_date.to_time.change(hour: 10, min: 0)
-      end_time   = current_date.to_time.change(hour: 22, min: 0)
+    while current_date <= last_date
+      day_start = current_date.to_time.change(hour: 10, min: 0)
+      day_end = current_date.to_time.change(hour: 22, min: 0)
 
-      while start_time <= end_time
-        slots << start_time if start_time.between?(start_date, end_date)
-        start_time += 30.minutes
+      current_time = day_start
+
+      while current_time <= day_end
+        if current_time >= start_date && current_time <= end_date
+          slots << current_time
+        end
+        current_time += 5.minutes
       end
-
       current_date += 1.day
     end
 
-    slots.shuffle # shuffle to distribute players randomly
+    slots.shuffle
   end
 
 

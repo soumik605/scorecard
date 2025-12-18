@@ -6,9 +6,11 @@
 			= link_to "Logout", logout_path, method: :delete, class: "absolute top-4 right-4 text-sm bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-lg shadow-md transition"
 
 	.mt-20
-	.text-sm.text-gray-300.mb-3 Note: Max 25, Min 22 players can be selected. Total purse is 1550. 
-	.text-sm.text-gray-300.mb-3 0/3/4/5 random players will come after every 30 minute from 10 AM to 10 PM. 
-	.text-sm.text-gray-300.mb-6 Can't release a player within 4 hour of selection.
+	.text-sm.text-gray-300.mb-3 Total purse is 1550. 
+	.text-sm.text-gray-300.mb-3 Note: Max 25, Min 22 players can be selected.
+	.text-sm.text-gray-300.mb-3 0 or 1 random player will come after every 5 minute from 10 AM to 10 PM. 
+	.text-sm.text-gray-300.mb-3 Can't release a player within 12 hour of selection.
+	.text-sm.text-gray-300.mb-6 You can take max 6 players from a country.
 
 	- if session[:user].present?
 		- if @room.present?
@@ -17,14 +19,15 @@
 				%h2.text-2xl.font-bold.text-gray-800.mb-2 Auction Room: #{@room.code}
 				%p.text-gray-600.text-sm.mb-6 Welcome, #{@room.user.name}!
 
-				= link_to 'Enter Auction Room', room_path(@room.id), class: "inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2.5 rounded-lg shadow-md transition"
-				= link_to "Check Players", auctions_players_path, class: "inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2.5 rounded-lg shadow-md transition"
+				.flex.flex-col
+					= link_to 'Enter Auction Room', room_path(@room.id), class: "w-full max-w-80 text-center inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2.5 rounded-lg shadow-md transition"
+					= link_to "Check Players", auctions_players_path, class: "w-full max-w-80 text-center inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2.5 rounded-lg shadow-md transition mt-2"
 
 		- elsif session[:user]["name"] == "soumikadmin"
 
 			.bg-white.shadow-md.rounded-xl.p-8.mb-6.text-center
 				%h2.text-xl.font-semibold.text-gray-800.mb-4 Admin Panel
-				= link_to 'Create Auction Room', auctions_create_room_path, class: "inline-block bg-purple-600 hover:bg-purple-700 text-white font-semibold px-5 py-2.5 rounded-lg shadow-md transition"
+				= button_to 'Create Auction Room', auctions_create_room_path, method: :post, class: "inline-block bg-purple-600 hover:bg-purple-700 text-white font-semibold px-5 py-2.5 rounded-lg shadow-md"
 
 		- else
 

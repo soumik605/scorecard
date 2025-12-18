@@ -52,7 +52,7 @@ Rails.application.routes.draw do
 
   namespace :auctions do
     get :players
-    get :create_room
+    post :create_room
   end
 
   resources :rooms do
@@ -64,6 +64,7 @@ Rails.application.routes.draw do
 
     member do
       get :players
+      get :my
       patch :update_team_type
     end
   end

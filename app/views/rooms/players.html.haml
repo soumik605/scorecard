@@ -1,5 +1,4 @@
-.flex.items-center.justify-between.w-full
-	= link_to '<- Back', room_path(@room.id), class: "text-sm text-blue-600 hover:underline mb-4 inline-block border p-4 rounded-xl"
+= render 'links', page: "other"
 
 - if @users.present?
 	- @users.each do |user|
@@ -27,7 +26,10 @@
 
 
 					- if team_players.any?
-						%h4.text-md.font-medium.text-gray-700.mt-4.mb-2= "#{label}: #{points}"
+						- if points == 0
+							%h4.text-md.font-medium.text-gray-700.mt-4.mb-2= "#{label}: #{points}"
+						- else
+							%h4.text-md.font-medium.text-gray-700.mt-4.mb-2= "#{label}: #{(points / 50) * 50}+"
 						%ol.list-decimal.list-inside
 							- team_players.each_with_index do |player, index|
 								- plr = @auction_players.find {|ap| ap["id"] == player.player_id}

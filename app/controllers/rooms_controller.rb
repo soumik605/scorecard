@@ -2,15 +2,11 @@ class RoomsController < ApplicationController
   before_action :get_data
 
   def show
-    @room = Room.find(params[:id])
-    @available_to_pick_players = PickedPlayer.where(user_id: nil).where("release_time <= ?", Time.current).order("release_time DESC").group_by(&:release_time)
-    @my_picked_players = PickedPlayer.where(user_id: session[:user]["id"])
+    set_page_data
+  end
 
-    my_picked_player_ids = @my_picked_players.pluck(:player_id)
-
-    @total_spent_price = @auction_players.map{|pp| my_picked_player_ids.include?(pp["id"]) ? pp["price"] : 0 }.sum
-    @total_available_price = 1550 - @total_spent_price
-    @can_take_action = Time.current.between?(@room.start_date, @room.end_date)
+  def my
+    set_page_data
   end
 
   def join
@@ -78,6 +74,43 @@ class RoomsController < ApplicationController
 
     player.update!(team_type: team_type.presence)
     redirect_to request.referrer, notice: "Player moved to #{team_type} team"
+  end
+
+
+
+  private 
+
+  def set_page_data
+    @room = Room.find(params[:id])
+    @auction_players_by_id = @auction_players.index_by { |p| p["id"] }
+
+    @available_to_pick_players = PickedPlayer
+                                  .where(user_id: nil)
+                                  .order(:release_time) # base ordering
+                                  .group_by do |picked_player|
+                                    auction_player = @auction_players_by_id[picked_player.player_id]
+                                    auction_player&.dig("country_code")
+                                  end
+                                  .transform_values do |players|
+                                    players.sort_by do |p|
+                                      p.release_time.in_time_zone("Asia/Kolkata")
+                                    end
+                                  end
+
+    @my_picked_players = PickedPlayer.where(user_id: session[:user]["id"])
+
+    @country_wise_picked_players = @my_picked_players
+                            .order(:last_pick_datetime)
+                            .group_by do |picked_player|
+                              auction_player = @auction_players_by_id[picked_player.player_id]
+                              auction_player&.dig("country_code") || "UNKNOWN"
+                            end
+
+    my_picked_player_ids = @my_picked_players.pluck(:player_id)
+
+    @total_spent_price = @auction_players.map{|pp| my_picked_player_ids.include?(pp["id"]) ? pp["price"] : 0 }.sum
+    @total_available_price = 1550 - @total_spent_price
+    @can_take_action = Time.current.between?(@room.start_date, @room.end_date)
   end
 
 end

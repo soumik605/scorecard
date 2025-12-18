@@ -1,15 +1,13 @@
 = link_to 'Back to Auctions', auctions_path, class: "text-sm text-blue-600 hover:underline mb-4 inline-block border p-4 rounded-xl"
 
-.relative.overflow-x-auto.bg-neutral-primary-soft.shadow-xs.rounded-base.border.border-default
+.relative.overflow-x-auto.bg-neutral-primary-soft.shadow-xs.rounded-base
   %table.w-full.max-w-xl.text-sm.text-left.rtl:text-right.text-body
-    %thead.bg-neutral-secondary-soft.border-b.border-default
+    %thead.bg-neutral-secondary-soft
       %tr
         -# %th.px-6.py-3.font-medium{scope: "col"}
         -#   ID
         %th.px-6.py-3.font-medium{scope: "col"}
           Player name
-        %th.px-6.py-3.font-medium{scope: "col"}
-          Category
         %th.px-6.py-3.font-medium{scope: "col"}
           ODI Point
         %th.px-6.py-3.font-medium{scope: "col"}
@@ -20,13 +18,12 @@
           Country
     %tbody
       - @auction_players.each do |player|
-        %tr.odd:bg-neutral-primary.even:bg-neutral-secondary-soft.border-b.border-default
-          -# %th.px-6.py-4.font-medium.text-heading.whitespace-nowrap{scope: "row"}
-          -#   = player["id"]
+        - picked_player = PickedPlayer.find { |p| p.player_id == player["id"] }
+        - picked = picked_player.present? && picked_player.last_pick_datetime.present?
+        - extraclass = picked ? "bg-red-700" : "bg-neutral-secondary-soft"
+        %tr{class: extraclass}
           %td.px-6.py-4
             = player["name"]
-          %td.px-6.py-4
-            = player["playertype"]
           %td.px-6.py-4
             = player["odi_point"]
           %td.px-6.py-4

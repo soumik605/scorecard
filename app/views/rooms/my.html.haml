@@ -1,0 +1,75 @@
+/ ================================
+/ HEADER SECTION
+/ ================================
+= render 'links', page: "my"
+
+.container.mx-auto.px-2.py-6
+	.mb-4
+		%h2.text-xl.font-bold.text-gray-300 My Players (#{@my_picked_players.count})
+		.text-sm.text-gray-500 You can release a player only after 4 hours of picking them.
+
+	%div{"data-controller" => @can_take_action ? "drag-drop" : ""}
+		- [["Unassigned", nil, "bg-slate-300"], ["ODI", "odi", "bg-blue-300"], ["T20", "t20", "bg-blue-500"]].each do |label, team, bg_class|
+			.mt-6.bg-white.bg-opacity-10.backdrop-blur-md.border-opacity-30.rounded-xl.px-2.py-4.shadow-lg{data: { team_type: team, action: @can_take_action ? "dragover->drag-drop#allow drop->drag-drop#drop" : "" }}
+				
+				- team_players = @my_picked_players.where(team_type: team)
+				- points = 0
+				- if team_players.present?
+					- team_players.each do |player|
+						- plr = @auction_players.find {|ap| ap["id"] == player.player_id}
+						- if plr
+							- points += plr["odi_point"].to_i if team == "odi"
+							- points += plr["t20_point"].to_i if team == "t20"
+				
+				%h3.font-semibold.text-sm.mb-2= "#{label} (#{team_players.count}) - Total Points: #{points}"
+
+
+
+				.flex.gap-4.overflow-x-auto
+					- if team_players.present?
+						- team_players.each do |player|
+							- plr = @auction_players.find {|ap| ap["id"] == player.player_id}
+							.rounded-xl.shadow-sm.hover:shadow-md.transition.p-4.cursor-move{ class: bg_class, draggable: true, data: { player_id: player.id, action: @can_take_action ? "dragstart->drag-drop#drag touchstart->drag-drop#touchStart" : "" }}
+								.font-semibold.text-gray-900.text-sm= plr["name"]
+								.text-xs.text-gray-600.font-medium.text-gray-800.mb-2= plr["playertype"]
+
+								.flex.w-full.justify-between.items-center.mt-1.gap-6
+									.text-xs.text-gray-600
+										.text-xs.text-center.font-bold.text-black= plr["odi_point"]
+										.text-xs.text-center ODI
+
+									.text-xs.text-gray-600
+										.text-xs.text-center.font-bold.text-black= plr["t20_point"]
+										.text-xs.text-center T20
+
+									.text-xs.text-gray-600
+										.text-xs.text-center.font-bold.text-black= plr["country_code"]
+										.text-xs.text-center Country
+
+								%div 
+									.text-xs.font-medium.text-gray-700.mt-3 #{player.last_pick_datetime.strftime("%A %I:%M %P")}
+									.text-xs.font-medium.text-gray-700.mt-1 ₹#{plr["price"]}
+
+								- if @can_take_action && (player.last_pick_datetime + 12.hours) < Time.current
+									= form_with url: release_rooms_path, method: :post, class: "mt-4", data: { controller: "confirm-pick" } do |f|
+										= f.hidden_field :picked_player_id, value: player["id"]
+
+										%button.w-full.text-xs.bg-red-500.hover:bg-red-600.text-white.font-medium.py-1.5.rounded-lg.transition{ type: "button", data: { action: "click->confirm-pick#open" }}
+											Release (₹#{plr["price"]})
+
+										.fixed.inset-0.bg-black.bg-opacity-40.flex.items-center.justify-center.hidden{data: { confirm_pick_target: "modal" }}
+											.bg-white.rounded-xl.shadow-xl.w-80.p-5
+												%h3.text-sm.font-semibold.text-gray-800 Confirm Release
+												%p.text-xs.text-gray-600.mt-2
+													Are you sure you want to release this player?
+													%br/
+													This action cannot be undone.
+
+												.flex.justify-end.gap-2.mt-4
+													%button.text-xs.px-3.py-1.5.rounded-md.bg-gray-200.hover:bg-gray-300.text-black{ type: "button", data: { action: "click->confirm-pick#close" }}
+														Cancel
+
+													= f.submit "Confirm Release", class: "text-xs px-3 py-1.5 rounded-md bg-red-500 hover:bg-red-600 text-white font-medium"
+
+					- else 
+						.p-10
