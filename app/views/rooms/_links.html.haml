@@ -3,10 +3,10 @@
 		= link_to '<- Back to Auctions', auctions_path, class: "text-sm text-blue-600 hover:underline inline-block p-2 rounded-xl"
 
 	.text-sm.font-medium.text-center.text-body.border-default.flex.justify-center
-		%ul.flex.flex-wrap.-mb-px
-			%li.me-2
-				= link_to "Buy Players", room_path(@room.id), method: :delete, class: "text-sm #{page == 'buy' && 'bg-blue-600'} hover:bg-blue-700 text-white font-semibold p-4 rounded-lg shadow-md transition"
-			%li.me-2
-				= link_to "My Teams", my_room_path(@room.id), method: :delete, class: "text-sm #{page == 'my' && 'bg-blue-600'} hover:bg-blue-700 text-white font-semibold p-4 rounded-lg shadow-md transition"
-			%li.me-2
-				= link_to "Others Teams", players_room_path(@room.id), method: :delete, class: "text-sm #{page == 'other' && 'bg-blue-600'} hover:bg-blue-700 text-white font-semibold p-4 rounded-lg shadow-md transition"
+		%ul.flex.flex-wrap.-mb-px.gap-2.justify-center
+			%li.me-2.py-2
+				= link_to "Buy", room_path(@room.id), method: :delete, class: "text-sm #{page == 'buy' && 'bg-blue-600'} hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-lg shadow-md transition"
+			%li.me-2.py-2
+				= link_to "My Teams", my_room_path(@room.id), method: :delete, class: "text-sm #{page == 'my' && 'bg-blue-600'} hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-lg shadow-md transition"
+			%li.me-2.py-2
+				= link_to "Others", players_room_path(@room.id), method: :delete, class: "text-sm #{page == 'other' && 'bg-blue-600'} hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-lg shadow-md transition"
