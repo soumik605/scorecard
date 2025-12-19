@@ -1,5 +1,6 @@
 class RoomsController < ApplicationController
   before_action :get_data
+  before_action :auth_user
 
   def show
     set_page_data
@@ -112,6 +113,15 @@ class RoomsController < ApplicationController
     @total_spent_price = @auction_players.map{|pp| my_picked_player_ids.include?(pp["id"]) ? pp["price"] : 0 }.sum
     @total_available_price = 1550 - @total_spent_price
     @can_take_action = Time.current.between?(@room.start_date, @room.end_date)
+  end
+
+  def auth_user
+    @user = nil
+    @user = User.find_by(id: session[:user]["id"]) if session[:user].present?
+
+    unless @user.present?
+      redirect_to login_path
+    end
   end
 
 end
