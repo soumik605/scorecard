@@ -10,8 +10,8 @@ class Room < ApplicationRecord
   private 
 
   def create_unique_code
-    self.start_date = Time.current.beginning_of_day
-    self.end_date = Time.current.beginning_of_day + 7.days - 1.seconds
+    self.start_date = Time.zone.now.beginning_of_day
+    self.end_date   = Time.zone.now.beginning_of_day + 7.days - 1.second
     self.code = loop do
       random_code = SecureRandom.random_number(900_000) + 100_000
       break random_code unless Room.exists?(code: random_code)
@@ -65,12 +65,12 @@ class Room < ApplicationRecord
   def generate_release_slots
     slots = []
 
-    current_date = start_date.to_date
-    last_date    = (end_date - 2.day).to_date
+    current_date = start_date.in_time_zone.to_date
+    last_date    = (end_date - 2.days).in_time_zone.to_date
 
     while current_date <= last_date
-      day_start = current_date.to_time.change(hour: 10, min: 0)
-      day_end = current_date.to_time.change(hour: 22, min: 0)
+      day_start = Time.zone.local( current_date.year, current_date.month, current_date.day, 10, 0, 0)
+      day_end = Time.zone.local( current_date.year, current_date.month, current_date.day, 22, 0, 0)
 
       current_time = day_start
 
@@ -78,7 +78,7 @@ class Room < ApplicationRecord
         if current_time >= start_date && current_time <= end_date
           slots << current_time
         end
-        current_time += 5.minutes
+        current_time += 30.minutes
       end
       current_date += 1.day
     end
