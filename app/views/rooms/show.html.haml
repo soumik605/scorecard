@@ -49,8 +49,15 @@
 			- players.each do |player|
 				- plr = @auction_players.find {|ap| ap["id"] == player.player_id}
 				- country_player_count = @country_wise_picked_players[country]&.count || 0
-				.border.border-gray-200.bg-white.rounded-xl.shadow-sm.hover:shadow-md.transition.p-4.flex.flex-col
-					.font-semibold.text-gray-900.text-sm.mb-2= plr["name"]
+				-# .border.border-gray-200.bg-white.rounded-xl.shadow-sm.hover:shadow-md.transition.p-4.flex.flex-col
+				.rounded-xl.shadow-sm.hover:shadow-md.transition.p-4.flex.flex-col.bg-gradient-to-br{ class: country_gradient(plr["country_code"]) }
+					.flex.items-center.gap-3.mb-2
+						.font-semibold.text-gray-900.text-sm= plr["name"]
+						- if player.release_time > 1.hour.ago
+							%span.relative.inline-flex.items-center.text-xs.font-semibold.text-white.rounded-full.px-2.py-0.5.bg-gradient-to-r.from-blue-500.via-blue-600.to-blue-700.shadow-md.overflow-hidden.w-fit
+								%span.absolute{ style: "top:-20%; left:-40%; width:140%; height:60%; background: linear-gradient(90deg, rgba(255,255,255,0.65), rgba(255,255,255,0.12)); transform: rotate(-25deg); pointer-events: none;" }
+								New
+
 					-# .text-xs.text-gray-600.font-medium.text-gray-800.mb-2= plr["playertype"]
 
 					.flex.w-full.justify-between.items-center.mt-1
@@ -62,9 +69,10 @@
 							.text-xs.text-center.font-bold.text-black= plr["t20_point"]
 							.text-xs.text-center T20
 
-						.text-xs.text-gray-600
+						.text-xs.text-gray-600.flex.items-center.gap-1
+							.text-2xl.text-center= country_flag(plr["country_code"])
 							.text-xs.text-center.font-bold.text-black= plr["country_code"]
-							.text-xs.text-center Country
+							-# .text-xs.text-center Country
 					
 
 					- if @can_take_action && (player.release_time < Time.current)
@@ -78,11 +86,18 @@
 							= form_with url: pick_rooms_path, method: :post, class: "mt-4", data: { controller: "confirm-pick" } do |f|
 								= f.hidden_field :picked_player_id, value: player["id"]
 
-								%button.w-full.text-xs.bg-green-500.hover:bg-green-600.text-white.font-medium.py-1.5.rounded-lg.transition{
+								%button.w-full.text-xs.font-medium.py-1.5.rounded-lg.transition{
 									type: "button",
+									class: country_button_style(plr["country_code"]),
 									data: { action: "click->confirm-pick#open" }
 								}
 									Pick (₹#{plr["price"]})
+
+								-# %button.w-full.text-xs.bg-green-500.hover:bg-green-600.text-white.font-medium.py-1.5.rounded-lg.transition{
+								-# 	type: "button",
+								-# 	data: { action: "click->confirm-pick#open" }
+								-# }
+								-# 	Pick (₹#{plr["price"]})
 
 								/ 🔔 Confirmation Modal
 								.fixed.inset-0.bg-black.bg-opacity-40.flex.items-center.justify-center.hidden{
