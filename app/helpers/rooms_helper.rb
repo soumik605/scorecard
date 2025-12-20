@@ -31,17 +31,17 @@ module RoomsHelper
 
   def country_flag(country_code)
     {
-      "IN"  => "🇮🇳",
-      "AU"  => "🇦🇺",
-      "ENG" => "🇫🇴",
-      "SA"  => "🇿🇦",
-      "PAK" => "🇵🇰",
-      "SL"  => "🇱🇰",
-      "BAN" => "🇧🇩",
-      "WI"  => "🌴",
-      "AFG" => "🇦🇫",
-      "NZ"  => "🇳🇿"
-    }[country_code] || ""
+      "IN"  => "https://flagcdn.com/w20/in.png",
+      "AU"  => "https://flagcdn.com/w20/au.png",
+      "ENG" => "https://flagcdn.com/w20/gb-eng.png",
+      "SA"  => "https://flagcdn.com/w20/za.png",
+      "PAK" => "https://flagcdn.com/w20/pk.png",
+      "SL"  => "https://flagcdn.com/w20/lk.png",
+      "BAN" => "https://flagcdn.com/w20/bd.png",
+      "WI"  => "https://flagcdn.com/w20/jm.png",
+      "AFG" => "https://flagcdn.com/w20/af.png",
+      "NZ"  => "https://flagcdn.com/w20/nz.png"
+    }[country_code]
   end
 
 end

@@ -34,16 +34,17 @@
 								-# .text-xs.text-gray-600.font-medium.text-gray-800.mb-2= plr["playertype"]
 
 								.flex.w-full.justify-between.items-center.mt-1.gap-6
-									.text-xs.text-gray-600
+									.text-xs.text-black
 										.text-xs.text-center.font-bold.text-black= plr["odi_point"]
 										.text-xs.text-center ODI
 
-									.text-xs.text-gray-600
+									.text-xs.text-black
 										.text-xs.text-center.font-bold.text-black= plr["t20_point"]
 										.text-xs.text-center T20
 
-									.text-xs.text-gray-600.flex.items-center.gap-1
-										.text-2xl.text-center= country_flag(plr["country_code"])
+									.text-xs.text-black.flex.items-center.gap-1
+										- if flag_url = country_flag(plr["country_code"])
+											%img.inline-block.w-5.h-4.mr-1{ src: flag_url, alt: plr["country_code"] }
 										.text-xs.text-center.font-bold.text-black= plr["country_code"]
 
 								%div 

@@ -37,7 +37,8 @@
 									.flex.items-center.gap-2
 										.text-sm.text-black= "#{index + 1}."
 										.text-gray-700= "#{plr["name"]}"
-										.text-xl= country_flag(plr["country_code"])
+										- if flag_url = country_flag(plr["country_code"])
+											%img.inline-block.w-5.h-4.mr-1{ src: flag_url, alt: plr["country_code"] }
 
 									.flex.items-center.gap-2
 										.text-xs.text-blue-700.rounded-md.px-2.italic.border.border-gray-500= "₹#{plr["price"]}"
