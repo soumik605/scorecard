@@ -1,10 +1,48 @@
 class Room < ApplicationRecord
+
+  MAX_PLAYERS_COUNT = 220
+
   belongs_to :user
   has_many :picked_players, dependent: :destroy
 
   before_create :create_unique_code
   after_create :self_join_room
   after_create :add_players_to_room
+
+  def add_players_if_missing
+    room_players = picked_players
+
+    p MAX_PLAYERS_COUNT
+    p room_players.count
+
+    if (MAX_PLAYERS_COUNT > room_players.count)
+      file_path = Rails.root.join("public/auction/players.json")
+      players = JSON.parse(File.read(file_path))
+      available_players_count = MAX_PLAYERS_COUNT - room_players.count
+
+      p available_players_count
+
+      existing_ids = room_players.pluck(:player_id)
+      available_players = players.reject { |p| existing_ids.include?(p["id"]) }
+      selected_players = available_players.sample(available_players_count)
+
+      current_date = Time.zone.now.to_date
+      release_slots = generate_release_slots current_date
+
+      max_assignable = [selected_players.size, release_slots.size].min
+
+      selected_players.first(max_assignable).each_with_index do |player, index|
+        PickedPlayer.create!(
+          room_id: self.id,
+          player_id: player["id"],
+          buy_price: player["price"],
+          release_time: release_slots[index]
+        )
+      end
+
+    end
+
+  end
 
 
   private 
@@ -45,9 +83,10 @@ class Room < ApplicationRecord
   def add_players_to_room
     file_path = Rails.root.join("public/auction/players.json")
     players = JSON.parse(File.read(file_path))
-    selected_players = players.sample(220)
+    selected_players = players.sample(MAX_PLAYERS_COUNT)
+    current_date = start_date.in_time_zone.to_date
 
-    release_slots = generate_release_slots
+    release_slots = generate_release_slots(current_date)
 
     max_assignable = [selected_players.size, release_slots.size].min
 
@@ -62,10 +101,9 @@ class Room < ApplicationRecord
   end
 
 
-  def generate_release_slots
+  def generate_release_slots current_date
     slots = []
 
-    current_date = start_date.in_time_zone.to_date
     last_date    = (end_date - 2.days).in_time_zone.to_date
 
     while current_date <= last_date
@@ -78,7 +116,7 @@ class Room < ApplicationRecord
         if current_time >= start_date && current_time <= end_date
           slots << current_time
         end
-        current_time += 30.minutes
+        current_time += 5.minutes
       end
       current_date += 1.day
     end

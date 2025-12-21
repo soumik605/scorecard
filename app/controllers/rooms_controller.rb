@@ -77,6 +77,16 @@ class RoomsController < ApplicationController
     redirect_to request.referrer, notice: "Player moved to #{team_type} team"
   end
 
+  def add_missing_players
+    @room = Room.find_by(id: params[:id])
+
+    if @room.add_players_if_missing
+      redirect_to request.referrer, notice: "Success"
+    else
+      redirect_to request.referrer, alert: "Error"
+    end
+  end
+
 
 
   private 

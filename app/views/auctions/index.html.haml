@@ -22,6 +22,8 @@
 				.flex.flex-col
 					= link_to 'Enter Auction Room', room_path(@room.id), class: "w-full max-w-80 text-center inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2.5 rounded-lg shadow-md transition"
 					= link_to "Check Players", auctions_players_path, class: "w-full max-w-80 text-center inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2.5 rounded-lg shadow-md transition mt-2"
+					- if session[:user]["name"] == "soumikadmin"
+						= button_to 'Add Missing players', add_missing_players_room_path(@room.id), method: :post, class: "w-full max-w-80 text-center inline-block bg-purple-600 hover:bg-purple-700 text-white font-semibold px-5 py-2.5 rounded-lg shadow-md transition mt-2"
 
 		- elsif session[:user]["name"] == "soumikadmin"
 

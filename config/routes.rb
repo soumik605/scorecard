@@ -66,6 +66,7 @@ Rails.application.routes.draw do
       get :players
       get :my
       patch :update_team_type
+      post :add_missing_players
     end
   end
 
