@@ -82,7 +82,7 @@
 						- elsif @total_available_price < plr["price"]
 							%button.mt-4.w-full.text-xs.bg-gray-400.text-white.font-medium.py-1.5.rounded-lg.cursor-not-allowed Not available fund (₹#{plr["price"]})
 						- elsif country_player_count >= 6
-							%button.mt-4.w-full.text-xs.bg-gray-400.text-white.font-medium.py-1.5.rounded-lg.cursor-not-allowed Country limit reached
+							%button.mt-4.w-full.text-xs.bg-gray-400.text-white.font-medium.py-1.5.rounded-lg.cursor-not-allowed Country limit reached (₹#{plr["price"]})
 						- else
 							= form_with url: pick_rooms_path, method: :post, class: "mt-4", data: { controller: "confirm-pick" } do |f|
 								= f.hidden_field :picked_player_id, value: player["id"]
