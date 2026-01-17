@@ -43,7 +43,12 @@ class RankingsController < ApplicationController
       # Traverse from the end and collect last 10 values where the key is present
       values = @points["6"].reverse.map { |h| h[string_key] }.compact.first(10)
 
-      sum = values.sum
+      weights = [5, 5, 4, 4, 3, 3, 2, 2, 1, 1]
+      sum = values.zip(weights).sum do |value, weight|
+        value * weight
+      end
+
+      # sum = values.sum
       avg = values.empty? ? 0 : (sum.to_f / values.size).round(2)
 
       result[string_key] = { last_10_values: values, sum: sum, avg: avg, photo: player["photo_name"], name: player["name"] }
@@ -75,7 +80,12 @@ class RankingsController < ApplicationController
       # Loop through all possible 10-value windows
       (0..(all_values.size - 10)).each do |i|
         window = all_values[i, 10]
-        sum = window.sum
+        # sum = window.sum
+        weights = [5, 5, 4, 4, 3, 3, 2, 2, 1, 1]
+        sum = window.zip(weights).sum do |value, weight|
+          value * weight
+        end
+
         avg = (sum.to_f / window.size).round(2)
 
         if max_record.nil? || avg > max_record[:avg]

@@ -470,7 +470,7 @@ class Player
         player_photo: player["photo_name"],
         player_name: player["name"],
         last_10_scores: last_10.map { |i| "#{i['runs']}#{i["is_not_out"] ? '*' : ''}"  },
-        points: ar.sum
+        points: ar.zip([5,5,4,4,3,3,2,2,1,1]).sum { |v, w| v * w }
       }
     end
 
@@ -494,11 +494,12 @@ class Player
       (0..(sorted_innings.size - 10)).each do |i|
         window = sorted_innings[i, 10]
 
-        points = window.sum do |inning|
+        points = window.map do |inning|
           runs = inning["runs"].to_i
           extra = inning["is_not_out"] ? [runs / 3, 25].min : 0
           runs + extra
         end
+        points = points.zip([5,5,4,4,3,3,2,2,1,1]).sum { |v, w| v * w }
 
         if highest_record.nil? || points > highest_record[:points]
           highest_record = {
@@ -528,7 +529,8 @@ class Player
       (0..(sorted_innings.size - 10)).each do |i|
         window = sorted_innings[i, 10]
 
-        points = window.sum { |inning| inning["wickets"].to_i * 15 }
+        points = window.map { |inning| inning["wickets"].to_i * 15 }
+        points = points.zip([5,5,4,4,3,3,2,2,1,1]).sum { |v, w| v * w }
 
         if highest_record.nil? || points > highest_record[:points]
           highest_record = {
@@ -597,12 +599,12 @@ class Player
     rankings = players_by_id.map do |player_id, innings|
       player = players.find{|p| p["id"].to_s == player_id.to_s}
       last_10 = innings.sort_by { |i| -i["match_id"] }.first(10)
-      bowling_points = last_10.sum { |i| i["wickets"].to_i * 15 }
+      bowling_points = last_10.map { |i| i["wickets"].to_i * 15 }
       {
         player_photo: player["photo_name"],
         player_name: player["name"],
         last_10_scores: last_10.map { |i| i["wickets"] },
-        points: bowling_points
+        points: bowling_points.zip([5,5,4,4,3,3,2,2,1,1]).sum { |v, w| v * w }
       }
     end
 
