@@ -10,6 +10,60 @@ class StatsController < ApplicationController
     set_data("t10")
   end
 
+  def solo_test
+    # p @points
+    @tours = @tours.filter{|t| "solo_test" == t["tour_type"]}
+    @all_points = @points.values.flatten
+    player_points = Hash.new { |h, k| h[k] = [] }
+
+    @all_points.each do |inning|
+      inning.each do |player_id, points|
+        player_points[player_id] << points
+      end
+    end
+
+    player_stats = {}
+    player_points.each do |player_id, points|
+      player_stats[player_id] = { total_points: total_points(points), average: average(points), fifty_plus: count_above(points, 50), hundred_plus: count_above(points, 100), ducks: ducks(points), best_innings: best_innings(points), consecutive_without_duck: max_consecutive_without_duck(points), consecutive_20_plus: max_consecutive_20_plus(points)}
+    end
+
+    most_points = player_stats.max_by { |_id, s| s[:total_points] }
+    most_average = player_stats.max_by { |_id, s| s[:average] }
+    most_50s = player_stats.max_by { |_id, s| s[:fifty_plus] }
+    most_100s = player_stats.max_by { |_id, s| s[:hundred_plus] }
+    most_ducks = player_stats.max_by { |_id, s| s[:ducks] }
+    best_innings = player_stats.max_by { |_id, s| s[:best_innings] }
+
+
+    stat_config = [
+      ["Most points", :total_points, :top],
+      ["Best average", :average, :top],
+      ["Most 50+", :fifty_plus, :top],
+      ["Most 100+", :hundred_plus, :top],
+      ["Best innings", :best_innings, :top],
+      ["Most consecutive innings without duck", :consecutive_without_duck, :top],
+      ["Most consecutive 20+ points", :consecutive_20_plus, :top],
+      ["Most ducks (0 or less)", :ducks, :top],
+      ["Least ducks (0 or less)", :ducks, :bottom]
+    ]
+
+
+
+    @player_stats = stat_config.map do |title, stat_key, direction|
+      [title, top_3_html(@players, player_stats, stat_key, direction)]
+    end
+
+    all_runs = @all_points.flat_map(&:values)
+    @run_counts = all_runs
+      # .select { |r| r > 0 }
+      .each_with_object(Hash.new(0)) do |run, hash|
+        hash[run] += 1
+      end
+
+    @run_counts = @run_counts.sort.to_h
+
+  end
+
   def set_data tour_type
     @tours = @tours.filter{|t| tour_type == t["tour_type"]}
     @matches = @matches.filter{|m| @tours.pluck("id").include?(m["tournament_id"])}
@@ -109,6 +163,91 @@ class StatsController < ApplicationController
       end
     end
   end
+
+
+
+
+  private
+
+
+  def total_points(points)
+    points.sum
+  end
+
+  def average(points)
+    return 0 if points.empty?
+    (points.sum.to_f / points.size).round(2)
+  end
+
+  def count_above(points, threshold)
+    points.count { |p| p >= threshold }
+  end
+
+  def ducks(points)
+    points.count { |p| p <= 0 }
+  end
+
+  def best_innings(points)
+    points.max
+  end
+
+  def max_consecutive_without_duck(points)
+    max = curr = 0
+
+    points.each do |p|
+      if p > 0
+        curr += 1
+        max = [max, curr].max
+      else
+        curr = 0
+      end
+    end
+
+    max
+  end
+
+  def max_consecutive_20_plus(points)
+    max = curr = 0
+
+    points.each do |p|
+      if p >= 20
+        curr += 1
+        max = [max, curr].max
+      else
+        curr = 0
+      end
+    end
+
+    max
+  end
+
+  def top_3_players(player_stats, stat_key)
+    player_stats
+      .sort_by { |_id, stats| -stats[stat_key] }
+      .first(3)
+  end
+
+  def bottom_3_players(player_stats, stat_key)
+    player_stats
+      .sort_by { |_id, stats| stats[stat_key] }
+      .first(3)
+  end
+
+  def top_3_html(players, player_stats, stat_key, direction)
+    ranked =
+      direction == :top ?
+        top_3_players(player_stats, stat_key) :
+        bottom_3_players(player_stats, stat_key)
+
+    ranked.each_with_index.map do |(player_id, stats), index|
+      player = players.find { |p| p["id"].to_s == player_id.to_s }
+      value  = stats[stat_key].round(2)
+
+      text = "#{player['name']} (#{value})"
+      index.zero? ? "<b>#{text}</b>" : text
+    end.join("<br>")
+  end
+
 
 
 

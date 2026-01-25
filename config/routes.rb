@@ -35,6 +35,7 @@ Rails.application.routes.draw do
     collection do
       get :test
       get :t10
+      get :solo_test
       get :head_to_head
     end
   end

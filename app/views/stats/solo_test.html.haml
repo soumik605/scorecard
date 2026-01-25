@@ -4,9 +4,7 @@
   - if @player_stats.present?
     .relative.overflow-x-auto.mt-4.mb-6
       .flex.w-full.justify-between.items-center.mb-6
-        = render "stats/links", active: "t10"
-        .text-md.font-bold.text-center Player Stat
-        .text-sm= ""
+        = render "stats/links", active: "solo_test"
       
       .grid.grid-cols-12.col-gap-2
         - @player_stats.each_with_index do |stat, index|
@@ -14,26 +12,9 @@
             %h5.text-sm= stat[0]
           .col-span-6.py-4.px-2{class: index % 2 == 0 ? "" : ""}
             %h5.text-sm.text-right= stat[1].html_safe
-
-  - if @captain_stats.present?
-    .relative.overflow-x-auto.mt-8.mb-6
-      .text-md.font-bold.mb-6.text-center Captain Stat
-      .grid.grid-cols-12.col-gap-2
-        - @captain_stats.each_with_index do |stat, index|
-          .col-span-6.py-4.px-2{class: index % 2 == 0 ? "" : ""}
-            %h5.text-sm= stat[0]
-          .col-span-6.py-4.px-2{class: index % 2 == 0 ? "" : ""}
-            %h5.text-sm.text-right= stat[1].html_safe
   
+
   - height = (@run_counts.keys.count * 15) + 50
   .p-4.rounded.mt-10
     .text-sm.text-center.mb-2 Runs
     = bar_chart @run_counts.sort.to_h,  library: { scales: { y: { ticks: { autoSkip: false }}, x: { ticks: { autoSkip: false }}}}, xtitle: "No of time scored", height: "#{height}px"
-
-  .text-sm.mt-6 Batting Stat
-  .rounded.p-4.w-full.overflow-auto
-    = line_chart @run_result, height: "400px", width: "600px", curve: true, points: false
-
-  .text-sm.mt-6 Bowling Stat
-  .rounded.p-4.w-full.overflow-auto
-    = line_chart @wicket_result, height: "400px", width: "600px", curve: true, points: false
