@@ -5,13 +5,16 @@
 		.text-sm= ""
 
 	- @head_to_head.to_a.shuffle.to_h.each do |player, value|
+		- win = value.values.pluck(:wins).sum.to_i
+		- loose = value.values.pluck(:losses).sum.to_i
 		.p-4.mt-4.text-black
 			.grid.grid-cols-12.gap-2 
 				.col-span-3 
 					.flex.justify-center
 						= image_tag getPlayerPhoto(player, @players), class: "playerPhoto shadow-lg border"
 					.text-md.font-bold.text-center.mt-4.text-white= "#{getPlayerName(player, @players)}"
-					.text-md.font-bold.text-center.mt-1.bg-gradient-to-r.from-white.via-green-200.to-white= "#{value.values.pluck(:wins).sum} - #{value.values.pluck(:losses).sum}"
+					.text-md.font-bold.text-center.mt-1.bg-gradient-to-r.from-white.via-green-200.to-white= "#{win} - #{loose}"
+					.text-md.text-center.font-bold.mt-2= "#{(win*100) / (win+loose)}%"
 				.col-span-9
 					- value.each do |p, k|
 						- cls = getH2HClass(k[:wins], k[:losses])
