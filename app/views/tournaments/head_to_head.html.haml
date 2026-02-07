@@ -10,12 +10,12 @@
 				.flex.justify-center
 					= image_tag getPlayerPhoto(player, @players), class: "playerPhoto shadow-lg border"
 				.text-md.font-bold.text-center.mt-4= "#{getPlayerName(player, @players)}"
-				.text-md.font-bold.text-center.mt-1.bg-gradient-to-r.from-white.via-green-200.to-white= "#{value.values.pluck(:wins).sum} - #{value.values.pluck(:losses).sum}"
+				.text-md.font-bold.text-center.mt-1.bg-gradient-to-r.from-white.via-green-200.to-white.text-black= "#{value.values.pluck(:wins).sum} - #{value.values.pluck(:losses).sum}"
 			.col-span-9
 				- value.each do |p, k|
 					- cls = getH2HClass(k[:wins], k[:losses])
 					.pl-6.py-1
-						.rounded-2xl.p-3.shadow-xl{class: cls}
+						.rounded-2xl.p-3.shadow-xl.text-black{class: cls}
 							.flex.justify-end.gap-8.items-center.px-2
 								.text-xl.font-bold="#{ k[:wins]} - #{k[:losses]}"
 								= image_tag getPlayerPhoto(p, @players), class: "vsPlayerPhoto"

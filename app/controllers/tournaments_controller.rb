@@ -167,6 +167,30 @@ class TournamentsController < ApplicationController
   end
 
   def create_team
+    # p @performances
+    # p @points.values.flatten
+
+
+    perf_map = Hash.new { |h, k| h[k] = [] }
+    @performances.each do |p|
+      perf_map[p["player_id"]] << p["runs"].to_i
+    end
+
+    points_map = Hash.new { |h, k| h[k] = [] }
+    @points.values.flatten.each do |point_hash|
+      point_hash.each do |player_id, score|
+        points_map[player_id.to_i] << score.to_i
+      end
+    end
+
+    all_player_ids = (perf_map.keys + points_map.keys).uniq.sort
+
+
+    @final_avg_hash = all_player_ids.each_with_object({}) do |id, h|
+      h[id] = average_of_last_10(points_map[id])
+    end
+
+
   end
   
   
@@ -247,6 +271,12 @@ class TournamentsController < ApplicationController
 
   def tournament_params
     params.require(:tournament).permit(:name, :is_removed, :win_point, :draw_point, :innings_win_point, :follow_on_win_point, :round_count, captain_ids: [])
+  end
+
+  def average_of_last_10(values)
+    last_10 = values.last(10)
+    return 0.0 if last_10.empty?
+    (last_10.sum.to_f / last_10.size).round(2)
   end
 
 end
