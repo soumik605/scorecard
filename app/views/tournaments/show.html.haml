@@ -76,7 +76,7 @@
 										.text-md.text-red-600 L
 
 		
-	- if  ["t10", "text"].include? @tour["tour_type"]
+	- if  ["t10", "test"].include? @tour["tour_type"]
 		.mt-8.grid.grid-cols-12.gap-2
 			- if @matches.present?
 				- @matches.reverse().each do |match|

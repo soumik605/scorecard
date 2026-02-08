@@ -1,12 +1,12 @@
 [
-  { "id": 1, "name": "BGT", "win_point": 2, "draw_point": 1, "innings_win_point": 1, "follow_on_win_point": 1, "round_count": 1, "is_removed": false, "tour_type": "test", "isComplete": true },
-  { "id": 2, "name": "ASHES", "win_point": 2, "draw_point": 1, "innings_win_point": 1, "follow_on_win_point": 1, "round_count": 1, "is_removed": false, "tour_type": "test", "isComplete": true },
-  { "id": 3, "name": "Ranji Trophy", "win_point": 5, "draw_point": 2, "innings_win_point": 2, "follow_on_win_point": 2, "round_count": 1, "is_removed": false, "tour_type": "test", "isComplete": true },
-  { "id": 4, "name": "Platinum Duck", "win_point": 5, "draw_point": 0, "innings_win_point": 0, "follow_on_win_point": 0, "round_count": 1, "is_removed": false, "tour_type": "t10", "isComplete": false },
-  { "id": 5, "name": "Golden Duck", "win_point": 5, "draw_point": 0, "innings_win_point": 0, "follow_on_win_point": 0, "round_count": 1, "is_removed": false, "tour_type": "t10", "isComplete": true },
-  { "id": 6, "name": "Free Hit", "is_removed": false, "tour_type": "solo_test", "isComplete": false },
-  { "id": 7, "name": "Super Hit", "is_removed": false, "tour_type": "super_over", "isComplete": false },
-  { "id": 8, "name": "Silver Duck", "is_removed": false, "tour_type": "t10", "isComplete": false },
-  { "id": 9, "name": "New Duck", "is_removed": false, "tour_type": "t10", "isComplete": false },
-  { "id": 10, "name": "Road Star", "is_removed": false, "tour_type": "test15", "isComplete": false }
+  { "id": 1,  "name": "BGT",            "1st": [1], "2nd": [4], "3rd": [2],   "win_point": 2, "draw_point": 1, "innings_win_point": 1, "follow_on_win_point": 1, "round_count": 1, "is_removed": false, "tour_type": "test", "isComplete": true },
+  { "id": 2,  "name": "ASHES",          "1st": [4], "2nd": [1], "3rd": [2],   "win_point": 2, "draw_point": 1, "innings_win_point": 1, "follow_on_win_point": 1, "round_count": 1, "is_removed": false, "tour_type": "test", "isComplete": true },
+  { "id": 3,  "name": "Ranji Trophy",   "1st": [4], "2nd": [5], "3rd": [3],   "win_point": 5, "draw_point": 2, "innings_win_point": 2, "follow_on_win_point": 2, "round_count": 1, "is_removed": false, "tour_type": "test", "isComplete": true },
+  { "id": 4,  "name": "Platinum Duck",  "1st": [], "2nd": [], "3rd": [],      "win_point": 5, "draw_point": 0, "innings_win_point": 0, "follow_on_win_point": 0, "round_count": 1, "is_removed": false, "tour_type": "t10", "isComplete": false },
+  { "id": 5,  "name": "Golden Duck",    "1st": [8], "2nd": [5], "3rd": [1,13],   "win_point": 5, "draw_point": 0, "innings_win_point": 0, "follow_on_win_point": 0, "round_count": 1, "is_removed": false, "tour_type": "t10", "isComplete": true },
+  { "id": 6,  "name": "Free Hit",       "1st": [], "2nd": [], "3rd": [],   "is_removed": false, "tour_type": "solo_test", "isComplete": false },
+  { "id": 7,  "name": "Super Hit",      "1st": [], "2nd": [], "3rd": [],   "is_removed": false, "tour_type": "super_over", "isComplete": false },
+  { "id": 8,  "name": "Silver Duck",    "1st": [], "2nd": [], "3rd": [3,6],   "is_removed": false, "tour_type": "t10", "isComplete": false },
+  { "id": 9,  "name": "New Duck",       "1st": [], "2nd": [], "3rd": [],   "is_removed": false, "tour_type": "t10", "isComplete": false },
+  { "id": 10, "name": "Road Star",      "1st": [], "2nd": [], "3rd": [],   "is_removed": false, "tour_type": "test15", "isComplete": false }
 ]
