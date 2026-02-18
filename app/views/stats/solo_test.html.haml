@@ -8,9 +8,9 @@
       
       .grid.grid-cols-12.col-gap-2
         - @player_stats.each_with_index do |stat, index|
-          .col-span-6.py-4.px-2{class: index % 2 == 0 ? "" : ""}
+          .col-span-6.py-4.px-2{class: index % 2 == 0 ? "bg-slate-100" : ""}
             %h5.text-sm= stat[0]
-          .col-span-6.py-4.px-2{class: index % 2 == 0 ? "" : ""}
+          .col-span-6.py-4.px-2{class: index % 2 == 0 ? "bg-slate-100" : ""}
             %h5.text-sm.text-right= stat[1].html_safe
   
 

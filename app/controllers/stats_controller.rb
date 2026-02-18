@@ -105,6 +105,8 @@ class StatsController < ApplicationController
     @captain_stats << ["Most consicutive win", Player.most_consicutive_win(@matches, @players)]
     @captain_stats << ["Best win % against a captain (min 5 match)", Match.best_win_percent_against_captain(@matches, @players)]
 
+    @captain_stats << ["Best win % in a tournament", Match.best_win_percent_in_a_tour(@tours, @matches, @players)]
+
     @run_result = {}
     cumulative_runs = Hash.new(0)
     run_innings_count = Hash.new(0)

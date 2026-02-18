@@ -12,6 +12,55 @@ class Match
   # scope :won_by_follow_on, -> { where(is_won_by_follow_on: true) }
   # scope :drawn, -> { where(is_draw: true) }
 
+  def self.best_win_percent_in_a_tour tours, matches, players
+    tours = tours.filter{|t| t["isComplete"] == true}
+    matches = matches.filter{|m| tours.pluck("id").include? m["tournament_id"]}
+    stats = Hash.new { |h, k| h[k] = Hash.new { |hh, kk| hh[kk] = { played: 0, wins: 0 } } }
+
+    matches.each do |match|
+      tournament_id = match["tournament_id"]
+
+      [match["captain_a"], match["captain_b"]].each do |captain_id|
+        stats[tournament_id][captain_id][:played] += 1
+      end
+
+      winner = match["winner_captain_id"]
+      stats[tournament_id][winner][:wins] += 1 if winner
+    end
+
+    win_percentages = []
+
+    stats.each do |tournament_id, captains|
+      captains.each do |captain_id, data|
+        win_percentages << {
+          tournament_id: tournament_id,
+          captain_id: captain_id,
+          win_percentage: (data[:wins].to_f / data[:played]) * 100
+        }
+      end
+    end
+    
+    sorted_win_percentages = win_percentages.sort_by { |h| -h[:win_percentage] }.first(5)
+    text = ""
+
+    sorted_win_percentages.each_with_index do |entry, index|
+      player = players.find { |p| p["id"] == entry[:captain_id] }
+      tournament = tours.find { |t| t["id"] == entry[:tournament_id] }
+
+      next unless player && tournament
+
+      line = "#{player["name"]} – #{tournament["name"]} (#{entry[:win_percentage].round(2)}%)"
+
+      if index == 0
+        text += "<b>#{line}</b><br>"
+      else
+        text += "#{line}<br>"
+      end
+    end
+
+    text
+  end
+
   def self.most_wins_by_innings matches, players
     captain_follow_on_wins = Hash.new(0)
     matches.each do |match|

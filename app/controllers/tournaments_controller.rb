@@ -108,6 +108,7 @@ class TournamentsController < ApplicationController
       @players_data = @players_data.sort_by { |_, v| -v[:percent] }.to_h
 
     else
+      @matches = @matches.filter{|m| m["match_type"] == "group"}
       @players_data = []
       captain_ids = @matches.pluck("captain_a", "captain_b").flatten.map(&:to_s)
       @players = @players.filter{|p| captain_ids.include? p["id"].to_s }
