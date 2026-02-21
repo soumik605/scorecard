@@ -1,99 +1,133 @@
-.h-screen.overflow-auto
+- card = "bg-slate-800/70 backdrop-blur rounded-2xl shadow-xl border border-slate-700"
 
-  .flex.justify-between.items-center
-    = link_to "<- Matches list", tournament_path(@tour["id"]), class: "mb-4 px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
-    - if @tour["tour_type"] == "solo_test"
-      = link_to "Chart", chart_tournament_path(@tour["id"]), class: "mb-4 px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
+.h-screen.bg-slate-900.text-slate-200.overflow-auto.p-4.md:p-6
+
+  / ================= HEADER =================
+  .sticky.top-0.z-20.backdrop-blur.border-b.border-slate-700.mb-6{class: "bg-slate-900/80"}
+    .flex.justify-between.items-center.max-w-7xl.mx-auto.py-3
+      = link_to "← Matches", tournament_path(@tour["id"]), class: "flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg bg-slate-800 hover:bg-slate-700 transition shadow"
+
+      - if @tour["tour_type"] == "solo_test"
+        = link_to "📈 View Chart", chart_tournament_path(@tour["id"]), class: "px-4 py-2 text-sm font-medium rounded-lg bg-blue-600 hover:bg-blue-500 transition shadow"
 
 
+  / ================= CONTENT =================
   - if @players_data.present?
-    - if @tour["tour_type"] == "solo_test"
-      .w-full.overflow-auto
-        %table.w-full.text-sm.text-left.rtl:text-right.text-gray-400.shadow-xl.mb-4
-          %thead.text-xs.text-gray-400.uppercase
-            %tr
-              %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
-                Player
-              %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
-                Average
-              %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
-                Innings
-              %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
-                Points
-            
-          %tbody
-            - @players_data.each_with_index do |data, index|
-              %tr
-                %td.px-6.py-4.flex.justify-center
-                  = image_tag @players.find{|p| p["id"].to_s == data[0].to_s}["photo_name"], class: "vsPlayerPhoto"
-                %td.px-6.py-4
-                  .text-center= data[1][:average].round(2)
-                %td.px-6.py-4
-                  .text-center= data[1][:count]
-                %td.px-6.py-4
-                  .text-center= data[1][:sum]
 
-      .my-6
-        .text-md.text-center.my-3 Average
-        = line_chart @player_chart_data, height: "400px", width: "100%", curve: true, points: false, min: 0, max: 50
+    / ===== SOLO TEST =====
+    - if @tour["tour_type"] == "solo_test"
+
+      .max-w-7xl.mx-auto{class: card}
+        .overflow-x-auto
+          %table.w-full.text-sm
+            %thead.text-slate-400.border-b.border-slate-700
+              %tr
+                %th.px-6.py-4.text-center Player
+                %th.px-6.py-4.text-center Average
+                %th.px-6.py-4.text-center Innings
+                %th.px-6.py-4.text-center Points
+
+            %tbody
+              - @players_data.each_with_index do |data, index|
+                - highlight = index < 3 ? "bg-gradient-to-r from-yellow-500/10 to-transparent" : ""
+                %tr{class: "hover:bg-slate-700/40 transition #{highlight}"}
+                  %td.px-6.py-4
+                    .flex.justify-center
+                      = image_tag @players.find{|p| p["id"].to_s == data[0].to_s}["photo_name"], class: "h-12 w-12 rounded-full border-2 border-blue-500 shadow-lg hover:scale-110 transition vsPlayerPhoto"
+
+                  %td.px-6.py-4.text-center.font-semibold.text-cyan-400
+                    = data[1][:average].round(2)
+
+                  %td.px-6.py-4.text-center
+                    = data[1][:count]
+
+                  %td.px-6.py-4.text-center.font-bold
+                    = data[1][:sum]
+
+      / ===== CHART =====
+      .max-w-7xl.mx-auto.mt-10{class: card}
+        .px-6.py-4.border-b.border-slate-700
+          %h3.text-lg.font-semibold.text-center.text-white Player Average Trend
+        .p-4
+          = line_chart @player_chart_data, height: "380px", width: "100%", curve: true, points: false, min: 0, max: 50
+
 
     - elsif @tour["tour_type"] == "super_over" || @tour["tour_type"] == "test15"
-      %table.w-full.text-sm.text-left.rtl:text-right.text-gray-400.shadow-xl.mb-4
-        %thead.text-xs.text-gray-400.uppercase
-          %tr
-            %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
-              Player
-            %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
-              Played
-            %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
-              Win
-            %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
-          
-        %tbody
-          - @players_data.each_with_index do |data, index|
-            %tr{class: index < 3 ? "" : ""}
-              %td.px-6.py-4.flex.justify-center
-                = image_tag @players.find{|p| p["id"].to_s == data[0].to_s}["photo_name"], class: "vsPlayerPhoto"
-              %td.px-6.py-4
-                .text-center= data[1][:match]
-              %td.px-6.py-4
-                .text-center= data[1][:win]
-              %td.px-6.py-4
-                .text-center= "#{data[1][:percent].round(0)}%"
 
-      .my-6
-        .text-md.text-center.my-3 Average
-        = line_chart @player_chart_data, height: "400px", width: "100%", curve: true, points: false
+      .max-w-7xl.mx-auto{class: card}
+        .overflow-x-auto
+          %table.w-full.text-sm
+            %thead.text-slate-400.border-b.border-slate-700
+              %tr
+                %th.px-6.py-4.text-center Player
+                %th.px-6.py-4.text-center Played
+                %th.px-6.py-4.text-center Win
+                %th.px-6.py-4.text-center Win %
+
+            %tbody
+              - @players_data.each_with_index do |data, index|
+                - highlight = index < 3 ? "bg-gradient-to-r from-yellow-500/10 to-transparent" : ""
+                %tr{class: "hover:bg-slate-700/40 transition #{highlight}"}
+                  %td.px-6.py-4
+                    .flex.justify-center
+                      = image_tag @players.find{|p| p["id"].to_s == data[0].to_s}["photo_name"], class: "h-12 w-12 rounded-full border-2 border-blue-500 shadow-lg hover:scale-110 transition vsPlayerPhoto"
+
+                  %td.px-6.py-4.text-center
+                    = data[1][:match]
+
+                  %td.px-6.py-4.text-center
+                    = data[1][:win]
+
+                  %td.px-6.py-4.text-center.font-semibold.text-cyan-400
+                    = "#{data[1][:percent].round(0)}%"
+
+      .max-w-7xl.mx-auto.mt-10{class: card}
+        .px-6.py-4.border-b.border-slate-700
+          %h3.text-lg.font-semibold.text-center.text-white Win Percentage Trend
+        .p-4
+          = line_chart @player_chart_data, height: "380px", width: "100%", curve: true, points: false
+
 
     - else
-      %table.w-full.text-sm.text-left.rtl:text-right.text-gray-400.shadow-xl
-        %thead.text-xs.uppercase
-          %tr
-            -# %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
-            -#   Rank
-            %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
-              Player
-            %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
-              Point
-            %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
-              Win
-            %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
-              Played
-            %th.px-6.py-3.text-center.whitespace-nowrap{scope: "col"}
-              Win %
-          
-        %tbody
-          - @players_data.each_with_index do |player, index|
-            %tr{class: index < 3 ? "" : ""}
-              -# %th.px-6.py-4.font-medium.text-gray-900.whitespace-nowrap{scope: "row"}
-              -#   .text-center= index + 1
-              %td.px-6.py-4.flex.justify-center
-                =image_tag player[0], class: "vsPlayerPhoto"
-              %td.px-6.py-4
-                .text-center= player[1]
-              %td.px-6.py-4
-                .text-center= player[2]
-              %td.px-6.py-4
-                .text-center= player[3]
-              %td.px-6.py-4
-                .text-center= player[4]
+
+      .max-w-7xl.mx-auto{class: card}
+        .overflow-x-auto
+          %table.w-full.text-sm
+            %thead.text-slate-400.border-b.border-slate-700
+              %tr
+                %th.px-6.py-4.text-center Player
+                %th.px-6.py-4.text-center Points
+                %th.px-6.py-4.text-center Win
+                %th.px-6.py-4.text-center Played
+                %th.px-6.py-4.text-center Win %
+
+            %tbody
+              - @players_data.each_with_index do |player, index|
+                - highlight = index < 4 ? "bg-gradient-to-r from-yellow-500/10 to-transparent" : ""
+                %tr{class: "hover:bg-slate-700/40 transition #{highlight}"}
+                  %td.px-6.py-4
+                    .flex.justify-center
+                      = image_tag player[0], class: "h-12 w-12 rounded-full border-2 border-blue-500 shadow-lg hover:scale-110 transition vsPlayerPhoto"
+
+                  %td.px-6.py-4.text-center.font-bold
+                    = player[1]
+
+                  %td.px-6.py-4.text-center
+                    = player[2]
+
+                  %td.px-6.py-4.text-center
+                    = player[3]
+
+                  %td.px-6.py-4.text-center.font-semibold.text-cyan-400
+                    = player[4]
+
+
+/ ================= OPTIONAL CSS =================
+:css
+  .vsPlayerPhoto {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .vsPlayerPhoto:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(59,130,246,0.6);
+  }
