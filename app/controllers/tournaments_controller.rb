@@ -115,6 +115,7 @@ class TournamentsController < ApplicationController
   
       @players.each do |player|
         player_matches = @matches.filter{|m| [m["captain_a"], m["captain_b"]].include? player["id"]  }
+        last_5 = player_matches.last(5).map{|m| m["winner_captain_id"] == player["id"] }
         win_matches = player_matches.filter{|m| m["winner_captain_id"].present? && m["winner_captain_id"] == player["id"] }
         loose_matches = player_matches.filter{|m| m["winner_captain_id"].present? && m["winner_captain_id"] != player["id"] }
         draw_matches = player_matches.filter{|m| !m["winner_captain_id"].present?}
@@ -128,7 +129,7 @@ class TournamentsController < ApplicationController
         total_match_count = player_matches.count
         total_point = win_point+loose_point+draw_point
   
-        @players_data << [player["photo_name"], total_point, win_match_count, total_match_count, win_percent ]
+        @players_data << [player["photo_name"], total_point, win_match_count, total_match_count, win_percent, last_5 ]
       end
   
       @players_data = @players_data.sort_by { |photo_name, point, win, total, per| [-point, total, photo_name] }

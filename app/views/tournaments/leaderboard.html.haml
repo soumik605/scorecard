@@ -100,6 +100,7 @@
                 %th.px-6.py-4.text-center Win
                 %th.px-6.py-4.text-center Played
                 %th.px-6.py-4.text-center Win %
+                %th.px-6.py-4.text-center Last 5 match
 
             %tbody
               - @players_data.each_with_index do |player, index|
@@ -120,6 +121,16 @@
 
                   %td.px-6.py-4.text-center.font-semibold.text-cyan-400
                     = player[4]
+                  
+                  %td.px-6.py-4.text-center.font-semibold.text-cyan-400.flex.justify-center
+                    .flex.items-center.gap-2
+                      - player[5].reverse.each do |x|
+                        - if x
+                          .rounded.bg-green-600.w-6.h-6.flex.items-center.justify-center
+                            .text-xs W
+                        - else
+                          .rounded.bg-red-600.w-6.h-6.flex.items-center.justify-center
+                            .text-xs L
 
 
 / ================= OPTIONAL CSS =================
