@@ -1104,7 +1104,23 @@
   {"id": null , "match_id": 193, "player_id": 4, "runs": 13, "wickets": 1, "is_not_out": false},
   {"id": null , "match_id": 193, "player_id": 5, "runs": 0, "wickets": 1, "is_not_out": false},
   {"id": null , "match_id": 193, "player_id": 6, "runs": 0, "wickets": 0, "is_not_out": false},
-  {"id": null , "match_id": 193, "player_id": 7, "runs": 9, "wickets": null, "is_not_out": false}
+  {"id": null , "match_id": 193, "player_id": 7, "runs": 9, "wickets": null, "is_not_out": false},
+
+  {"id": null , "match_id": 194, "player_id": 1, "runs": 11, "wickets": 2, "is_not_out": false},
+  {"id": null , "match_id": 194, "player_id": 2, "runs": 9, "wickets": 0, "is_not_out": false},
+  {"id": null , "match_id": 194, "player_id": 3, "runs": 12, "wickets": 0, "is_not_out": true},
+  {"id": null , "match_id": 194, "player_id": 4, "runs": 0, "wickets": 0, "is_not_out": false},
+  {"id": null , "match_id": 194, "player_id": 5, "runs": 0, "wickets": 1, "is_not_out": false},
+  {"id": null , "match_id": 194, "player_id": 6, "runs": null, "wickets": 1, "is_not_out": false},
+  {"id": null , "match_id": 194, "player_id": 7, "runs": 13, "wickets": null, "is_not_out": false},
+
+  {"id": null , "match_id": 195, "player_id": 1, "runs": 0, "wickets": 0, "is_not_out": false},
+  {"id": null , "match_id": 195, "player_id": 2, "runs": 0, "wickets": 0, "is_not_out": false},
+  {"id": null , "match_id": 195, "player_id": 3, "runs": null, "wickets": 2, "is_not_out": false},
+  {"id": null , "match_id": 195, "player_id": 4, "runs": 40, "wickets": 0, "is_not_out": false},
+  {"id": null , "match_id": 195, "player_id": 5, "runs": 74, "wickets": 1, "is_not_out": true},
+  {"id": null , "match_id": 195, "player_id": 6, "runs": null, "wickets": 0, "is_not_out": false},
+  {"id": null , "match_id": 195, "player_id": 7, "runs": null, "wickets": null, "is_not_out": false}
 
 
 ]

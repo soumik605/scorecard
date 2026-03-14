@@ -160,7 +160,7 @@ class TournamentsController < ApplicationController
   end
 
   def next_match_suggestion
-    @next_matches = Tournament.get_next_match_suggestion(@all_matches, @players)
+    @next_matches = Tournament.get_next_match_suggestion(@all_matches, @players, @tour)
   end
 
   def rivalry

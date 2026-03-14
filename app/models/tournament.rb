@@ -10,57 +10,89 @@ class Tournament
   # enum :tour_type, { 'test': 1, 't20': 2  }
   
   
-  def self.get_next_match_suggestion(matches, players)
-    all_matches = matches.map(&:dup) # Avoid mutating original
-    active_player_ids = [1, 2, 3, 4, 5]
-    current_tournament_id = 4
+  def self.get_next_match_suggestion(matches, players, tour)
+    max_match_per_player = tour["max_matches_count"]
+    current_tournament_id = tour["id"]
     penalty_weight = 3
 
-    next_matches = []
+    all_matches = matches.map(&:dup)
+    active_player_ids = tour["captain_ids"]
 
-    20.times do
+    next_matches = []
+    
+    10.times do
       overall_matchup_count = Hash.new(0)
       current_tournament_matchup_count = Hash.new(0)
-
+      player_tournament_match_count = Hash.new(0)
+  
       all_matches.each do |match|
-        pair = [match["captain_a"], match["captain_b"]].sort
+        a = match["captain_a"]
+        b = match["captain_b"]
+  
+        pair = [a, b].sort
+  
         overall_matchup_count[pair] += 1
-
+  
         if match["tournament_id"] == current_tournament_id
           current_tournament_matchup_count[pair] += 1
+          player_tournament_match_count[a] += 1
+          player_tournament_match_count[b] += 1
         end
       end
 
-      # Compute scores for each possible pair
       candidate_scores = []
+
       active_player_ids.combination(2).each do |pair|
-        overall = overall_matchup_count[pair] || 0
-        current = current_tournament_matchup_count[pair] || 0
+        a, b = pair
+
+        # enforce max matches per player in THIS tournament
+        if player_tournament_match_count[a] >= max_match_per_player
+          active_player_ids = active_player_ids.filter{|id| id != a}
+          next
+        end
+
+        if player_tournament_match_count[b] >= max_match_per_player
+          active_player_ids = active_player_ids.filter{|id| id != b}
+          next
+        end
+
+        overall = overall_matchup_count[pair]
+        current = current_tournament_matchup_count[pair]
+
         score = overall + (current * penalty_weight)
-        candidate_scores << { pair: pair, score: score, overall: overall, current: current }
+
+        candidate_scores << {
+          pair: pair,
+          score: score,
+          overall: overall,
+          current: current
+        }
       end
-
-      candidate_scores = candidate_scores.shuffle
-
-      # Pick pair with lowest score
-      selected = candidate_scores.min_by { |c| c[:score] }
+      
+      break if candidate_scores.empty?
+      
+      selected = candidate_scores.shuffle.min_by { |c| c[:score] }
       pair = selected[:pair]
 
-      # Append the simulated match to all_matches
       all_matches << {
         "captain_a" => pair[0],
         "captain_b" => pair[1],
         "tournament_id" => current_tournament_id
       }
 
-      # Get names for output
       player_a_name = players.find { |p| p["id"] == pair[0] }["photo_name"]
       player_b_name = players.find { |p| p["id"] == pair[1] }["photo_name"]
 
-      next_matches << [[player_a_name, player_b_name], selected[:overall], selected[:current]]
+      next_matches << {
+        match: [player_a_name, player_b_name],
+        overall_previous_matches: selected[:overall],
+        tournament_previous_matches: selected[:current],
+        score: selected[:score]
+      }
     end
 
-    next_matches
+    next_matches = next_matches.sort_by{|m| m[:score]}
+    return next_matches
   end
 
 
