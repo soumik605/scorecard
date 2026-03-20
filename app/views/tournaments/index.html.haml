@@ -51,8 +51,10 @@
 							- { card: "bg-amber-50 dark:bg-amber-950/30 border-amber-200/50", badge: "bg-amber-500/10 text-amber-700 dark:text-amber-300", ping: "bg-amber-400", dot: "bg-amber-600", btn: "hover:bg-amber-600", text: "T10" }
 						- when "super_over" 
 							- { card: "bg-red-50 dark:bg-red-950/30 border-red-200/50", badge: "bg-red-500/10 text-red-700 dark:text-red-300", ping: "bg-red-400", dot: "bg-red-600", btn: "hover:bg-red-600", text: "Super" }
-						- else 
+						- when "test15"  
 							- { card: "bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200/50", badge: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300", ping: "bg-emerald-400", dot: "bg-emerald-600", btn: "hover:bg-emerald-600", text: "T15" }
+						- else 
+							- { card: "bg-teal-50 dark:bg-teal-950/30 border-teal-200/50", badge: "bg-teal-500/10 text-teal-700 dark:text-teal-300", ping: "bg-teal-400", dot: "bg-teal-600", btn: "hover:bg-teal-600", text: "Solo 3" }
 
 					.group.relative{ class: "#{theme[:card]} rounded-3xl border shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col overflow-hidden" }
 						-# 1. Subtle Type Watermark (Behind content for extra differentiation)

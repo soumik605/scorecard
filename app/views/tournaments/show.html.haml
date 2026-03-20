@@ -34,6 +34,29 @@
 									- else
 										.text-lg.text-center.text-red-600= point[pl["id"].to_s]
 
+	- if @tour["tour_type"] == "solo3"
+		- players = @players.filter{|p| [1,2,3,4,5,6,7].include?(p["id"])}
+		.w-full.mt-4
+			.flex.justify-stretch.sticky.top-0.py-3
+				- players.each do |pl|
+					.w-full.flex.justify-center
+						= image_tag pl["photo_name"], class: "vsPlayerPhoto"
+			
+			%div
+				- @solo3.each_with_index do |ids, index|
+					- ids = ids.map(&:to_s)
+					- max_point = ids.count.to_s
+					.flex.justify-stretch.py-1{class: index == 9 ? "border-b-4" : "border-b"}
+						- players.each do |pl|
+							- i = ids.find_index(pl["id"].to_s)
+							- x = i.present? ? (max_point.to_i - i.to_i) : nil
+							.w-full{class: x.to_s == max_point.to_s ? "bg-green-200 rounded-xl text-black" : ""  }
+								- if x.present?
+									- if x.to_i > 0
+										.text-lg.text-center= x
+									- else
+										.text-lg.text-center.text-red-600= x
+
 	- if @tour["tour_type"] == "super_over"
 		- players = @players.filter{|p| [1,2,3,4,5,6].include?(p["id"])}
 		.w-full.mt-4

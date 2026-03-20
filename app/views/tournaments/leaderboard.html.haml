@@ -51,6 +51,35 @@
         .p-4
           = line_chart @player_chart_data, height: "380px", width: "100%", curve: true, points: false, min: 0, max: 50
 
+    - elsif @tour["tour_type"] == "solo3"
+
+      .max-w-7xl.mx-auto{class: card}
+        .overflow-x-auto
+          %table.w-full.text-sm
+            %thead.text-slate-400.border-b.border-slate-700
+              %tr
+                %th.px-6.py-4.text-center Player
+                %th.px-6.py-4.text-center %
+                %th.px-6.py-4.text-center Total
+                %th.px-6.py-4.text-center Max
+
+            %tbody
+              - @players_data.each_with_index do |data, index|
+                - highlight = index < 3 ? "bg-gradient-to-r from-yellow-500/10 to-transparent" : ""
+                %tr{class: "hover:bg-slate-700/40 transition #{highlight}"}
+                  %td.px-6.py-4
+                    .flex.justify-center
+                      = image_tag data[0], class: "h-12 w-12 rounded-full border-2 border-blue-500 shadow-lg hover:scale-110 transition vsPlayerPhoto"
+
+                  %td.px-6.py-4.text-center.font-bold
+                    = data[1][:percentage].round(2)
+                  
+                  %td.px-6.py-4.text-center.font-semibold.text-cyan-400
+                    = data[1][:total]
+
+                  %td.px-6.py-4.text-center
+                    = data[1][:max]
+
 
     - elsif @tour["tour_type"] == "super_over" || @tour["tour_type"] == "test15"
 
@@ -131,6 +160,12 @@
                         - else
                           .rounded.bg-red-600.w-6.h-6.flex.items-center.justify-center
                             .text-xs L
+
+      .max-w-7xl.mx-auto.mt-10{class: card}
+        .px-6.py-4.border-b.border-slate-700
+          %h3.text-lg.font-semibold.text-center.text-white Player Win Trend
+        .p-4
+          = line_chart @player_chart_data, height: "380px", width: "100%", curve: true, points: false, min: 0, max: @highest_point
 
 
 / ================= OPTIONAL CSS =================

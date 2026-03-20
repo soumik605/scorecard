@@ -79,6 +79,27 @@ class TournamentsController < ApplicationController
         { name: player["name"], data: val[:data] }
       end
 
+    elsif @tour["tour_type"] == "solo3"
+
+      data = {}
+      @solo3.each do |hash|
+        max_point = hash.count
+        hash.each_with_index do |key, index|
+          data[key.to_s] ||= { total: 0, max: 0 }
+          data[key.to_s][:total] += max_point - index
+          data[key.to_s][:max] += max_point
+        end
+      end
+
+      @players_data = {}
+      data.each do |a,b|
+        player = @players.find{|p| p["id"].to_s == a.to_s }
+        percentage = (b[:total].to_f / b[:max])*100
+        @players_data[player["photo_name"]] = { total: b[:total], max: b[:max], percentage: percentage }
+      end
+
+      @players_data = @players_data.sort_by { |hash| -hash[1][:percentage] }
+
     elsif @tour["tour_type"] == "super_over" || @tour["tour_type"] == "test15"
       data = @tour["tour_type"] == "super_over" ? @super : @test15
 
@@ -134,6 +155,37 @@ class TournamentsController < ApplicationController
   
       @players_data = @players_data.sort_by { |photo_name, point, win, total, per| [-point, total, photo_name] }
     end
+
+    captain_stats = Hash.new { |h, k| h[k] = { points: 0, matches: 0, data: {} } }
+
+    @matches.each do |match|
+      captains = [match["captain_a"], match["captain_b"]]
+
+      captains.each do |captain|
+        stats = captain_stats[captain]
+
+        stats[:matches] += 1
+
+        if match["is_draw"]
+          stats[:points] += match["draw_point"]
+        elsif match["winner_captain_id"] == captain
+          stats[:points] += match["win_point"]
+        else
+          stats[:points] += match["loose_point"]
+        end
+
+        stats[:data][stats[:matches].to_s] = stats[:points]
+      end
+    end
+
+    @player_chart_data = captain_stats.map do |captain_id, stats|
+      player = @players.find{|p| p["id"].to_s == captain_id.to_s }
+
+      { name: player["name"], data: stats[:data] }
+    end
+
+    _, top_stats = captain_stats.max_by { |_, stats| stats[:points] }
+    @highest_point = top_stats
 
   end
 
@@ -267,6 +319,7 @@ class TournamentsController < ApplicationController
     @matches = @matches.filter{|m| m["tournament_id"].to_s == params[:id].to_s}
     
     @points = @points[params[:id].to_s]
+    @solo3 = @solo3[params[:id].to_s]
     @super = @super[params[:id].to_s]
     @test15 = @test15[params[:id].to_s]
   end

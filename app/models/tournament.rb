@@ -20,7 +20,7 @@ class Tournament
 
     next_matches = []
     
-    10.times do
+    50.times do
       overall_matchup_count = Hash.new(0)
       current_tournament_matchup_count = Hash.new(0)
       player_tournament_match_count = Hash.new(0)
