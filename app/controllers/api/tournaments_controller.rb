@@ -131,12 +131,18 @@ class Api::TournamentsController < ApplicationController
       captain_a = match["captain_a"]
       captain_b = match["captain_b"]
       winner = match["winner_captain_id"]
+      is_draw = match["is_draw"]
     
       if winner == captain_a
         @head_to_head[captain_a][captain_b][:wins] += 1
         @head_to_head[captain_b][captain_a][:losses] += 1
       elsif winner == captain_b
         @head_to_head[captain_b][captain_a][:wins] += 1
+        @head_to_head[captain_a][captain_b][:losses] += 1
+      elsif is_draw
+        @head_to_head[captain_b][captain_a][:draws] += 1
+        @head_to_head[captain_a][captain_b][:draws] += 1
+        @head_to_head[captain_b][captain_a][:losses] += 1
         @head_to_head[captain_a][captain_b][:losses] += 1
       end
     end

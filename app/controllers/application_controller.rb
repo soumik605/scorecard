@@ -26,8 +26,8 @@ class ApplicationController < ActionController::Base
     auction_players = File.open "public/auction/players.json"
     @auction_players = JSON.load auction_players
 
-    solo3_players = File.open "public/stats/solo3.json"
-    @solo3 = JSON.load solo3_players
+    o2_players = File.open "public/stats/o2.json"
+    @o2 = JSON.load o2_players
   end
 
 

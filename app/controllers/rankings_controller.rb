@@ -32,6 +32,7 @@ class RankingsController < ApplicationController
   end
 
   def solo_test
+    @solotest_tours = @tours.filter{|t| t['tour_type'] == 'solo_test'}
     @result = {}
 
     result = {}
@@ -41,7 +42,15 @@ class RankingsController < ApplicationController
       player = @players.find{|p| p["id"] == key}
 
       # Traverse from the end and collect last 10 values where the key is present
-      values = @points["6"].reverse.map { |h| h[string_key] }.compact.first(10)
+      values1 = @points["6"].reverse.map { |h| h[string_key] }.compact.first(10)
+      values2 = @points["12"].reverse.map { |h| h[string_key] }.compact.first(10)
+
+      p values2
+      p values1
+
+      values = (values2 + values1).flatten
+
+      values = values.first(10)
 
       weights = [5, 5, 4, 4, 3, 3, 2, 2, 1, 1]
       sum = values.zip(weights).sum do |value, weight|
@@ -73,6 +82,8 @@ class RankingsController < ApplicationController
 
       # All values (latest first)
       all_values = @points["6"].reverse.map { |h| h[string_key] }.compact
+
+      all_values = all_values + @points["12"].reverse.map { |h| h[string_key] }.compact
 
       # Skip if less than 10 entries
       next if all_values.size < 10

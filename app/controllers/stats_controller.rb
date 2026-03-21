@@ -142,12 +142,13 @@ class StatsController < ApplicationController
 
 
   def head_to_head
-    @head_to_head = Hash.new { |hash, key| hash[key] = Hash.new { |h, k| h[k] = { wins: 0, losses: 0 } } }
+    @head_to_head = Hash.new { |hash, key| hash[key] = Hash.new { |h, k| h[k] = { wins: 0, losses: 0, draws: 0 } } }
 
     @matches.each do |match|
       captain_a = match["captain_a"]
       captain_b = match["captain_b"]
       winner = match["winner_captain_id"]
+      is_draw = match["is_draw"]
     
       if winner == captain_a
         @head_to_head[captain_a][captain_b][:wins] += 1
@@ -155,6 +156,9 @@ class StatsController < ApplicationController
       elsif winner == captain_b
         @head_to_head[captain_b][captain_a][:wins] += 1
         @head_to_head[captain_a][captain_b][:losses] += 1
+      elsif is_draw
+        @head_to_head[captain_b][captain_a][:draws] += 1
+        @head_to_head[captain_a][captain_b][:draws] += 1
       end
     end
     

@@ -79,10 +79,10 @@ class TournamentsController < ApplicationController
         { name: player["name"], data: val[:data] }
       end
 
-    elsif @tour["tour_type"] == "solo3"
+    elsif @tour["tour_type"] == "o2"
 
       data = {}
-      @solo3.each do |hash|
+      @o2.each do |hash|
         max_point = hash.count
         hash.each_with_index do |key, index|
           data[key.to_s] ||= { total: 0, max: 0 }
@@ -197,6 +197,7 @@ class TournamentsController < ApplicationController
       captain_a = match["captain_a"]
       captain_b = match["captain_b"]
       winner = match["winner_captain_id"]
+      is_draw = match["is_draw"]
     
       if winner == captain_a
         @head_to_head[captain_a][captain_b][:wins] += 1
@@ -204,6 +205,11 @@ class TournamentsController < ApplicationController
       elsif winner == captain_b
         @head_to_head[captain_b][captain_a][:wins] += 1
         @head_to_head[captain_a][captain_b][:losses] += 1
+      elsif is_draw
+        @head_to_head[captain_b][captain_a][:wins] += 0.5
+        @head_to_head[captain_a][captain_b][:wins] += 0.5
+        @head_to_head[captain_b][captain_a][:losses] += 0.5
+        @head_to_head[captain_a][captain_b][:losses] += 0.5
       end
     end
   end
@@ -319,7 +325,7 @@ class TournamentsController < ApplicationController
     @matches = @matches.filter{|m| m["tournament_id"].to_s == params[:id].to_s}
     
     @points = @points[params[:id].to_s]
-    @solo3 = @solo3[params[:id].to_s]
+    @o2 = @o2[params[:id].to_s]
     @super = @super[params[:id].to_s]
     @test15 = @test15[params[:id].to_s]
   end
