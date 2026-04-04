@@ -7,7 +7,7 @@
   { "id": 6,  "name": "Free Hit",       "captain_ids": [1,2,3,4,5], "max_matches_count": 30, "1st": [], "2nd": [], "3rd": [],   "is_removed": false, "tour_type": "solo_test", "isComplete": false },
   { "id": 7,  "name": "Super Hit",      "captain_ids": [1,2,3,4,5], "max_matches_count": 30, "1st": [], "2nd": [], "3rd": [],   "is_removed": false, "tour_type": "super_over", "isComplete": false },
   { "id": 8,  "name": "Silver Duck",    "captain_ids": [1,2,3,4,5], "max_matches_count": 30, "1st": [5], "2nd": [2], "3rd": [3,6],   "is_removed": false, "tour_type": "t10", "isComplete": true },
-  { "id": 9,  "name": "New Duck",       "captain_ids": [1,2,3,4,5,6], "max_matches_count": 10, "1st": [], "2nd": [], "3rd": [],   "is_removed": false, "tour_type": "t10", "isComplete": false },
+  { "id": 9,  "name": "New Duck",       "captain_ids": [1,2,3,4,5,6], "max_matches_count": 12, "1st": [], "2nd": [], "3rd": [],   "is_removed": false, "tour_type": "t10", "isComplete": false },
   { "id": 10, "name": "Road Star",      "captain_ids": [1,2,3,4,5], "max_matches_count": 30, "1st": [1], "2nd": [5], "3rd": [2,3],   "is_removed": false, "tour_type": "test15", "isComplete": true },
   { "id": 11, "name": "-",              "captain_ids": [1,2,3,4,5,6,7], "max_matches_count": 30, "1st": [], "2nd": [], "3rd": [],   "is_removed": false, "tour_type": "o2", "isComplete": false },
   { "id": 12, "name": "-",              "captain_ids": [1,2,3,4,5,6,7], "max_matches_count": 50, "1st": [], "2nd": [], "3rd": [],   "is_removed": false, "tour_type": "solo_test", "isComplete": false }

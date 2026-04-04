@@ -60,6 +60,10 @@ class TournamentsController < ApplicationController
         val[:average] = val[:sum].to_f / val[:count]
       end
 
+      p @players_data
+
+      @players_data = @players_data.select{|v, k| k[:count] >= 5}
+
       @players_data = @players_data.sort_by { |_, v| -v[:average] }.to_h
 
 

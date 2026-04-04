@@ -11,5 +11,6 @@
   { "id": 10, "name": "Kartik", "photo_name": "Kartik.jpeg" },
   { "id": 11, "name": "Ankan", "photo_name": "Ankan.jpeg" },
   { "id": 12, "name": "Rajib", "photo_name": "Rajib.jpeg" },
-  { "id": 13, "name": "Sayan", "photo_name": "Sayan.jpg" }
+  { "id": 13, "name": "Sayan", "photo_name": "Sayan.jpg" },
+  { "id": 14, "name": "Atanu", "photo_name": "Atanu.jpg" }
 ]
