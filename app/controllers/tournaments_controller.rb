@@ -62,7 +62,7 @@ class TournamentsController < ApplicationController
 
       p @players_data
 
-      @players_data = @players_data.select{|v, k| k[:count] >= 5}
+      # @players_data = @players_data.select{|v, k| k[:count] >= 5}
 
       @players_data = @players_data.sort_by { |_, v| -v[:average] }.to_h
 
@@ -78,10 +78,14 @@ class TournamentsController < ApplicationController
         end
       end
 
-      @player_chart_data = player_series.map do |player_id, val|
+      p player_series
+
+      @solo_player_chart_data = player_series.map do |player_id, val|
         player = @players.find{|p| p["id"].to_s == player_id.to_s }
         { name: player["name"], data: val[:data] }
       end
+
+      p @solo_player_chart_data
 
     elsif @tour["tour_type"] == "o2"
 

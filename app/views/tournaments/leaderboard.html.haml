@@ -30,27 +30,27 @@
             %tbody
               - @players_data.each_with_index do |data, index|
                 - highlight = index < 3 ? "bg-gradient-to-r from-yellow-500/10 to-transparent" : ""
-                - if data[1][:count] >= 5
-                  %tr{class: "hover:bg-slate-700/40 transition #{highlight}"}
-                    %td.px-6.py-4
-                      .flex.justify-center
-                        = image_tag @players.find{|p| p["id"].to_s == data[0].to_s}["photo_name"], class: "h-12 w-12 rounded-full border-2 border-blue-500 shadow-lg hover:scale-110 transition vsPlayerPhoto"
+                -# - if data[1][:count] >= 5
+                %tr{class: "hover:bg-slate-700/40 transition #{highlight}"}
+                  %td.px-6.py-4
+                    .flex.justify-center
+                      = image_tag @players.find{|p| p["id"].to_s == data[0].to_s}["photo_name"], class: "h-12 w-12 rounded-full border-2 border-blue-500 shadow-lg hover:scale-110 transition vsPlayerPhoto"
 
-                    %td.px-6.py-4.text-center.font-semibold.text-cyan-400
-                      = data[1][:average].round(2)
+                  %td.px-6.py-4.text-center.font-semibold.text-cyan-400
+                    = data[1][:average].round(2)
 
-                    %td.px-6.py-4.text-center
-                      = data[1][:count]
+                  %td.px-6.py-4.text-center
+                    = data[1][:count]
 
-                    %td.px-6.py-4.text-center.font-bold
-                      = data[1][:sum]
+                  %td.px-6.py-4.text-center.font-bold
+                    = data[1][:sum]
 
       / ===== CHART =====
       .max-w-7xl.mx-auto.mt-10{class: card}
         .px-6.py-4.border-b.border-slate-700
           %h3.text-lg.font-semibold.text-center.text-white Player Average Trend
         .p-4
-          = line_chart @player_chart_data, height: "380px", width: "100%", curve: true, points: false, min: 0, max: 50
+          = line_chart @solo_player_chart_data, height: "380px", width: "100%", curve: true, points: false, min: 0, max: 50
 
     - elsif @tour["tour_type"] == "o2"
 
