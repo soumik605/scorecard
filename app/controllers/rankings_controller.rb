@@ -80,15 +80,13 @@ class RankingsController < ApplicationController
       string_key = key.to_s
       player = @players.find { |p| p["id"] == key }
 
-      # All values (latest first)
-      all_values = @points["6"].reverse.map { |h| h[string_key] }.compact
+      values1 = @points["6"].reverse.map { |h| h[string_key] }.compact
+      values2 = @points["12"].reverse.map { |h| h[string_key] }.compact
 
-      all_values = all_values + @points["12"].reverse.map { |h| h[string_key] }.compact
+      all_values = (values2 + values1).flatten
 
-      # Skip if less than 10 entries
       next if all_values.size < 10
 
-      # Loop through all possible 10-value windows
       (0..(all_values.size - 10)).each do |i|
         window = all_values[i, 10]
         # sum = window.sum
@@ -106,7 +104,8 @@ class RankingsController < ApplicationController
             photo: player["photo_name"],
             avg: avg,
             sum: sum,
-            values: window
+            values: window,
+            all_values: all_values
           }
         end
       end

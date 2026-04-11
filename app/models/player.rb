@@ -560,15 +560,15 @@ class Player
       (0..(sorted_innings.size - 10)).each do |i|
         window = sorted_innings[i, 10]
 
-        batting_points = window.sum do |inning|
+        batting_points = window.map do |inning|
           runs = inning["runs"].to_i
           extra = inning["is_not_out"] ? [runs / 3, 25].min : 0
           runs + extra
         end
 
-        bowling_points = window.sum { |inning| inning["wickets"].to_i * 15 }
+        bowling_points = window.map { |inning| inning["wickets"].to_i * 15 }
 
-        total_points = batting_points + bowling_points
+        total_points = batting_points.zip([5,5,4,4,3,3,2,2,1,1]).sum { |v, w| v * w } + bowling_points.zip([5,5,4,4,3,3,2,2,1,1]).sum { |v, w| v * w }
 
         if highest_record.nil? || total_points > highest_record[:points]
           highest_record = {
@@ -629,14 +629,14 @@ class Player
         point = run + extra_point
         ar << point
       end
-      bowling_points = last_10.sum { |i| i["wickets"].to_i * 15 }
+      bowling_points = last_10.map { |i| i["wickets"].to_i * 15 }
       {
         player_photo: player["photo_name"],
         player_name: player["name"],
         last_10_scores: last_10.map { |i| 
         ["#{i['runs']}#{i["is_not_out"] ? '*' : ''}", i['wickets'].present? ? "(#{i['wickets']})" : ""].join(" ")
       },
-        points: ar.sum + bowling_points
+        points: ar.zip([5,5,4,4,3,3,2,2,1,1]).sum { |v, w| v * w } + bowling_points.zip([5,5,4,4,3,3,2,2,1,1]).sum { |v, w| v * w }
       }
     end
 
